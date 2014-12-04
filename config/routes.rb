@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post '/dalal_dashboard/:id/stock_ajax_handler' => 'dalal_dashboard#stock_ajax_handler'
   get '/dalal_dashboard/:id/events' => 'dalal_dashboard#market_events'
   get '/dalal_dashboard/:id/buy_sell' => 'dalal_dashboard#buy_sell'
+  get '/admin/index' => 'admin#index' ###controller not yet created
 
 
   # The priority is based upon order of creation: first created -> highest priority.
