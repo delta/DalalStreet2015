@@ -1,0 +1,60 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+1:
+ user_id: 298486374
+ stock_id: 644626036
+ numofstock: 12
+
+2:
+ user_id: 281110143
+ stock_id: 683130438
+ numofstock: 11
+
+3:
+ user_id: 980190962
+ stock_id: 417155790
+ numofstock: 2
+
+4:
+ user_id: 298486374
+ stock_id: 292226793
+ numofstock: 5
+
+5:
+ user_id: 281110143
+ stock_id: 252678980
+ numofstock: 6
+
+6:
+ user_id: 980190962
+ stock_id: 252678980
+ numofstock: 23
+
+7:
+ user_id: 980190962
+ stock_id: 30677878
+ numofstock: 3
+
+8:
+ user_id: 298486374
+ stock_id: 417155790
+ numofstock: 19
+
+9:
+ user_id: 281110143
+ stock_id: 683130438
+ numofstock: 15
+
+10:
+ user_id: 980190962
+ stock_id: 292226793
+ numofstock: 13
+
+11:
+ user_id: 298486374
+ stock_id: 553775723
+ numofstock: 3

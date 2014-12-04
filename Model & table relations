@@ -1,0 +1,24 @@
+Models
+
+Users
+Stock
+Stock_details
+Buy
+Sell
+Bank
+log
+newsfeed
+notification
+graph & charts
+
+
+Relation
+
+->Get all buy request and store :: belongs to user stock
+->Get all sell request and store :: belongs to user stock
+->use loop and decide trade :: use efficent algo(two loops one for each stock and another to arrange 	stocks)
+->notifications to keep track of successfull trade::belongs to user and stock
+->log to keep track of events???
+->Bank
+
+

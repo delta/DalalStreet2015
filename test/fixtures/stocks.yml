@@ -1,0 +1,156 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+a:
+   stockname: 'ESAT'
+   currentprice: 34.00
+   dayhigh: 43.00
+   daylow: 32.00
+   alltimehigh: 55.00
+   alltimelow: 13.00
+   stocksinexchange: 23
+   stocksinmarket: 304
+
+b:
+   stockname: 'Apple' 
+   currentprice: 23.00
+   dayhigh: 32.00
+   daylow: 32.00
+   alltimehigh: 45.00
+   alltimelow: 4.00
+   stocksinexchange: 33
+   stocksinmarket: 355
+
+c:
+   stockname: 'Infy'
+   currentprice: 34.00
+   dayhigh: 34.00
+   daylow: 33.00
+   alltimehigh: 34.00
+   alltimelow: 22.00
+   stocksinexchange: 22
+   stocksinmarket: 321
+
+d:
+   stockname: 'Ranbaxy'
+   currentprice: 67.00
+   dayhigh: 67.00
+   daylow: 35.00
+   alltimehigh: 77.00
+   alltimelow: 78.00
+   stocksinexchange: 37
+   stocksinmarket: 876
+
+e:
+   stockname: 'HP' 
+   currentprice: 58.00
+   dayhigh: 58.00
+   daylow: 8.00
+   alltimehigh: 64.00
+   alltimelow: 6.00
+   stocksinexchange: 40
+   stocksinmarket: 768
+
+f:
+   stockname: 'TCS' 
+   currentprice: 44
+   dayhigh: 43.00
+   daylow: 24.00
+   alltimehigh: 77.00
+   alltimelow: 11.00
+   stocksinexchange: 75
+   stocksinmarket: 654
+
+g:
+   stockname: 'Intel' 
+   currentprice: 45.00
+   dayhigh: 55.00
+   daylow: 22.00
+   alltimehigh: 45.00
+   alltimelow: 22.00
+   stocksinexchange: 40
+   stocksinmarket: 200
+
+h:
+   stockname: 'HDFC'
+   currentprice: 56.4
+   dayhigh: 66.00
+   daylow: 33.00
+   alltimehigh: 66.00
+   alltimelow: 11.00
+   stocksinexchange: 32
+   stocksinmarket: 432
+
+i:
+   stockname: 'Github'
+   currentprice: 32.00
+   dayhigh: 44.00
+   daylow: 23.00
+   alltimehigh: 34.00
+   alltimelow: 32.00
+   stocksinexchange: 33
+   stocksinmarket: 343
+
+
+j:
+   stockname: 'Sony'
+   currentprice: 23.00
+   dayhigh: 32.00
+   daylow: 23.00
+   alltimehigh: 43.00
+   alltimelow: 32.00
+   stocksinexchange: 97
+   stocksinmarket: 216
+
+k:
+   stockname: 'Dell' 
+   currentprice: 34.00
+   dayhigh: 23.00
+   daylow: 43.00
+   alltimehigh: 23.00
+   alltimelow: 32.00
+   stocksinexchange: 40
+   stocksinmarket: 400
+
+l:
+   stockname: 'Delta' 
+   currentprice: 3.00
+   dayhigh: 4.00
+   daylow: 2.00
+   alltimehigh: 3.00
+   alltimelow: 3.00
+   stocksinexchange: 43
+   stocksinmarket: 200
+
+m:
+   stockname: 'Pragyan'
+   currentprice: 22.00
+   dayhigh: 23.00
+   daylow: 34.3
+   alltimehigh: 45.00
+   alltimelow: 3.00
+   stocksinexchange: 55
+   stocksinmarket: 340
+
+n:
+   stockname: 'Morgan Stanley' 
+   currentprice: 66.00
+   dayhigh: 44.00
+   daylow: 67.5
+   alltimehigh: 45.4
+   alltimelow: 45.4
+   stocksinexchange: 54
+   stocksinmarket: 220
+
+o:
+   stockname: 'LG'
+   currentprice: 32.00
+   dayhigh: 43.00
+   daylow: 34.00
+   alltimehigh: 44.4
+   alltimelow: 45.4
+   stocksinexchange: 220
+   stocksinmarket: 300

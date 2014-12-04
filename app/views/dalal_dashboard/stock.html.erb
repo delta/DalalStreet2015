@@ -1,0 +1,293 @@
+<% content_for :page_wrapper do %>
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Dalal Panel <small>Stock Market</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                             <i class="fa fa-dashboard"></i> Dashboard
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert alert-info alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-info-circle"></i>  <strong>Like Dalal Street?</strong> Like our FB page <a href="#">Dalal Street</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-comments fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">26</div>
+                                        <div>New Comments!</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                       <i class="fa fa-money fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div>Cash</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-yellow">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-tasks fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div>Stock</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-red">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-support fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">13</div>
+                                        <div>Support Tickets!</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+
+                <div class="row">
+                 <div class="col-lg-12">  
+                    <div id="ajax_notice">
+                    </div>
+                    <% if flash[:notice] %>
+                    <div class="notice"><%= flash[:notice] %></div>
+                    <% end %>
+                    <% if flash[:error] %>
+                    <div class="error"><%= flash[:error] %></div>
+                    <% end %>
+                  </div>
+                  <div class="col-lg-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Stocks </h3>
+                            </div>
+                            <div class="panel-body">
+                              <%= @extra %>
+                                <div class="table-responsive">                            
+                                  <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Stock</th>
+                                                <th>DayLow</th>
+                                                <th>DayHigh</th>
+                                                <th>Current (USD)</th>
+                                                <th>StockInMarket</th>
+                                                <th>StockInExchange</th>
+                                                <th>TradeStock</th>
+                                                <th>Trade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% @stocks.each do |stock| %>
+                                                <tr>
+                                                    <td><%=stock.stockname %></td>
+                                                    <td><%=stock.daylow %></td>
+                                                    <td><%=stock.dayhigh %></td>
+                                                    <td><%=stock.currentprice %></td>
+                                                    <td><%=stock.stocksinmarket%></td>
+                                                    <td><%=stock.stocksinexchange %></td>
+                                                    <td><input type="text" maxlength="2" style="width:75px;"<%="id=#{current_user.id}_#{stock.id}"%> onchange="swapper(this.id);" onkeypress="return isNumber(event)"/></td>
+                                                    <td><%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'stock_ajax_handler'},{:id => "form_#{stock.id}", :class => 'trade', :method => 'post', :remote => 'true'}) do |f|%>
+                                                    <%= hidden_field_tag "stocktrade_#{stock.id}"%>
+                                                    <%= hidden_field_tag "identity","stocktrade_#{stock.id}"%>
+                                                    <%= submit_tag "Trade" %>
+                                                    <% end %> 
+                                                    </td>
+                                                </tr>
+                                            <% end %>     
+                                        </tbody>
+                                    </table>
+                               
+                                </div>
+                                <div class="text-right">
+                                    <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Notification Panel</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item">
+                                        <span class="badge">just now</span>
+                                        <i class="fa fa-fw fa-calendar"></i> Calendar updated
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <span class="badge">4 minutes ago</span>
+                                        <i class="fa fa-fw fa-comment"></i> Commented on a post
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <span class="badge">23 minutes ago</span>
+                                        <i class="fa fa-fw fa-truck"></i> Order 392 shipped
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <span class="badge">46 minutes ago</span>
+                                        <i class="fa fa-fw fa-money"></i> Invoice 653 has been paid
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <span class="badge">1 hour ago</span>
+                                        <i class="fa fa-fw fa-user"></i> A new user has been added
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <span class="badge">2 hours ago</span>
+                                        <i class="fa fa-fw fa-check"></i> Completed task: "pick up dry cleaning"
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <span class="badge">yesterday</span>
+                                        <i class="fa fa-fw fa-globe"></i> Saved the world
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <span class="badge">two days ago</span>
+                                        <i class="fa fa-fw fa-check"></i> Completed task: "fix error on sales page"
+                                    </a>
+                                </div>
+                                <div class="text-right">
+                                    <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+<% end %>
+
+
+<% content_for :script do %>
+
+ <script type="text/javascript">
+
+    var swapper = function(swap_stock_trade){
+     var coin_field_id = "stocktrade_"+swap_stock_trade.split('_')[1];
+     //alert(coin_field_id);
+     document.getElementById(coin_field_id).value = document.getElementById(swap_stock_trade).value;
+    };
+
+    var return_result_div = function(data){
+       // $("<p>"+data+"</p>").appendTo("#ajax_notice");
+         $( "#ajax_notice" ).empty();
+         $( "#ajax_notice" ).append( "<p>"+data+"</p>" );
+         // to clear all fields after each call
+         
+         // $('.trade').each(function(i, tradeform) {
+         //   tradeform.reset();
+         //   alert();
+         //  });
+
+    };
+
+    var isNumber= function(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    };
+
+    $(".trade").submit(function(){  
+        var data = $(this).serialize();
+        $.ajax({
+            headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+            type: "POST",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            url: $(this).attr('action'),
+            data: data,
+            dataType: "json",
+            cashe: false,
+            success: function(data){console.log(data); return_result_div(data);},
+            error  : function(){console.log("Error.Did not receive data"); return_result_div("Error.Did not receive data");}
+          });
+        return false; 
+    });
+
+</script>
+
+<% end %>    
