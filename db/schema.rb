@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141203101524) do
+ActiveRecord::Schema.define(version: 20141205054418) do
 
   create_table "banks", force: true do |t|
     t.integer  "user_id"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20141203101524) do
     t.integer  "user_id"
     t.string   "notification"
     t.integer  "seen"
-    t.integer  "type"
+    t.integer  "notice_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

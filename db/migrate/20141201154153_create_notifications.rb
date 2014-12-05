@@ -5,7 +5,6 @@ class CreateNotifications < ActiveRecord::Migration
       t.string  :notification
       t.integer :seen
       t.integer :type
-
       t.timestamps
     end
   end
