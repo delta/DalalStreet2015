@@ -55,7 +55,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 			if @stockidbought && @numofstock ##main if block 1 enters only if ajax variables are recieved
 			   @stock_bought = Stock.find(@stockidbought)
 
-               if @stock_bought.stocksinexchange > @numofstock && @numofstock <= 0
+               if @stock_bought.stocksinexchange > @numofstock and @numofstock > 0
                   @total_price_of_bought_stock = @numofstock*@stock_bought.currentprice
                   @user_cash_inhand = User.find(current_user.id)
                     if @user_cash_inhand.cash - @total_price_of_bought_stock > 0
