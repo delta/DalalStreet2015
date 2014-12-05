@@ -1,4 +1,4 @@
-class DalalDashboardController < ApplicationController
+class DalalDashboardController < WebsocketRails::ApplicationController
 before_filter :authenticate_user! #devise filters#
 protect_from_forgery with: :null_session
 
@@ -55,7 +55,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 			if @stockidbought && @numofstock ##main if block 1 enters only if ajax variables are recieved
 			   @stock_bought = Stock.find(@stockidbought)
 
-               if @stock_bought.stocksinexchange > @numofstock && @numofstock > 0
+               if @stock_bought.stocksinexchange > @numofstock && @numofstock <= 0
                   @total_price_of_bought_stock = @numofstock*@stock_bought.currentprice
                   @user_cash_inhand = User.find(current_user.id)
                     if @user_cash_inhand.cash - @total_price_of_bought_stock > 0
@@ -104,6 +104,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
 	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
 	           @notifications_list = Notification.last(10).reverse
+
 	          ##create methos to get the total stock price of the user#############
               #######################
 
@@ -117,7 +118,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     def buy_sell_ajax_handler
     
 	    if user_signed_in?
-	    	
+	    		
+
 	    else
 	       redirect_to :action => 'index'
 	    end

@@ -186,12 +186,9 @@
                             </div>
                             <div class="panel-body">
                                 <div class="list-group">
-                                   <% @notifications_list.each do |notice|%>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge"><%= notice.updated_at%></span>
-                                        <i class="fa fa-fw fa-check"></i> <%= notice.notification%>
-                                    </a>
-                                <% end %>
+
+                           <%= render partial:"dalal_dashboard/notification_partial",locals: { notifications_list: @notifications_list }%>
+
                                 </div>
                                 <div class="text-right">
                                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
@@ -217,79 +214,7 @@
             //     var ctx = document.getElementById("chart-area").getContext("2d");
             //     window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
             // };
-            
-    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-        var lineChartData = {
-            labels : ["January","February","March","April","May","June","July"],
-            datasets : [
-                {
-                    label: "My First dataset",
-                    fillColor : "rgba(220,220,220,0.2)",
-                    strokeColor : "rgba(220,220,220,1)",
-                    pointColor : "rgba(220,220,220,1)",
-                    pointStrokeColor : "#fff",
-                    pointHighlightFill : "#fff",
-                    pointHighlightStroke : "rgba(220,220,220,1)",
-                    data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                },
-                {
-                    label: "My Second dataset",
-                    fillColor : "rgba(151,187,205,0.2)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    pointHighlightFill : "#fff",
-                    pointHighlightStroke : "rgba(151,187,205,1)",
-                    data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                }
-            ]
-
-        }
-
-        var doughnutData = [
-                {
-                    value: 300,
-                    color:"#F7464A",
-                    highlight: "#FF5A5E",
-                    label: "Red"
-                },
-                {
-                    value: 50,
-                    color: "#46BFBD",
-                    highlight: "#5AD3D1",
-                    label: "Green"
-                },
-                {
-                    value: 100,
-                    color: "#FDB45C",
-                    highlight: "#FFC870",
-                    label: "Yellow"
-                },
-                {
-                    value: 40,
-                    color: "#949FB1",
-                    highlight: "#A8B3C5",
-                    label: "Grey"
-                },
-                {
-                    value: 120,
-                    color: "#4D5360",
-                    highlight: "#616774",
-                    label: "Dark Grey"
-                }
-
-            ];
-
-            window.onload = function(){
-                var ctx1 = document.getElementById("canvas_line").getContext("2d");
-                window.myLine = new Chart(ctx1).Line(lineChartData, {
-                    responsive: true
-                });
-
-                var ctx2 = document.getElementById("chart-area").getContext("2d");
-                window.myDoughnut = new Chart(ctx2).Doughnut(doughnutData, {responsive : true});
-            }
-
+  
 </script>
 
 <% end %>    

@@ -1,0 +1,6 @@
+<% @notifications_list.each do |notice|%>
+	<a href="#" class="list-group-item">
+	<span class="badge"><%= notice.updated_at%></span>
+	<i class="fa fa-fw fa-check"></i> <%= notice.notification%>
+	</a>
+<% end %>
