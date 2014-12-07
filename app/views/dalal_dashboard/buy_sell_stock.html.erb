@@ -180,13 +180,33 @@
                 <div class="col-lg-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i>Buy Sell Panel</h3>
+                                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Buy Sell Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="list-group">
-                                <%= tag "input", { "type" => "button", "value" => "Buy","name" => "Buy", "onclick" => "" } %>
-                                  <%= tag "input", { "type" => "button", "value" => "Sell", "name" => "Sell", "onclick" => "" } %>
-                               </div>
+                            
+                            <div class="panel-body">    
+                            <% @stocks.each do |stock| %>
+                   <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'buy_sell_stock'},{:id => "form_buy", :class => 'buy_sell', :method => 'post', :name=>"form_buy"}) do |f|%>
+                                      <%= label_tag "buy","Bid Price"%>
+                                      <%= text_field_tag "buy"%><br>
+                                      <%= label_tag "num_of_stock","Stocks"%>
+                                      <%= text_field_tag "num_of_stock"%>
+                                      <%= hidden_field_tag "identity_buy","stocktrade_#{stock.id}"%><br>
+                                      <%= submit_tag "Buy" %>
+                                     <% end %>
+                             </div>        
+                             <div class="panel-body">                            
+                   <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'buy_sell_stock'},{:id => "form_sell", :class => 'buy_sell', :method => 'post', :name=>"form_sell"}) do |f|%>
+                                      <%= label_tag "sell","Ask Price"%>             
+                                      <%= text_field_tag "sell"%><br>
+                                      <%= label_tag "num_of_stock","Stocks"%>
+                                      <%= text_field_tag "num_of_stock"%>
+                                      <%= hidden_field_tag "identity_sell","stocktrade_#{stock.id}"%><br>
+                                      <%= submit_tag "Sell" %>
+                                     <% end %>
+
+                               <% end %>  
+                              </div>
                                 <div class="text-right">
                                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>

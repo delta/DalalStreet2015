@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get '/dalal_dashboard/:id/events' => 'dalal_dashboard#market_events'
   get '/dalal_dashboard/:id/buy_sell_page' => 'dalal_dashboard#buy_sell_page'
   get '/dalal_dashboard/:id/buy_sell_stock'=> 'dalal_dashboard#buy_sell_stock'
+  post '/dalal_dashboard/:id/buy_sell_stock'=> 'dalal_dashboard#buy_sell_stock'
   get '/admin/index' => 'admin#index' ###controller not yet created
 
 
