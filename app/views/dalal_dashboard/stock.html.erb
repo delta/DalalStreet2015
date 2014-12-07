@@ -273,11 +273,21 @@
     // });
 
      var dispatcher_stock_table = new WebSocketRails($('.table').data('uri'), true);
+   
+     dispatcher_stock_table.on_open = function() {
+        console.log('Connection has been established:');
+  // You can trigger new server events inside this callback if you wish.
+     }
+
+     dispatcher_stock_table.on_close = function(closed) {
+        console.log('Connection has been closed:'+closed);
+  // You can trigger new server events inside this callback if you wish.
+     }
     
      var getvalues = function(value){  
                            
                  var valuenum = value.split('_')[1];
-                 var data  = {identity: valuenum,value: document.getElementById(value).value};
+                 var data = {identity: valuenum,value: document.getElementById(value).value};
           
                   console.log(data);
 
@@ -293,14 +303,10 @@
                  dispatcher_stock_table.trigger('stock_ajax_handler', data, success, failure); 
 
                  function gettable(gettable_and_flashnotice) {
-
-                       //var get_data = JSON.parse(gettable_and_flashnotice);
-                      //alert(gettable_and_flashnotice);
                       console.log(gettable_and_flashnotice.sent_data.notice);
+                      dispatcher_stock_table.on_close("closed");
                     }
-
                  dispatcher_stock_table.bind('stock_ajax_handler', gettable);
-                
                 // var channel = dispatcher.subscribe('<%=current_user.id%>');
                 // channel.trigger('notification_update',sent,success,failure);
                 // channel.bind('notification_update', function(data) {
