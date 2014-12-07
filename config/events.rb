@@ -3,6 +3,9 @@ WebsocketRails::EventMap.describe do
   # One event can be mapped to any number of controller actions. The
   # actions will be executed in the order they were subscribed.
   
+  subscribe :notification_update, to: SocketController, with_method: :notification_update
+  subscribe :stock_ajax_handler, to: SocketController, with_method: :stock_ajax_handler
+  
   # Uncomment and edit the next line to handle the client connected event:
   #   subscribe :client_connected, :to => Controller, :with_method => :method_name
   #

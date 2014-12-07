@@ -140,7 +140,7 @@
                             <div class="panel-body">
                               <%= @extra %>
                                 <div class="table-responsive">                            
-                                  <table class="table table-bordered table-hover table-striped">
+                                  <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>
                                             <tr>
                                                 <th>Stock</th>
@@ -163,11 +163,10 @@
                                                     <td><%=stock.stocksinmarket%></td>
                                                     <td><%=stock.stocksinexchange %></td>
                                                     <td><input type="text" maxlength="2" style="width:75px;"<%="id=#{current_user.id}_#{stock.id}"%> onchange="swapper(this.id);" onkeypress="return isNumber(event)"/></td>
-                                                    <td><%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'stock_ajax_handler'},{:id => "form_#{stock.id}", :class => 'trade', :method => 'post', :remote => 'true'}) do |f|%>
+                                                    <td>
                                                     <%= hidden_field_tag "stocktrade_#{stock.id}"%>
                                                     <%= hidden_field_tag "identity","stocktrade_#{stock.id}"%>
-                                                    <%= submit_tag "Trade" %>
-                                                    <% end %> 
+                                                    <%= tag "input", { "type" => "button", "value" => "Trade","name" => "Trade", "onclick" => "getvalues('stocktrade_#{stock.id}');" } %>
                                                     </td>
                                                 </tr>
                                             <% end %>     
@@ -189,13 +188,8 @@
                                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Notification Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="list-group">
-                                <% @notifications_list.each do |notice|%>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge"><%= notice.updated_at %></span>
-                                        <i class="fa fa-fw fa-calendar"></i> <%= notice.notification %>
-                                    </a>
-                                <% end %>                                        
+                                <div class="list-group" data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                <%= render partial:"dalal_dashboard/notification_partial",locals: { notifications_list: @notifications_list }%> 
                                 </div>
                                 <div class="text-right">
                                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
@@ -224,16 +218,32 @@
      document.getElementById(coin_field_id).value = document.getElementById(swap_stock_trade).value;
     };
 
+  //var dispatcher = new WebSocketRails($('.list-group').data('uri'), true);
+    
     var return_result_div = function(data){
-       // $("<p>"+data+"</p>").appendTo("#ajax_notice");
          $( "#ajax_notice" ).empty();
          $( "#ajax_notice" ).append( "<p>"+data+"</p>" );
-         // to clear all fields after each call
-         
-         // $('.trade').each(function(i, tradeform) {
-         //   tradeform.reset();
-         //   alert();
-         //  });
+
+                var sent = {
+                  receive: 'true'
+                }
+
+                 var success = function(response) {
+                  console.log("Wow it worked: "+response.message);
+                  dispatcher.unbind('notification_update');
+                  }
+
+                 var failure = function(response) {
+                   console.log("That just totally failed: "+response.message);
+                  }
+
+                 dispatcher.trigger('notification_update', sent, success, failure); 
+
+                 function getnotifications(notice) {
+                      alert(notice);
+                      console.log(notice);
+                    }
+                 dispatcher.bind('notification_update', getnotifications);
 
     };
 
@@ -246,21 +256,54 @@
         return true;
     };
 
-    $(".trade").submit(function(){  
-        var data = $(this).serialize();
-        $.ajax({
-            headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-            type: "POST",
-            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-            url: $(this).attr('action'),
-            data: data,
-            dataType: "json",
-            cashe: false,
-            success: function(data){console.log(data); return_result_div(data);},
-            error  : function(){console.log("Error.Did not receive data"); return_result_div("Error.Did not receive data");}
-          });
-        return false; 
-    });
+    // $(".trade1").submit(function(){  
+    //     var data = $(this).serialize();
+    //     $.ajax({
+    //         headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
+    //         type: "POST",
+    //         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+    //         url: $(this).attr('action'),
+    //         data: data,
+    //         dataType: "json",
+    //         cashe: false,
+    //         success: function(data){console.log(data); return_result_div(data);},
+    //         error  : function(){console.log("Error.Did not receive data"); return_result_div("Error.Did not receive data");}
+    //       });
+    //     return false; 
+    // });
+
+     var dispatcher_stock_table = new WebSocketRails($('.table').data('uri'), true);
+    
+     var getvalues = function(value){  
+                           
+                 var valuenum = value.split('_')[1];
+                 var data  = {identity: valuenum,value: document.getElementById(value).value};
+          
+                  console.log(data);
+
+                 var success = function(response) {
+                  console.log("Wow it worked: "+response.message);
+                  dispatcher_stock_table.unbind('stock_ajax_handler');
+                  }
+
+                 var failure = function(response) {
+                   console.log("That just totally failed: "+response.message);
+                  }
+
+                 dispatcher_stock_table.trigger('stock_ajax_handler', data, success, failure); 
+
+                 function gettable(notice) {
+                      console.log(notice);
+                    }
+
+                 dispatcher_stock_table.bind('stock_ajax_handler', gettable);
+                
+                // var channel = dispatcher.subscribe('<%=current_user.id%>');
+                // channel.trigger('notification_update',sent,success,failure);
+                // channel.bind('notification_update', function(data) {
+                // console.log('channel event received: ' + data);});
+                // channel.unbind('notification_update');
+    };
 
 </script>
 
