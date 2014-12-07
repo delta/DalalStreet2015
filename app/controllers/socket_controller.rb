@@ -66,9 +66,9 @@ require "json"
                 ## update block send response to client
                if @success == 1
                     @stockall = Stock.all
-                    send_message :stock_ajax_handler, sent_data => { :notice => flash[:notice],:stock_update => @stockall}  
+                    send_message :stock_ajax_handler, :sent_data => { :notice => flash[:notice],:stock_update => @stockall}  
                else
-                    send_message :stock_ajax_handler, sent_data => { :notice => flash[:error] }
+                    send_message :stock_ajax_handler, :sent_data => { :notice => flash[:error] }
                end
                 ## end update block send response to client
            

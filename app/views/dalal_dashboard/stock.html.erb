@@ -292,8 +292,11 @@
 
                  dispatcher_stock_table.trigger('stock_ajax_handler', data, success, failure); 
 
-                 function gettable(notice) {
-                      console.log(notice);
+                 function gettable(gettable_and_flashnotice) {
+
+                       //var get_data = JSON.parse(gettable_and_flashnotice);
+                      //alert(gettable_and_flashnotice);
+                      console.log(gettable_and_flashnotice.sent_data.notice);
                     }
 
                  dispatcher_stock_table.bind('stock_ajax_handler', gettable);
