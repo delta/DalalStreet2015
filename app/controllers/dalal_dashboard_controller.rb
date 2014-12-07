@@ -39,6 +39,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	        	@user_cash_inhand = User.find(current_user.id)
 	        	@extra = @user_cash_inhand.cash
 	        	@notifications_list = Notification.last(10).reverse
+	        	##create methos to get the total stock price of the user#############
 	       else
 	          redirect_to :action => 'index'
 	       end	   
@@ -98,16 +99,14 @@ layout "../dalal_dashboard/layout/layout.html.erb"
    #  end #stock_ajax_handle def block
 
 
-    def buy_sell
+    def buy_sell_page
     
 	    if user_signed_in?
 
 	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
 	           @notifications_list = Notification.last(10).reverse
-
 	          ##create methos to get the total stock price of the user#############
               #######################
-
 	    else
 	       redirect_to :action => 'index'
 	    end
@@ -115,15 +114,21 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     end ####end of buy def
 
 
-    def buy_sell_ajax_handler
-    
-	    if user_signed_in?
-	    		
+    def buy_sell_stock
 
+    	  if user_signed_in?
+                ##@stock_unique = Stock.find(:all, :conditions => ["stockname = ?", params[:stockname]])
+                #@stock_unique = Stock.find_by_stockname(params[:stockname])
+	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.stockname' => params[:stockname] ).group("stock_id")
+               @notifications_list = Notification.last(10).reverse 
+               ##create methods to get the total stock price of the user#############
+              #######################
 	    else
 	       redirect_to :action => 'index'
 	    end
 
-    end ####end of sell def
+    end ####end of buy def
+
+
 
 end  #class def  

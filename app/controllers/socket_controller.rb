@@ -15,9 +15,9 @@ require "json"
         end
     end  ##end of #notification updates
 
-    def market_fluctuations
+    def buy_and_sell_handler
     	if user_signed_in?
-
+           
     	else
     			
     	end
