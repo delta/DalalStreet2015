@@ -237,45 +237,48 @@
         return true;
     };
 
-     var connection = function(){var data = {connected : true}; return data;};
+         var connection = function(){var data = {connected : true}; return data;};
 
-     var dispatcher_stock_table = new WebSocketRails($('.table').data('uri'), true);
+         var dispatcher = new WebSocketRails($('.table').data('uri'), true);
 
-         dispatcher_stock_table.on_open = function(){
+         dispatcher.on_open = function(){
             console.log('Connection has been established:');
-         }
+         };
 
-         dispatcher_stock_table.on_close = function(closed){
+         dispatcher.on_close = function(closed){
             console.log('Connection has been closed:'+closed);
-         }
+         };
 
-         var getnoticeandtable = function getnoticeandtable(gettable_and_flashnotice) {
+         
+         var bind_check = 0;
 
-                      console.log(gettable_and_flashnotice.sent_data.notice);
-                      console.log(gettable_and_flashnotice.sent_data.stock_update);
-
-                     $(".render_tbody").empty().append("<%= escape_javascript(render partial:'dalal_dashboard/stock_partial',locals: { stocks: "+gettable_and_flashnotice.sent_data.notice+"})%>");
-                    };
-
-          var getvalues = function(value){  
-                           
+         var getvalues = function(value){  
+         
                  var valuenum = value.split('_')[1];
                  var data = {identity: valuenum,value: document.getElementById(value).value};
-                
-                  dispatcher_stock_table.bind('stock_ajax_handler', getnoticeandtable);          
 
                  var success = function(response) {
-                    console.log(data);
                     console.log("Wow it worked: "+response.message);
-                    dispatcher_stock_table.unbind('stock_ajax_handler');
                   };
 
                  var failure = function(response) {
                     console.log("That just totally failed: "+response.message);
                   };
 
-                 dispatcher_stock_table.trigger('stock_ajax_handler', data, success, failure); 
+                 var gettable = function getable(get_value) {
+                      console.log(get_value.sent_data.notice);
+                      console.log(get_value.sent_data.stock_update);
+                 //$(".render_tbody").empty().append("<%= escape_javascript(render partial:'dalal_dashboard/stock_partial',locals: { stocks: "+gettable_and_flashnotice.sent_data.notice+"})%>");
+                  };
 
+                if(!bind_check)
+                    bind_check = dispatcher.bind('stock_ajax_handler', gettable);
+
+                    dispatcher.trigger('stock_ajax_handler', data, success, failure); 
+               
+    };
+
+    var channel = function(){
                 // var channel = dispatcher.subscribe('<%=current_user.id%>');
                 // channel.trigger('notification_update',sent,success,failure);
                 // channel.bind('notification_update', function(data) {

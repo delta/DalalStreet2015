@@ -70,9 +70,10 @@ require "json"
                 ## update block send response to client
                 @stockall = Stock.all
                if @success == 1
-                    send_message :stock_ajax_handler, :sent_data => { :notice => flash[:notice],:stock_update => @stockall}  
+                ##WebsocketRails.users[current_user.id].send_message('new_notification', {:message => 'you\'ve got an upvote '})
+                    broadcast_message :stock_ajax_handler, :sent_data => { :notice => flash[:notice],:stock_update => @stockall}  
                else
-                    send_message :stock_ajax_handler, :sent_data => { :notice => flash[:error],:stock_update => @stockall}
+                    broadcast_message :stock_ajax_handler, :sent_data => { :notice => flash[:error],:stock_update => @stockall}
                end
                 ## end update block send response to client
            
