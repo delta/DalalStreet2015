@@ -8,7 +8,7 @@ require "json"
     end
 
 	def notification_update 
-	    if user_signed_in?	
+	    if user_signed_in?
 	        @receive = params[:receive] 
 	        @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	        ## new_message = {:message => 'this is a message'}

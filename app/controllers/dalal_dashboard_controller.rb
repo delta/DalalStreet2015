@@ -39,7 +39,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	        	@stocks = Stock.all
 	        	@user_cash_inhand = User.find(current_user.id)
 	        	@extra = @user_cash_inhand.cash
-	        	@notifications_list = Notification.last(10).reverse
+	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	        	##create methos to get the total stock price of the user#############
 	       else
 	          redirect_to :action => 'index'
@@ -51,7 +51,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	    if user_signed_in?
              
 	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
-	           @notifications_list = Notification.last(10).reverse
+	           @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	           logger.info @stocks[0].stockname
 	          ##create methos to get the total stock price of the user#############
               #######################
@@ -69,7 +69,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
                 ##@stock_unique = Stock.find(:all, :conditions => ["stockname = ?", params[:stockname]])
                  #@stock_unique = Stock.find_by_stockname(params[:stockname])
 	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.stockname' => params[:stockname] ).group("stock_id")
-               @notifications_list = Notification.last(10).reverse
+	           @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
                logger.info @stocks[0].stockname 
                ##create methods to get the total stock price of the user#############
               #######################
@@ -94,13 +94,16 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	                if @user_cash_inhand.cash.to_f > @numofstock_buy_for.to_f*@bid_price.to_f 
 		                @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
 		                flash[:notice] = "Successful Bid."
+                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
 		                redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
 	                else
 	                	flash[:error] = "Buy request failed.You only have $ #{@user_cash_inhand.cash}."
-	                	redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
+                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                        redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
 	                end
 	            else
 	            	flash[:error] = "Buy request failed.There are only #{@stock.stocksinmarket} stocks in the market."
+                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
 	                redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
 	            end
 
@@ -113,13 +116,16 @@ layout "../dalal_dashboard/layout/layout.html.erb"
                 if @user_stock_inhand[0].totalstock.to_f > @numofstock_sell_for.to_f
                 	@sell_ask  = Sell.create(:user_id=>current_user.id, :stock_id=>@stockid, :priceexpected=>@ask_price, :numofstock=>@numofstock_sell_for)
                	 	flash[:notice] = "Sell request made."
+                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
                 	redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
                 else
                 	flash[:error] = "Sell request failed.You only have #{@user_stock_inhand[0].totalstock} stocks of #{@user_stock_inhand[0].stockname}."
-                	redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
+                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+              		redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
                 end
              else
                flash[:error] = "Did Not receive request.Please try again."
+               @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
                redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'     		
 	  		 end
 	  		   

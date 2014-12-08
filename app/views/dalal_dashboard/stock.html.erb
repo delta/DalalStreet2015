@@ -200,33 +200,6 @@
      var coin_field_id = "stocktrade_"+swap_stock_trade.split('_')[1];
      document.getElementById(coin_field_id).value = document.getElementById(swap_stock_trade).value;
     };
-    
-    var return_result_div = function(data){
-         $( "#ajax_notice" ).empty();
-         $( "#ajax_notice" ).append( "<p>"+data+"</p>" );
-
-                var sent = {
-                  receive: 'true'
-                }
-
-                 var success = function(response) {
-                  console.log("Wow it worked: "+response.message);
-                  dispatcher.unbind('notification_update');
-                  }
-
-                 var failure = function(response) {
-                   console.log("That just totally failed: "+response.message);
-                  }
-
-                 dispatcher.trigger('notification_update', sent, success, failure); 
-
-                 function getnotifications(notice) {
-                      alert(notice);
-                      console.log(notice);
-                    }
-                 dispatcher.bind('notification_update', getnotifications);
-
-    };
 
     var isNumber= function(evt) {
         evt = (evt) ? evt : window.event;
@@ -242,16 +215,50 @@
          var dispatcher = new WebSocketRails($('.table').data('uri'), true);
 
          dispatcher.on_open = function(){
-            console.log('Connection has been established:');
+            console.log('Connection has been established');
          };
 
-         dispatcher.on_close = function(closed){
-            console.log('Connection has been closed:'+closed);
+         dispatcher.on_close = function(){
+            console.log('Connection has been closed');
          };
-
          
+         //function not completed
          var bind_check = 0;
+        //remember to protect this variable later
+         var binder = function(event){switch(event){
+           
+           case 'notification_update' : dispatcher.bind();
 
+           case 'stock_ajax_handler'  : dispatcher.bind();
+
+         }};
+
+         var getnotifications = function(){
+
+                var sent = {
+                  receive: 'true'
+                }
+
+                 var success = function(response) {
+                  console.log("Wow it worked: "+response.message);
+                  dispatcher.unbind('notification_update');
+                  }
+
+                 var failure = function(response) {
+                   console.log("That just totally failed: "+response.message);
+                  }
+
+                 dispatcher.bind('notification_update', getnotifications);
+                 dispatcher.trigger('notification_update', sent, success, failure); 
+
+                 function getnotifications(notice) {
+                      console.log(notice);
+                      $( "#ajax_notice" ).empty();
+                      $( "#ajax_notice" ).append( "<p>"+notice+"</p>" );
+                    }
+                 
+    };
+         
          var getvalues = function(value){  
          
                  var valuenum = value.split('_')[1];
@@ -265,9 +272,11 @@
                     console.log("That just totally failed: "+response.message);
                   };
 
-                 var gettable = function getable(get_value) {
+                 var gettable = function (get_value) {
                       console.log(get_value.sent_data.notice);
                       console.log(get_value.sent_data.stock_update);
+
+                      getnotifications();
                  //$(".render_tbody").empty().append("<%= escape_javascript(render partial:'dalal_dashboard/stock_partial',locals: { stocks: "+gettable_and_flashnotice.sent_data.notice+"})%>");
                   };
 
