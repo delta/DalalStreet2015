@@ -152,27 +152,12 @@
                                                 <th>Trade</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <% @stocks.each do |stock| %>
-                                                <tr>
-                                                    <td><%=stock.stockname %></td>
-                                                    <td><%=stock.daylow %></td>
-                                                    <td><%=stock.dayhigh %></td>
-                                                    <td><%=stock.currentprice %></td>
-                                                    <td><%=stock.stocksinmarket%></td>
-                                                    <td><%=stock.stocksinexchange %></td>
-                                                    <td><input type="text" maxlength="2" style="width:75px;"<%="id=#{current_user.id}_#{stock.id}"%> onchange="swapper(this.id);" onkeypress="return isNumber(event)"/></td>
-                                                    <td>
-                                                    <%= hidden_field_tag "stocktrade_#{stock.id}"%>
-                                                    <%= hidden_field_tag "identity","stocktrade_#{stock.id}"%>
-                                                    <%= tag "input", { "type" => "button", "value" => "Trade","name" => "Trade", "onclick" => "getvalues('stocktrade_#{stock.id}');" } %>
-                                                    </td>
-                                                </tr>
-                                            <% end %>     
+                                        <tbody class="render_tbody">
+                                         <%= render partial:"dalal_dashboard/stock_partial",locals: { stocks: @stocks }%>  
                                         </tbody>
                                     </table>
                                 </div>
-                                
+
                                 <div class="text-right">
                                     <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
@@ -213,11 +198,8 @@
 
     var swapper = function(swap_stock_trade){
      var coin_field_id = "stocktrade_"+swap_stock_trade.split('_')[1];
-     //alert(coin_field_id);
      document.getElementById(coin_field_id).value = document.getElementById(swap_stock_trade).value;
     };
-
-  //var dispatcher = new WebSocketRails($('.list-group').data('uri'), true);
     
     var return_result_div = function(data){
          $( "#ajax_notice" ).empty();
@@ -255,6 +237,52 @@
         return true;
     };
 
+     var connection = function(){var data = {connected : true}; return data;};
+
+     var dispatcher_stock_table = new WebSocketRails($('.table').data('uri'), true);
+
+         dispatcher_stock_table.on_open = function(){
+            console.log('Connection has been established:');
+         }
+
+         dispatcher_stock_table.on_close = function(closed){
+            console.log('Connection has been closed:'+closed);
+         }
+
+         var getnoticeandtable = function getnoticeandtable(gettable_and_flashnotice) {
+
+                      console.log(gettable_and_flashnotice.sent_data.notice);
+                      console.log(gettable_and_flashnotice.sent_data.stock_update);
+
+                     $(".render_tbody").empty().append("<%= escape_javascript(render partial:'dalal_dashboard/stock_partial',locals: { stocks: "+gettable_and_flashnotice.sent_data.notice+"})%>");
+                    };
+
+          var getvalues = function(value){  
+                           
+                 var valuenum = value.split('_')[1];
+                 var data = {identity: valuenum,value: document.getElementById(value).value};
+                
+                  dispatcher_stock_table.bind('stock_ajax_handler', getnoticeandtable);          
+
+                 var success = function(response) {
+                    console.log(data);
+                    console.log("Wow it worked: "+response.message);
+                    dispatcher_stock_table.unbind('stock_ajax_handler');
+                  };
+
+                 var failure = function(response) {
+                    console.log("That just totally failed: "+response.message);
+                  };
+
+                 dispatcher_stock_table.trigger('stock_ajax_handler', data, success, failure); 
+
+                // var channel = dispatcher.subscribe('<%=current_user.id%>');
+                // channel.trigger('notification_update',sent,success,failure);
+                // channel.bind('notification_update', function(data) {
+                // console.log('channel event received: ' + data);});
+                // channel.unbind('notification_update');
+    };
+
     // $(".trade1").submit(function(){  
     //     var data = $(this).serialize();
     //     $.ajax({
@@ -271,53 +299,18 @@
     //     return false; 
     // });
 
-     var dispatcher_stock_table = new WebSocketRails($('.table').data('uri'), true);
-   
-     dispatcher_stock_table.on_open = function() {
-        console.log('Connection has been established:');
-  // You can trigger new server events inside this callback if you wish.
-     }
-
-     dispatcher_stock_table.on_close = function(closed) {
-        console.log('Connection has been closed:'+closed);
-  // You can trigger new server events inside this callback if you wish.
-     }
-  
   //////// IMPORTANT  ...................   Please check for websocket support  /////////////////   
 // var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
 // if (support == null) {
 //     alert("Your browser doesn't support Websockets.");
 //     return;   
 //}
-     var getvalues = function(value){  
-                           
-                 var valuenum = value.split('_')[1];
-                 var data = {identity: valuenum,value: document.getElementById(value).value};
-          
-                  console.log(data);
 
-                 var success = function(response) {
-                  console.log("Wow it worked: "+response.message);
-                  dispatcher_stock_table.unbind('stock_ajax_handler');
-                  }
+// for(var i = 0; i < json.length; i++) {
+//     var obj = json[i];
 
-                 var failure = function(response) {
-                   console.log("That just totally failed: "+response.message);
-                  }
-
-                 dispatcher_stock_table.trigger('stock_ajax_handler', data, success, failure); 
-
-                 function gettable(gettable_and_flashnotice) {
-                      console.log(gettable_and_flashnotice.sent_data.notice);
-                      dispatcher_stock_table.on_close("closed");
-                    }
-                 dispatcher_stock_table.bind('stock_ajax_handler', gettable);
-                // var channel = dispatcher.subscribe('<%=current_user.id%>');
-                // channel.trigger('notification_update',sent,success,failure);
-                // channel.bind('notification_update', function(data) {
-                // console.log('channel event received: ' + data);});
-                // channel.unbind('notification_update');
-    };
+//     console.log(obj.id);
+// }
 
 </script>
 

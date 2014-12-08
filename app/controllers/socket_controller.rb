@@ -2,6 +2,11 @@ class SocketController < WebsocketRails::BaseController
 before_filter :authenticate_user!
 require "json"
 
+    def initialize_session
+    # perform application setup here
+    controller_store[:message_count] = 0
+    end
+
 	def notification_update 
 	    if user_signed_in?	
 	        @receive = params[:receive] 
@@ -57,18 +62,17 @@ require "json"
                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
                end      
 
-
             else
                flash[:error] = "Did not receive request #{@numofstock} stocks of #{@stock_bought.stockname}.TRADE FAILED"
                @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3) 
             end ##main if block 1
 
                 ## update block send response to client
+                @stockall = Stock.all
                if @success == 1
-                    @stockall = Stock.all
                     send_message :stock_ajax_handler, :sent_data => { :notice => flash[:notice],:stock_update => @stockall}  
                else
-                    send_message :stock_ajax_handler, :sent_data => { :notice => flash[:error] }
+                    send_message :stock_ajax_handler, :sent_data => { :notice => flash[:error],:stock_update => @stockall}
                end
                 ## end update block send response to client
            
@@ -79,4 +83,20 @@ require "json"
     end #stock_ajax_handle def block
 
 
-end
+    def update_stock_market
+        if user_signed_in?
+           # logger.info params[:connected]
+           # if params[:connected] 
+              @stockall = Stock.all
+              broadcast_message :update_stock_market, :sent_data => {:notice => flash[:notice],:stock_update => @stockall}
+           # end
+        else
+           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+           #send_message :update_stock_market, :sent_data => {:error => flash[:error],:stock_update => @stockall}
+           redirect_to :action => 'index'
+        end  
+      
+    end
+
+end ## end of socket controller
+ 

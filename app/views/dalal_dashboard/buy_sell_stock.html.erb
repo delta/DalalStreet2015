@@ -186,21 +186,29 @@
                             
                             <div class="panel-body">    
                             <% @stocks.each do |stock| %>
-                   <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'buy_sell_stock'},{:id => "form_buy", :class => 'buy_sell', :method => 'post', :name=>"form_buy"}) do |f|%>
+                   <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'buy_sell_stock'},{:id => "form_buy", :class => 'buy_sell  contcustom', :method => 'post', :name=>"form_buy", :role=>"form"}) do |f|%>
+                                      <div class="form-group">
                                       <%= label_tag "buy","Bid Price"%>
-                                      <%= text_field_tag "buy"%><br>
+                                      <%= text_field_tag "buy"%>
+                                      </div>
+                                      <div class="form-group">
                                       <%= label_tag "num_of_stock","Stocks"%>
                                       <%= text_field_tag "num_of_stock"%>
+                                      </div>
                                       <%= hidden_field_tag "identity_buy","stocktrade_#{stock.id}"%><br>
                                       <%= submit_tag "Buy" %>
                                      <% end %>
                              </div>        
                              <div class="panel-body">                            
-                   <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'buy_sell_stock'},{:id => "form_sell", :class => 'buy_sell', :method => 'post', :name=>"form_sell"}) do |f|%>
+                   <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'buy_sell_stock'},{:id => "form_sell", :class => 'buy_sell contcustom', :method => 'post', :name=>"form_sell",:role=>"form"}) do |f|%>
+                                      <div class="form-group">
                                       <%= label_tag "sell","Ask Price"%>             
                                       <%= text_field_tag "sell"%><br>
+                                      </div>
+                                      <div class="form-group">
                                       <%= label_tag "num_of_stock","Stocks"%>
                                       <%= text_field_tag "num_of_stock"%>
+                                      </div>
                                       <%= hidden_field_tag "identity_sell","stocktrade_#{stock.id}"%><br>
                                       <%= submit_tag "Sell" %>
                                      <% end %>

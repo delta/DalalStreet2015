@@ -9,6 +9,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	def index
 		if user_signed_in?
          #caution ::::   change to devise parameters later #####
+         #######.................redirect to main page if user not valid ..............instead it is redirecting now to /user/sign_in...which is not correct
   		 @user = User.find(current_user)
   		 redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
   		else
@@ -48,7 +49,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     def buy_sell_page
     
 	    if user_signed_in?
-
+             
 	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
 	           @notifications_list = Notification.last(10).reverse
 	           logger.info @stocks[0].stockname

@@ -1,0 +1,12 @@
+<% @stocks.each do |stock| %>
+   <tr> 
+      <td><%=stock.stockname %></td>
+      <td><%=stock.daylow %></td> 
+      <td><%=stock.dayhigh %></td> 
+      <td><%=stock.currentprice %></td> 
+      <td><%=stock.stocksinmarket%></td> 
+      <td><%=stock.stocksinexchange %></td> 
+      <td><input type="text" maxlength="2" style="width:75px;"<%="id=#{current_user.id}_#{stock.id}"%> onchange="swapper(this.id);" onkeypress="return isNumber(event)"/></td> 
+      <td> <%= hidden_field_tag "stocktrade_#{stock.id}"%> <%= hidden_field_tag "identity","stocktrade_#{stock.id}"%> <%= tag "input", { "type" => "button", "value" => "Trade","name" => "Trade", "onclick" => "getvalues('stocktrade_#{stock.id}');" } %> </td> 
+   </tr> 
+<% end %>

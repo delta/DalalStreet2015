@@ -51,8 +51,9 @@
 	           <div class="modal-body">
 	              <span class="fa fa-spinner bigicon"></span>
 		           <h2>Login</h2> 
-		        <div>      	       
-           <%=form_for(resource, :as => resource_name, :url => session_path(resource_name), :method =>'post') do |f| %>
+		        <div>      
+		       
+ <%=form_for(resource, :as => resource_name, :url => session_path(resource_name), :method =>'post') do |f| %>
 					  <p><%= f.text_field :email , :placeholder => "email" %></p>
 					  <p><%= f.password_field :password , :placeholder => "password"%></p>
 					  <p><%= f.submit "Sign in" %></p>
