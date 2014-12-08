@@ -152,7 +152,7 @@
                                                 <th>Trade</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="render_tbody">
+                                        <tbody id="render_tbody">
                                          <%= render partial:"dalal_dashboard/stock_partial",locals: { stocks: @stocks }%>  
                                         </tbody>
                                     </table>
@@ -252,9 +252,18 @@
                  dispatcher.trigger('notification_update', sent, success, failure); 
 
                  function getnotifications(notice) {
-                      console.log(notice);
-                      $( "#ajax_notice" ).empty();
-                      $( "#ajax_notice" ).append( "<p>"+notice+"</p>" );
+                       
+                       console.log(notice);
+                       console.log(notice.notice[0]);
+
+                        for(var i = 0; i < 10; i++) {
+                            var obj = notice.notice[i];
+                            var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+notice.notice[i].updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+notice.notice[i].notification+'</a>';
+                        }
+
+                      $(".list-group").empty().append(notify);
+                      $( "#ajax_notice" ).empty().append("<p>"+notice.notice[0].notification+"</p>");
+
                     }
                  
     };
@@ -273,11 +282,18 @@
                   };
 
                  var gettable = function (get_value) {
-                      console.log(get_value.sent_data.notice);
+                      console.log(get_value.sent_data.current_user);
                       console.log(get_value.sent_data.stock_update);
 
-                      getnotifications();
-                 //$(".render_tbody").empty().append("<%= escape_javascript(render partial:'dalal_dashboard/stock_partial',locals: { stocks: "+gettable_and_flashnotice.sent_data.notice+"})%>");
+                      for(var i = 0; i < 15; i++) {
+                            var obj = get_value.sent_data.stock_update[i];
+
+                            var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
+                        }
+
+                     $("#render_tbody").empty().append(fill_table);
+                     getnotifications();
+                
                   };
 
                 if(!bind_check)

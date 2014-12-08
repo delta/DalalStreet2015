@@ -11,12 +11,10 @@ require "json"
 	    if user_signed_in?
 	        @receive = params[:receive] 
 	        @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	        ## new_message = {:message => 'this is a message'}
-            send_message :notification_update, @notifications_list.to_json
+            send_message :notification_update, :notice => @notifications_list
         else
-	       @not_signed_in = "You are not signed in.Please sign in first."
-	        new_message = {:message => @not_signed_in}
-            send_message :notification_update, new_message.to_json
+	        @not_signed_in = "You are not signed in.Please sign in first."
+            send_message :notification_update, :notice =>  @not_signed_in
         end
     end  ##end of #notification updates
 
@@ -71,9 +69,9 @@ require "json"
                 @stockall = Stock.all
                if @success == 1
                 ##WebsocketRails.users[current_user.id].send_message('new_notification', {:message => 'you\'ve got an upvote '})
-                    broadcast_message :stock_ajax_handler, :sent_data => { :notice => flash[:notice],:stock_update => @stockall}  
+                    broadcast_message :stock_ajax_handler, :sent_data => { :current_user => current_user.id,:stock_update => @stockall}  
                else
-                    broadcast_message :stock_ajax_handler, :sent_data => { :notice => flash[:error],:stock_update => @stockall}
+                    broadcast_message :stock_ajax_handler, :sent_data => { :current_user => current_user.id,:stock_update => @stockall}
                end
                 ## end update block send response to client
            
