@@ -84,6 +84,7 @@ require "json"
 
 
     def update_stock_user
+        logger.info current_user.id
         if user_signed_in?
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")

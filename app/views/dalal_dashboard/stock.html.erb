@@ -242,15 +242,16 @@
                  var success = function(response) {
                   console.log("Wow it worked: "+response.message);
                   dispatcher.unbind('notification_update');
-                  }
+                  };
 
                  var failure = function(response) {
                    console.log("That just totally failed: "+response.message);
-                  }
+                  };
 
                  dispatcher.bind('notification_update', getnotifications);
+                 
                  dispatcher.trigger('notification_update', sent, success, failure); 
-
+                
                  function getnotifications(notice) {
                        
                        console.log(notice);

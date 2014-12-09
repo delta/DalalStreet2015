@@ -140,7 +140,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                     <table class="table table-bordered table-hover table-striped">
+                                     <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>
                                             <tr>
                                                 <th>Stock</th>
@@ -248,7 +248,7 @@
             //     window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
             // };
      $(function(){
-      var dispatcher = new WebSocketRails('localhost:3000/websocket');
+      var dispatcher = new WebSocketRails($('.table').data('uri'), true);
       var channel = dispatcher.subscribe('stocks');
       channel.bind('update_stock_user', function(get_value) {  
         console.log(get_value);
@@ -273,15 +273,15 @@
                   console.log(get_value);
      
                   for(var i = 0; i < 10; i++) {
-                                var obj = get_value.sent.notice[i];
+                                var obj = get_value.sent_data.notice[i];
                                 var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
                             }
              
-             $( "#ajax_notice" ).empty().append("<p>"+get_value.sent.notice[0].notification+"</p>");
+             $( "#ajax_notice" ).empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
              $(".list-group").empty().append(notify);
 
              for(var i = 0; i < 15; i++) {
-                                var obj = get_value.sent.stock_update[i];
+                                var obj = get_value.sent_data.stock_update[i];
 
                                 var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td></tr>';
                             }
