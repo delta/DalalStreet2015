@@ -1,5 +1,6 @@
 class SocketController < WebsocketRails::BaseController
 before_filter :authenticate_user!
+
 require "json"
 
     def initialize_session
@@ -68,7 +69,7 @@ require "json"
                 ## update block send response to client
                 @stockall = Stock.all
                if @success == 1
-                ##WebsocketRails.users[current_user.id].send_message('new_notification', {:message => 'you\'ve got an upvote '})
+                    WebsocketRails[:stocks].trigger(:update_stock_user, "true")
                     broadcast_message :stock_ajax_handler, :sent_data => { :current_user => current_user.id,:stock_update => @stockall}  
                else
                     broadcast_message :stock_ajax_handler, :sent_data => { :current_user => current_user.id,:stock_update => @stockall}
@@ -82,13 +83,11 @@ require "json"
     end #stock_ajax_handle def block
 
 
-    def update_stock_market
+    def update_stock_user
         if user_signed_in?
-           # logger.info params[:connected]
-           # if params[:connected] 
-              @stockall = Stock.all
-              broadcast_message :update_stock_market, :sent_data => {:notice => flash[:notice],:stock_update => @stockall}
-           # end
+              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+              @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
+              send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            #send_message :update_stock_market, :sent_data => {:error => flash[:error],:stock_update => @stockall}

@@ -123,6 +123,8 @@
                 <div class="row">
                  
                   <div class="col-lg-12">
+                  <div id="ajax_notice">
+                    </div>
                     <% if flash[:notice] %>
                     <div class="notice"><%= flash[:notice] %></div>
                     <% end %>
@@ -151,9 +153,8 @@
                                                 <th>StockBought</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-
-                                            <% @stocks.each do |stock| %>
+                                        <tbody id="render_tbody">
+                                             <% @stocks.each do |stock| %>
                                                 <tr>
                                                     <td><%=stock.stockname %></td>
                                                     <td><%=stock.alltimelow %></td>
@@ -246,6 +247,52 @@
             //     var ctx = document.getElementById("chart-area").getContext("2d");
             //     window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
             // };
+     $(function(){
+      var dispatcher = new WebSocketRails('localhost:3000/websocket');
+      var channel = dispatcher.subscribe('stocks');
+      channel.bind('update_stock_user', function(get_value) {  
+        console.log(get_value);
+        get_userstock_info(get_value,dispatcher);
+      });
+    });
+
+    var get_userstock_info  = function(bool,dispatcher){
+
+         var sent = {receive: bool};
+
+         var success = function(response) {
+                  console.log("Wow it worked: "+response.message);
+                  //dispatcher.unbind('notification_update');
+                  };
+
+         var failure = function(response) {
+                   console.log("That just totally failed: "+response.message);
+                  };
+
+             dispatcher.bind('update_stock_user', function(get_value) {
+                  console.log(get_value);
+     
+                  for(var i = 0; i < 10; i++) {
+                                var obj = get_value.sent.notice[i];
+                                var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
+                            }
+             
+             $( "#ajax_notice" ).empty().append("<p>"+get_value.sent.notice[0].notification+"</p>");
+             $(".list-group").empty().append(notify);
+
+             for(var i = 0; i < 15; i++) {
+                                var obj = get_value.sent.stock_update[i];
+
+                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td></tr>';
+                            }
+
+                         $("#render_tbody").empty().append(fill_table);
+                         
+      });
+     
+         dispatcher.trigger('update_stock_user', sent, success, failure); 
+
+    }; 
             
     var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
         var lineChartData = {

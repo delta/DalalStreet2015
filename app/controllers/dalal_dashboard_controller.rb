@@ -61,6 +61,14 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
     end ####end of buy def
 
+protected
+
+    def comparator 
+    	
+    
+
+    end ##end of comparator
+
 ########################IMPORTANT :::::: Dont forget to block url to http://0.0.0.0:3000/dalal_dashboard/298486374/buy_sell_stock :::::####################################
     def buy_sell_stock
       if request.get?
@@ -95,6 +103,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 		                @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
 		                flash[:notice] = "Successful Bid."
                         @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                        comparator
 		                redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
 	                else
 	                	flash[:error] = "Buy request failed.You only have $ #{@user_cash_inhand.cash}."
@@ -116,7 +125,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
                 if @user_stock_inhand[0].totalstock.to_f > @numofstock_sell_for.to_f
                 	@sell_ask  = Sell.create(:user_id=>current_user.id, :stock_id=>@stockid, :priceexpected=>@ask_price, :numofstock=>@numofstock_sell_for)
                	 	flash[:notice] = "Sell request made."
-                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+               	 	@notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                	comparator
                 	redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
                 else
                 	flash[:error] = "Sell request failed.You only have #{@user_stock_inhand[0].totalstock} stocks of #{@user_stock_inhand[0].stockname}."
