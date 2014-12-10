@@ -82,7 +82,11 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                    <% @price_of_tot_stock = 0%>
+                                    <% @stocks.each do |stock| %>
+                                    <% @price_of_tot_stock = @price_of_tot_stock + stock.netcash.to_f %>
+                                    <% end %>
+                                        <div class="huge"><%=@price_of_tot_stock%></div>
                                         <div>Stock</div>
                                     </div>
                                 </div>
@@ -151,6 +155,7 @@
                                                 <th>Current (USD)</th>
                                                 <th>StockInMarket</th>
                                                 <th>StockBought</th>
+                                                <th>StockWorth</th>
                                             </tr>
                                         </thead>
                                         <tbody id="render_tbody">
@@ -164,6 +169,7 @@
                                                     <td><%=stock.currentprice %></td>
                                                     <td><%=stock.stocksinmarket%></td>
                                                     <td><%=stock.totalstock %></td>
+                                                    <td><%=stock.netcash %></td>
                                                 </tr>
                                             <% end %>     
                                         </tbody>
@@ -283,7 +289,7 @@
              for(var i = 0; i < 15; i++) {
                                 var obj = get_value.sent_data.stock_update[i];
 
-                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td></tr>';
+                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+obj.net_cash+'</td></tr>';
                             }
 
                          $("#render_tbody").empty().append(fill_table);

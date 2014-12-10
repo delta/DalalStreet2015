@@ -18,12 +18,15 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	end
 	
 	def show
+		## the chart and pie charts fix em .........works only on reload ...... #####################
 		if request.get?
 		   if !user_signed_in?
 	         redirect_to :action => 'index'
 	       else
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	          @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
+	          @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
+	          
+	          #@total_stock_price = Stock.find(:all, :joins => [:stock_useds], :select => "stocks.*,sum(stock_useds.numofstock) as totalstock", :conditions => 'stock_useds.user_id' => current_user.id, :group => "stock_id")
 	          ##create methos to get the total stock price of the user#############
               #######################
 	       end
@@ -61,19 +64,11 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
     end ####end of buy def
 
-protected
-
-    def comparator 
-    	
-    
-
-    end ##end of comparator
-
 ########################IMPORTANT :::::: Dont forget to block url to http://0.0.0.0:3000/dalal_dashboard/298486374/buy_sell_stock :::::####################################
     def buy_sell_stock
-      if request.get?
-    	
+      if request.get? 	
     	if user_signed_in?
+    		logger.info "Inside"
                 ##@stock_unique = Stock.find(:all, :conditions => ["stockname = ?", params[:stockname]])
                  #@stock_unique = Stock.find_by_stockname(params[:stockname])
 	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.stockname' => params[:stockname] ).group("stock_id")
@@ -145,6 +140,19 @@ protected
 
 	  end ##block for get or post request 
     end ####end of buy def
+
+protected
+    def comparator 
+         
+         #@all_stock_ids = ''
+         @Buy_table  = Buy.uniq.pluck(:stock_id) 
+         @Sell_table = Sell.uniq.pluck(:stock_id)
+
+         logger.info "sell-"+@Sell_table
+         logger.info "buy-"+@Buy_table
+         
+ 
+    end ##end of comparator
 
 
 end  #class def  

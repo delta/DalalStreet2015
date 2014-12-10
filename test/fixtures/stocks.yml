@@ -76,7 +76,7 @@ g:
 
 h:
    stockname: 'HDFC'
-   currentprice: 56.4
+   currentprice: 56.0
    dayhigh: 66.00
    daylow: 33.00
    alltimehigh: 66.00
