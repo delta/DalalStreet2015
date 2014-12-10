@@ -123,7 +123,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
                 	@sell_ask  = Sell.create(:user_id=>current_user.id, :stock_id=>@stockid, :priceexpected=>@ask_price, :numofstock=>@numofstock_sell_for)
                	 	flash[:notice] = "Sell request made."
                	 	@notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
-                	comparator
+                    ## call comparator
+                	@comparator = User.comparator
                 	redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
                 else
                 	flash[:error] = "Sell request failed.You only have #{@user_stock_inhand[0].totalstock} stocks of #{@user_stock_inhand[0].stockname}."
