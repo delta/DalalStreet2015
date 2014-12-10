@@ -144,15 +144,52 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 protected
     def comparator 
          
-         #@all_stock_ids = ''
          @Buy_table  = Buy.uniq.pluck(:stock_id) 
          @Sell_table = Sell.uniq.pluck(:stock_id)
+         @all_ids = @Sell_table + @Buy_table	
+         ##select unique ids of stcok only
+         @all_ids = @all_ids.uniq
+         logger.info @all_ids
 
-         logger.info "sell-"+@Sell_table
-         logger.info "buy-"+@Buy_table
-         
- 
-    end ##end of comparator
 
+          @all_ids.each do |id| ##start of buy_sell for each loop comparator
+            logger.info id  
+            
+             @Buy_id = Buy.where(:stock_id => id).order('price DESC').first
+             @Sell_id = Sell.where(:stock_id => id).order('priceexpected ASC').first
+             
+             if @Buy_id && @Sell_id
+                logger.info @Buy_id
+                logger.info @Sell_id 
+                if @Buy_id.price >= @Sell_id.priceexpected
+                	##check for cash in buy user ## check for stock in sell user
+                    @buy_user_cash = User.select('cash').where(:id => @Buy_id.user_id)
+	    	        @sell_user_stock = StockUsed.select("sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => @Sell_id.user_id,'stocks.id' => id).group("stock_id")
+                    if @buy_user_cash.cash >= @Buy_id.price*@Buy_id.numofstock && @sell_user_stock.totalstock >= @Sell_id.numofstock
+                     stock_looper @Buy_id @Sell_id  	 
+                    else
+                     @log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id, :log => "")	 
+                    end	
+                else
+                 @log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id, :log => "Sell price is greater than Buy price")	 
+                end #@Buy_id.price >= @Sell_id.priceexpected
+             else   
+              @log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id, :log => "No stock match found")	 
+             end #@Buy_id && @Sell_id
+        
+          end  ##end of for each loop .............comparator
+                  
+    end ##end of comparator def
+
+
+    def stock_looper 
+    	if @Buy_id.numofstock > @Sell_id.numofstock
+            stock_looper Buy_id
+        elsif
+            stock_looper
+        else	
+                            
+        end
+    end #stock_looper
 
 end  #class def  
