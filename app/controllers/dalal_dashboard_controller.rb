@@ -10,6 +10,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 		if user_signed_in?
          #caution ::::   change to devise parameters later #####
          #######.................redirect to main page if user not valid ..............instead it is redirecting now to /user/sign_in...which is not correct
+  		 #######....Wats the limit of stocks user can buy from stocksinmarket,,how much he can bid for etc.........###########################
+  		 #######....wat to do if sum of total stock is zero in stock_useds ..........................#########################
   		 @user = User.find(current_user)
   		 redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
   		else
@@ -134,5 +136,52 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	  end ##block for get or post request 
     end ####end of buy def
 
+    
+    def bank_mortgage
+    	 if user_signed_in?
+	       	   @stocks_list = Stock.return_bought_stocks(current_user.id)
+	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+	           @notifications_list = Notification.get_notice(current_user.id,10)
+	     else
+	       redirect_to :action => 'index'
+	     end
+    end ###bank_mortgage
+
+    def bank_mortgage_stock
+    	if request.get?
+	    	if user_signed_in?
+	          @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.stockname' => params[:stockname] ).group("stock_id").first
+	          @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+	    	else
+	    	  redirect_to :action => 'index'
+	    	end
+	    else
+	    	if user_signed_in?
+	    		@stockid = params[:identity_bank].split("_")[1]
+                @numofstock_to_mortgage = params[:num_of_stock]
+	            @check_stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.id' => @stockid ).group("stock_id").first
+                logger.info @check_stock.totalstock 
+                ##check if he has enough stock
+                if @check_stock.totalstock.to_f >= @numofstock.to_f
+                   @user_cash_inhand = User.find(current_user.id)
+                   @user_cash_inhand.cash = @user_cash_inhand.cash.to_f + 0.75*@numofstock_to_mortgage.to_f*@check_stock.currentprice.to_f
+                   @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @stockid,:numofstock => -1*@numofstock_to_mortgage.to_f)
+                   @mortgage = Bank.create(:user_id => current_user.id, :stock_id => @stockid,:pricerendered => @check_stock.currentprice, :numofstock => @numofstock_to_mortgage)
+                   @user_cash_inhand.save  
+                   @extra_cash = 0.75*@numofstock_to_mortgage.to_f*@check_stock.currentprice.to_f
+                   flash[:notice] = "Mortgage Successful.$#{@extra_cash} added to your account"
+                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+              	   redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                else
+                   flash[:error] = "Invalid request.You only have #{@check_stock.totalstock} stocks of #{@check_stock.stockname}."
+                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+              	   redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                end
+	    	else
+	    	  redirect_to :action => 'index'
+	    	end ##end of user_signed_in
+	    end ##end of request
+    end##end of bank_mortgage11
 
 end  #class def  

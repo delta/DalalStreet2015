@@ -17,15 +17,7 @@ require "json"
 	        @not_signed_in = "You are not signed in.Please sign in first."
             send_message :notification_update, :notice =>  @not_signed_in
         end
-    end  ##end of #notification updates
-
-    def buy_and_sell_handler
-    	if user_signed_in?
-           
-    	else
-    			
-    	end
-    end    
+    end  ##end of #notification updates   
 
    def stock_ajax_handler
        

@@ -183,7 +183,9 @@
                         <a href="#"><i class="fa fa-fw fa-edit"></i> Company Profile</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-fw fa-desktop"></i> Bank Mortage</a>
+                    <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'bank_mortgage' do %>
+                        <span id="span"><i class="fa fa-fw fa-desktop"></i> Bank Mortage</span>
+                    <% end %>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-fw fa-wrench"></i> Market Events</a>
