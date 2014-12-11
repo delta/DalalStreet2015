@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 	has_many :stock_useds
 	has_many :logs
 
-
+#######################################CHECK Time conflictssss...... and write Publish functions for notified user....................................#################
     def self.comparator 
          
          @Buy_table  = Buy.uniq.pluck(:stock_id) 

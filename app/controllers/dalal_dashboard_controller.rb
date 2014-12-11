@@ -25,10 +25,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	       else
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	          @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
-	          
-	          #@total_stock_price = Stock.find(:all, :joins => [:stock_useds], :select => "stocks.*,sum(stock_useds.numofstock) as totalstock", :conditions => 'stock_useds.user_id' => current_user.id, :group => "stock_id")
-	          ##create methos to get the total stock price of the user#############
-              #######################
+	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	       end
 	    else
 	       ##fill up
@@ -36,14 +33,11 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	    end   
 	end
 
-
  	def stock
 	       if user_signed_in?
 	        	@stocks = Stock.all
-	        	@user_cash_inhand = User.find(current_user.id)
-	        	@extra = @user_cash_inhand.cash
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	        	##create methos to get the total stock price of the user#############
+	            @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	       else
 	          redirect_to :action => 'index'
 	       end	   
@@ -52,12 +46,10 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     def buy_sell_page
     
 	    if user_signed_in?
-             
-	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
+	    	  #@stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
+	           @stocks_list = Stock.all
+	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	           @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	           logger.info @stocks[0].stockname
-	          ##create methos to get the total stock price of the user#############
-              #######################
 	    else
 	       redirect_to :action => 'index'
 	    end
@@ -68,15 +60,14 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     def buy_sell_stock
       if request.get? 	
     	if user_signed_in?
-    		logger.info "Inside"
-                ##@stock_unique = Stock.find(:all, :conditions => ["stockname = ?", params[:stockname]])
-                 #@stock_unique = Stock.find_by_stockname(params[:stockname])
-	    	   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.stockname' => params[:stockname] ).group("stock_id")
-	           @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-               logger.info @stocks[0].stockname 
-               ##create methods to get the total stock price of the user#############
-              #######################
-	    else
+            @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.stockname' => params[:stockname] ).group("stock_id").first
+	        @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+            if !@stocks
+              @stocks = Stock.select("stocks.*").where('stocks.stockname' => params[:stockname]).first
+              @No_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
+            end   
+        else
 	       redirect_to :action => 'index'
 	    end
 

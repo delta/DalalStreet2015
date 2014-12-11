@@ -81,7 +81,7 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div class="huge"><%=@price_of_tot_stock%></div>
                                         <div>Stock</div>
                                     </div>
                                 </div>
@@ -137,7 +137,6 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Stocks </h3>
                             </div>
                             <div class="panel-body">
-                              <%= @extra %>
                                 <div class="table-responsive">                            
                                   <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>

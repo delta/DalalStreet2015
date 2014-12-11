@@ -82,7 +82,7 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div class="huge"><%=@price_of_tot_stock%></div>
                                         <div>Stock</div>
                                     </div>
                                 </div>
@@ -123,6 +123,8 @@
                 <div class="row">
                  
                   <div class="col-lg-12">
+                  <div id="ajax_notice">
+                    </div>
                     <% if flash[:notice] %>
                     <div class="notice"><%= flash[:notice] %></div>
                     <% end %>
@@ -138,7 +140,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                     <table class="table table-bordered table-hover table-striped">
+                                     <table class="table table-bordered table-hover table-striped"  data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>
                                             <tr>
                                                 <th>Stock</th>
@@ -148,11 +150,10 @@
                                                 <th>DayHigh</th>
                                                 <th>Current (USD)</th>
                                                 <th>StockInMarket</th>
-                                                <th>StockBought</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <% @stocks.each do |stock| %>
+                                        <tbody id="render_tbody">
+                                            <% @stocks_list.each do |stock| %>
                                                 <tr>
                                         <td><%= link_to "#{stock.stockname}", {:controller=>"dalal_dashboard",:id =>"#{current_user.id}",:action =>"buy_sell_stock",:stockname =>"#{stock.stockname}"}, id: "#{stock.stockname}_#{stock.id}", class: "stock_name"%></td>
                                                     <td><%=stock.alltimelow %></td>
@@ -161,7 +162,6 @@
                                                     <td><%=stock.dayhigh %></td>
                                                     <td><%=stock.currentprice %></td>
                                                     <td><%=stock.stocksinmarket%></td>
-                                                    <td><%=stock.totalstock %></td>
                                                 </tr>
                                             <% end %>     
                                         </tbody>
@@ -208,11 +208,57 @@
 <% content_for :script do %>
 
    <script type="text/javascript">
+  $(function(){
+      var dispatcher = new WebSocketRails($('.table').data('uri'), true);
+      
+      dispatcher.on_open = function(){
+        console.log("Connection established");
+      };
 
-    // window.onload = function(){
-            //     var ctx = document.getElementById("chart-area").getContext("2d");
-            //     window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
-            // };
+      var channel = dispatcher.subscribe('stocks');
+      channel.bind('update_stock_user', function(get_value) {  
+        console.log(get_value);
+        get_userstock_info(get_value,dispatcher);
+      });
+    });
+
+    var get_userstock_info  = function(bool,dispatcher){
+
+         var sent = {receive: bool};
+
+         var success = function(response) {
+                  console.log("Wow it worked: "+response.message);
+                  //dispatcher.unbind('notification_update');
+                  };
+
+         var failure = function(response) {
+                   console.log("That just totally failed: "+response.message);
+                  };
+
+             dispatcher.bind('update_stock_user', function(get_value) {
+                  console.log(get_value);
+     
+                  for(var i = 0; i < 10; i++) {
+                                var obj = get_value.sent_data.notice[i];
+                                var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
+                            }
+             
+             $("#ajax_notice").empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
+             $(".list-group").empty().append(notify);
+
+             for(var i = 0; i < 15; i++) {
+                                var obj = get_value.sent_data.stock_update[i];
+
+                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+obj.net_cash+'</td></tr>';
+                            }
+
+                         $("#render_tbody").empty().append(fill_table);
+                         
+      });
+     
+         dispatcher.trigger('update_stock_user', sent, success, failure); 
+
+    }; 
   
 </script>
 

@@ -82,7 +82,7 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div class="huge"><%=@price_of_tot_stock%></div>
                                         <div>Stock</div>
                                     </div>
                                 </div>
@@ -123,6 +123,8 @@
                 <div class="row">
                  
                   <div class="col-lg-12">
+                    <div id="ajax_notice">
+                    </div>
                     <% if flash[:notice] %>
                     <div class="notice"><%= flash[:notice] %></div>
                     <% end %>
@@ -137,8 +139,9 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
                             </div>
                             <div class="panel-body">
+                            <%if !@No_stock_found%>
                                 <div class="table-responsive">
-                                     <table class="table table-bordered table-hover table-striped">
+                                     <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>
                                             <tr>
                                                 <th>Stock</th>
@@ -151,21 +154,49 @@
                                                 <th>StockBought</th>
                                             </tr>
                                         </thead>
-                                        <tbody><% @stocks.each do |stock| %>
+                                        <tbody id="render_tbody">
                                              <tr>
-                                                    <td><%=stock.stockname %></td>
-                                                    <td><%=stock.alltimelow %></td>
-                                                    <td><%=stock.alltimehigh %></td>
-                                                    <td><%=stock.daylow %></td>
-                                                    <td><%=stock.dayhigh %></td>
-                                                    <td><%=stock.currentprice %></td>
-                                                    <td><%=stock.stocksinmarket%></td>
-                                                    <td><%=stock.totalstock %></td>
+                                                    <td><%=@stocks.stockname %></td>
+                                                    <td><%=@stocks.alltimelow %></td>
+                                                    <td><%=@stocks.alltimehigh %></td>
+                                                    <td><%=@stocks.daylow %></td>
+                                                    <td><%=@stocks.dayhigh %></td>
+                                                    <td><%=@stocks.currentprice %></td>
+                                                    <td><%=@stocks.stocksinmarket%></td>
+                                                    <td><%=@stocks.totalstock %></td>
                                                 </tr>
-                                            <% end %>  
                                         </tbody>
                                     </table>
                                 </div>
+                                <% else %>
+                                     <div class="table-responsive">
+                                         <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                            <thead>
+                                                <tr>
+                                                    <th>Stock</th>
+                                                    <th>AllTimeLow</th>
+                                                    <th>AllTimeHigh</th>
+                                                    <th>DayLow</th>
+                                                    <th>DayHigh</th>
+                                                    <th>Current (USD)</th>
+                                                    <th>StockInMarket</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="render_tbody">
+                                                 <tr>
+                                                        <td><%=@stocks.stockname %></td>
+                                                        <td><%=@stocks.alltimelow %></td>
+                                                        <td><%=@stocks.alltimehigh %></td>
+                                                        <td><%=@stocks.daylow %></td>
+                                                        <td><%=@stocks.dayhigh %></td>
+                                                        <td><%=@stocks.currentprice %></td>
+                                                        <td><%=@stocks.stocksinmarket%></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <%= @No_stock_found%>
+                                <% end %>
                                 <div class="text-right">
                                     <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
@@ -173,8 +204,6 @@
                         </div>
                     </div>
                  </div> <!-- row -->
-
-                <!-- /.row -->
 
                 <div class="row">
                 <div class="col-lg-6">
@@ -185,7 +214,6 @@
                             <div class="panel-body">
                             
                             <div class="panel-body">    
-                            <% @stocks.each do |stock| %>
                    <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'buy_sell_stock'},{:id => "form_buy", :class => 'buy_sell  contcustom', :method => 'post', :name=>"form_buy", :role=>"form"}) do |f|%>
                                       <div class="form-group">
                                       <%= label_tag "buy","Bid Price"%>
@@ -195,11 +223,12 @@
                                       <%= label_tag "num_of_stock","Stocks"%>
                                       <%= text_field_tag "num_of_stock"%>
                                       </div>
-                                      <%= hidden_field_tag "identity_buy","stocktrade_#{stock.id}"%><br>
+                                      <%= hidden_field_tag "identity_buy","stocktrade_#{@stocks.id}"%><br>
                                       <%= submit_tag "Buy" %>
                                      <% end %>
-                             </div>        
-                             <div class="panel-body">                            
+                             </div>    
+                              <div class="panel-body">      
+                             <%if !@No_stock_found -%>
                    <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'buy_sell_stock'},{:id => "form_sell", :class => 'buy_sell contcustom', :method => 'post', :name=>"form_sell",:role=>"form"}) do |f|%>
                                       <div class="form-group">
                                       <%= label_tag "sell","Ask Price"%>             
@@ -209,11 +238,10 @@
                                       <%= label_tag "num_of_stock","Stocks"%>
                                       <%= text_field_tag "num_of_stock"%>
                                       </div>
-                                      <%= hidden_field_tag "identity_sell","stocktrade_#{stock.id}"%><br>
+                                      <%= hidden_field_tag "identity_sell","stocktrade_#{@stocks.id}"%><br>
                                       <%= submit_tag "Sell" %>
                                      <% end %>
-
-                               <% end %>  
+                               <% end -%>      
                               </div>
                                 <div class="text-right">
                                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
@@ -252,11 +280,8 @@
 
    <script type="text/javascript">
 
-    // window.onload = function(){
-            //     var ctx = document.getElementById("chart-area").getContext("2d");
-            //     window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
-            // };
-  
+    
+
 </script>
 
 <% end %>    

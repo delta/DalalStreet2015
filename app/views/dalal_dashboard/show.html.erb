@@ -256,6 +256,11 @@
      $(function(){
       var dispatcher = new WebSocketRails($('.table').data('uri'), true);
       var channel = dispatcher.subscribe('stocks');
+
+      dispatcher.on_open = function(){
+        console.log("Connection established");
+      };
+
       channel.bind('update_stock_user', function(get_value) {  
         console.log(get_value);
         get_userstock_info(get_value,dispatcher);
