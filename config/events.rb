@@ -4,8 +4,10 @@ WebsocketRails::EventMap.describe do
   # actions will be executed in the order they were subscribed.
    
     subscribe :update_stock_user, to: SocketController, with_method: :update_stock_user
+    subscribe :update_stock_all, to: SocketController, with_method: :update_stock_all
     subscribe :notification_update, to: SocketController, with_method: :notification_update
     subscribe :stock_ajax_handler, to: SocketController, with_method: :stock_ajax_handler
+
  
   
   # Uncomment and edit the next line to handle the client connected event:

@@ -84,17 +84,25 @@ require "json"
 
 
     def update_stock_user
-        logger.info current_user.id
         if user_signed_in?
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
               send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
-           #send_message :update_stock_market, :sent_data => {:error => flash[:error],:stock_update => @stockall}
            redirect_to :action => 'index'
         end  
-      
+    end
+
+    def update_stock_all
+       if user_signed_in?
+              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+              @stocks = Stock.all
+              send_message :update_stock_all, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
+        else
+           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+           redirect_to :action => 'index'
+        end
     end
 
 end ## end of socket controller

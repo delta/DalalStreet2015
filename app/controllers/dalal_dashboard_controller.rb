@@ -24,7 +24,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	         redirect_to :action => 'index'
 	       else
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	          @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
+	       	  @stocks = Stock.return_bought_stocks(current_user.id)
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	       end
 	    else
@@ -89,9 +89,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 		                @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
 		                flash[:notice] = "Successful Bid."
                         @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
-                        
-                        ## call comparator
-                        @comparator = User.comparator
+                        ## call comparator ##can be made efficient
+                        @comparator = User.comparator(params[:identity_buy].split("_")[0])
 		                redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
 	                else
 	                	flash[:error] = "Buy request failed.You only have $ #{@user_cash_inhand.cash}."
@@ -114,8 +113,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
                 	@sell_ask  = Sell.create(:user_id=>current_user.id, :stock_id=>@stockid, :priceexpected=>@ask_price, :numofstock=>@numofstock_sell_for)
                	 	flash[:notice] = "Sell request made."
                	 	@notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
-                    ## call comparator
-                	@comparator = User.comparator
+                    ## call comparator ##can be made efficient
+                	@comparator = User.comparator(params[:identity_sell].split("_")[0])
                 	redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
                 else
                 	flash[:error] = "Sell request failed.You only have #{@user_stock_inhand[0].totalstock} stocks of #{@user_stock_inhand[0].stockname}."

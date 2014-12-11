@@ -82,10 +82,6 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                    <% @price_of_tot_stock = 0%>
-                                    <% @stocks.each do |stock| %>
-                                    <% @price_of_tot_stock = @price_of_tot_stock + stock.netcash.to_f %>
-                                    <% end %>
                                         <div class="huge"><%=@price_of_tot_stock%></div>
                                         <div>Stock</div>
                                     </div>

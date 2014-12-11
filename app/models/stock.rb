@@ -9,8 +9,12 @@ has_many :stock_useds
          @stocks.each do |stock| 
           @price_of_tot_stock = @price_of_tot_stock + stock.netcash.to_f
          end
-
    return @price_of_tot_stock
+ end
+
+ def self.return_bought_stocks(id)
+   @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => id).group("stock_id")
+   return @stocks
  end
 
 end
