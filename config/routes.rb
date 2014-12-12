@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   get '/dalal_dashboard/:id/bank_mortgage_stock'=> 'dalal_dashboard#bank_mortgage_stock'
   post '/dalal_dashboard/:id/bank_mortgage_stock'=> 'dalal_dashboard#bank_mortgage_stock'
   get '/dalal_dashboard/:id/company' => 'dalal_dashboard#company'
+  get '/dalal_dashboard/:id/buy_sell_history' => 'dalal_dashboard#buy_sell_history'
+
   get '/admin/index' => 'admin#index' ###controller not yet created
 
 

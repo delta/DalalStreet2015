@@ -47,6 +47,10 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'websocket-rails'
 
+gem "resque"
+
+gem "resque-scheduler"
+
 # Use unicorn as the app server
 # gem 'unicorn'
 

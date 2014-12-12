@@ -204,7 +204,9 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-fw fa-file"></i> Blank Page</a>
+                    <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'buy_sell_history' do %>
+                        <span id="span"><i class="fa fa-fw fa-file"></i> Buy Sell History</span>
+                    <% end %>
                     </li>
                 </ul>
             </div>

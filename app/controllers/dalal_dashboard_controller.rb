@@ -184,9 +184,21 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	    end ##end of request
     end##end of bank_mortgage
 
+	def buy_sell_history
+        if user_signed_in?
+        	@buy_history = Buy.select("stock_id,numofstock,updated_at").where('user_id' => current_user.id).last(10).reverse
+        	@sell_history = Sell.select("stock_id,numofstock,updated_at").where('user_id' => current_user.id).last(10).reverse
+	        @notifications_list = Notification.get_notice(current_user.id,10)
+	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+        else
+        	redirect_to :action => 'index'
+        end
+	end
+
     def company
     	if user_signed_in?
-	           @notifications_list = Notification.get_notice(current_user.id,10)
+	        @notifications_list = Notification.get_notice(current_user.id,10)
+	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	    else
 	      redirect_to :action => 'index'
 	    end
