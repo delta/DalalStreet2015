@@ -177,15 +177,17 @@
                     <% end %>   
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-edit"></i> Company Profile</a>
-                    </li>
-                    <li>
                     <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'bank_mortgage' do %>
                         <span id="span"><i class="fa fa-fw fa-desktop"></i> Bank Mortage</span>
                     <% end %>
+                    </li>
+                    <li>
+                    <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'company' do %>
+                        <span id="span"><i class="fa fa-fw fa-edit"></i> Company Profile</span>
+                    <% end %>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-fw fa-wrench"></i> Market Events</a>

@@ -182,6 +182,15 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	    	  redirect_to :action => 'index'
 	    	end ##end of user_signed_in
 	    end ##end of request
-    end##end of bank_mortgage11
+    end##end of bank_mortgage
+
+    def company
+    	if user_signed_in?
+	           @notifications_list = Notification.get_notice(current_user.id,10)
+	    else
+	      redirect_to :action => 'index'
+	    end
+
+    end
 
 end  #class def  
