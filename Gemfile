@@ -49,7 +49,7 @@ gem 'websocket-rails'
 
 gem "resque"
 
-gem "resque-scheduler"
+gem "resque-scheduler", '~> 2.5.5'
 
 # Use unicorn as the app server
 # gem 'unicorn'
