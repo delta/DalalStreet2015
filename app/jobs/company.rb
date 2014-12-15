@@ -20,13 +20,34 @@ class Company < ActiveRecord::Base
     @call_update_stock_user = SocketController.call_update_stock_user
   end
 
-
   def self.Company_event()
-  
-
-
-
-
+  	  event_type = [0,1].sample(1)
+      event =  [1,2,3].sample(1)
+      
+      event_selector(event_type,event)
   end
 
-end
+  def self.event_selector(event_type,event)
+    if event_type
+      case event # a_variable is the variable we want to compare
+		when 1    #compare to 1
+		  puts "it was 1" 
+		when 2    #compare to 2
+		  puts "it was 2"
+		else
+		  puts "it was something else"
+        end
+    else
+      case event # a_variable is the variable we want to compare
+		when 1    #compare to 1
+		  puts "it was 1" 
+		when 2    #compare to 2
+		  puts "it was 2"
+		else
+		  puts "it was something else"
+        end
+    end
+  end
+
+
+end ## end of class def

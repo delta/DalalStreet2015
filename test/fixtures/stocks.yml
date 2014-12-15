@@ -12,7 +12,7 @@ a:
    alltimehigh: 55.00
    alltimelow: 13.00
    stocksinexchange: 23
-   stocksinmarket: 304
+   stocksinmarket: 0
 
 b:
    stockname: 'Apple' 
@@ -22,7 +22,7 @@ b:
    alltimehigh: 45.00
    alltimelow: 4.00
    stocksinexchange: 33
-   stocksinmarket: 355
+   stocksinmarket: 0
 
 c:
    stockname: 'Infy'
@@ -32,7 +32,7 @@ c:
    alltimehigh: 34.00
    alltimelow: 22.00
    stocksinexchange: 22
-   stocksinmarket: 321
+   stocksinmarket: 0
 
 d:
    stockname: 'Ranbaxy'
@@ -42,7 +42,7 @@ d:
    alltimehigh: 77.00
    alltimelow: 78.00
    stocksinexchange: 37
-   stocksinmarket: 876
+   stocksinmarket: 0
 
 e:
    stockname: 'HP' 
@@ -52,7 +52,7 @@ e:
    alltimehigh: 64.00
    alltimelow: 6.00
    stocksinexchange: 40
-   stocksinmarket: 768
+   stocksinmarket: 0
 
 f:
    stockname: 'TCS' 
@@ -62,7 +62,7 @@ f:
    alltimehigh: 77.00
    alltimelow: 11.00
    stocksinexchange: 75
-   stocksinmarket: 654
+   stocksinmarket: 0
 
 g:
    stockname: 'Intel' 
@@ -72,7 +72,7 @@ g:
    alltimehigh: 45.00
    alltimelow: 22.00
    stocksinexchange: 40
-   stocksinmarket: 200
+   stocksinmarket: 0
 
 h:
    stockname: 'HDFC'
@@ -82,7 +82,7 @@ h:
    alltimehigh: 66.00
    alltimelow: 11.00
    stocksinexchange: 32
-   stocksinmarket: 432
+   stocksinmarket: 0
 
 i:
    stockname: 'Github'
@@ -92,7 +92,7 @@ i:
    alltimehigh: 34.00
    alltimelow: 32.00
    stocksinexchange: 33
-   stocksinmarket: 343
+   stocksinmarket: 0
 
 
 j:
@@ -103,7 +103,7 @@ j:
    alltimehigh: 43.00
    alltimelow: 32.00
    stocksinexchange: 97
-   stocksinmarket: 216
+   stocksinmarket: 0
 
 k:
    stockname: 'Dell' 
@@ -113,7 +113,7 @@ k:
    alltimehigh: 23.00
    alltimelow: 32.00
    stocksinexchange: 40
-   stocksinmarket: 400
+   stocksinmarket: 0
 
 l:
    stockname: 'Delta' 
@@ -123,7 +123,7 @@ l:
    alltimehigh: 3.00
    alltimelow: 3.00
    stocksinexchange: 43
-   stocksinmarket: 200
+   stocksinmarket: 0
 
 m:
    stockname: 'Pragyan'
@@ -133,7 +133,7 @@ m:
    alltimehigh: 45.00
    alltimelow: 3.00
    stocksinexchange: 55
-   stocksinmarket: 340
+   stocksinmarket: 0
 
 n:
    stockname: 'Morgan Stanley' 
@@ -143,7 +143,7 @@ n:
    alltimehigh: 45.4
    alltimelow: 45.4
    stocksinexchange: 54
-   stocksinmarket: 220
+   stocksinmarket: 0
 
 o:
    stockname: 'LG'
@@ -153,4 +153,4 @@ o:
    alltimehigh: 44.4
    alltimelow: 45.4
    stocksinexchange: 220
-   stocksinmarket: 300
+   stocksinmarket: 0

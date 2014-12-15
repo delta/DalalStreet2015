@@ -38,6 +38,7 @@ require "json"
                     if @user_cash_inhand.cash - @total_price_of_bought_stock > 0
                        @user_cash_inhand.cash = @user_cash_inhand.cash-@total_price_of_bought_stock
                        @stock_bought.stocksinexchange = @stock_bought.stocksinexchange - @numofstock
+                       @stock_bought.stocksinmarket = @stock_bought.stocksinmarket + @numofstock
                        @stock_bought.save
                        @user_cash_inhand.save
                        @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @stockidbought,:numofstock => @numofstock)
