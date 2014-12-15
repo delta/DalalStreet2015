@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
            #@log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id , :log => "Buyer cash insufficient or Seller don't have enough stocks")   
            if @user_buying.cash <= @Buy_id.price*@Buy_id.numofstock.to_f
                @offset_buy_count = @offset_buy_count + 1
-           elsif @sell_user_stock.totalstock.to_f <=@Sell_id.numofstock.to_f
+           elsif @sell_user_stock.totalstock.to_f <= @Sell_id.numofstock.to_f
                @offset_sell_count = @offset_sell_count + 1
            else
                @offset_buy_count = @offset_buy_count + 1
@@ -194,16 +194,16 @@ class User < ActiveRecord::Base
        	@Buy_id = Buy.where(:stock_id => id).order('price DESC').first
         @Sell_id = Sell.where(:stock_id => id).order('priceexpected ASC').first
              ##################check this function is wrong#################################################################################
-             if !@Buy_id.blank? && !@Sell_id.blank? && @Buy_id.user_id != @Sell_id.user_id
+             if !@Buy_id.blank? && !@Sell_id.blank?
                 if @Buy_id.price.to_f >= @Sell_id.priceexpected.to_f
                     @user_buying = User.select('cash').where(:id => @Buy_id.user_id).first
 	    	            @sell_user_stock = StockUsed.select("sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => @Sell_id.user_id,'stock_id' => id).group("stock_id").first
-                    if @user_buying.cash >= @Buy_id.price*@Buy_id.numofstock.to_f && @sell_user_stock.totalstock.to_f >= @Sell_id.numofstock.to_f
+                    if @user_buying.cash >= @Buy_id.price*@Buy_id.numofstock.to_f && @sell_user_stock.totalstock.to_f >= @Sell_id.numofstock.to_f && @Buy_id.user_id != @Sell_id.user_id
                        @stock_looper = User.stock_looper(id,mode)  	 
                     else
                        log_data = "USERID: #{@Buy_id.user_id} STOCKID: #{id} LOG: Buyer cash insufficient or Seller don't have enough stocks"
                        @log_file = User.custom_logger(log_data)
-                      # #@log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id , :log => "Buyer cash insufficient or Seller don't have enough stocks")   
+                       #@log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id , :log => "Buyer cash insufficient or Seller don't have enough stocks")   
                        if @user_buying.cash <= @Buy_id.price*@Buy_id.numofstock.to_f
                            @offset_buy_count = @offset_buy_count + 1
                        elsif @sell_user_stock.totalstock.to_f <= @Sell_id.numofstock.to_f
@@ -219,17 +219,9 @@ class User < ActiveRecord::Base
                   #@log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id, :log => "Sell price is greater than Buy price")	 
                 end #@Buy_id.price >= @Sell_id.priceexpected
              else
-                 log_data = "USERID: #{@Buy_id.user_id} STOCKID: #{id} LOG: Buyer cash insufficient or Seller don't have enough stocks"
+                 log_data = "USERID: nil STOCKID: #{id} LOG: No matching stock found"
                  @log_file = User.custom_logger(log_data)
                  #@log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id , :log => "Buyer cash insufficient or Seller don't have enough stocks")   
-                 if @user_buying.cash <= @Buy_id.price*@Buy_id.numofstock.to_f
-                     @offset_buy_count = @offset_buy_count + 1
-                 elsif @sell_user_stock.totalstock.to_f <= @Sell_id.numofstock.to_f
-                     @offset_sell_count = @offset_sell_count + 1
-                 else
-                     @offset_buy_count = @offset_buy_count + 1
-                 end
-                 @buy_stock_check_looper = User.buy_price_stock_num_looper(id,mode)
              end #@Buy_id && @Sell_id
     end ###next_compatible_stock_bid_ask def
 
