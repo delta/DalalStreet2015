@@ -10,7 +10,7 @@ require "json"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
-  
+
 layout "../dalal_dashboard/layout/layout.html.erb"
 
 	def index
@@ -44,6 +44,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
  	def stock
 	       if user_signed_in?
+                Stock.connection.clear_query_cache
 	        	@stocks = Stock.all
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	            @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)

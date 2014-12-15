@@ -77,8 +77,9 @@ require "json"
 
     def update_stock_user
         if user_signed_in?
-              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+              Stock.connection.clear_query_cache
               @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
+              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
