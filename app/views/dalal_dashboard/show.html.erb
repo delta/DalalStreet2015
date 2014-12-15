@@ -257,7 +257,7 @@
         console.log("Connection established");
       };
 
-      channel.bind('update_stock_user', function(get_value) {  
+      channel.bind('channel_update_stock_user', function(get_value) {
         console.log(get_value);
         get_userstock_info(get_value,dispatcher);
       });
@@ -279,7 +279,7 @@
              dispatcher.bind('update_stock_user', function(get_value) {
                   console.log(get_value);
      
-                  for(var i = 0; i < 10; i++) {
+                  for(var i = 0; i < get_value.sent_data.notice.length; i++) {
                                 var obj = get_value.sent_data.notice[i];
                                 var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
                             }
@@ -287,10 +287,10 @@
              $( "#ajax_notice" ).empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
              $(".list-group").empty().append(notify);
 
-             for(var i = 0; i < 15; i++) {
+             for(var i = 0; i < get_value.sent_data.stock_update.length; i++) {
                                 var obj = get_value.sent_data.stock_update[i];
-
-                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+obj.net_cash+'</td></tr>';
+                                
+                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+obj.netcash+'</td></tr>';
                             }
 
                          $("#render_tbody").empty().append(fill_table);

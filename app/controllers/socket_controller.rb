@@ -61,10 +61,10 @@ require "json"
                 ## update block send response to client
                 @stockall = Stock.all
                if @success == 1
-                    WebsocketRails[:stocks].trigger(:update_stock_user, "true")
-                    broadcast_message :stock_ajax_handler, :sent_data => { :current_user => current_user.id,:stock_update => @stockall}  
+                    WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
+                    broadcast_message :stock_ajax_handler, :sent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}  
                else
-                    broadcast_message :stock_ajax_handler, :sent_data => { :current_user => current_user.id,:stock_update => @stockall}
+                    broadcast_message :stock_ajax_handler, :ent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}
                end
                 ## end update block send response to client
            
@@ -78,7 +78,7 @@ require "json"
     def update_stock_user
         if user_signed_in?
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-              @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id")
+              @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
               send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
@@ -95,6 +95,10 @@ require "json"
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            redirect_to :action => 'index'
         end
+    end
+
+    def self.call_update_stock_user
+       WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
     end
 
 end ## end of socket controller

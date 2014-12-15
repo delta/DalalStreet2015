@@ -146,7 +146,7 @@
                                 <% @buy_history.each do |buy|%>
                                 <a href="#" class="list-group-item">
                                 <span class="badge"><%= buy.updated_at%></span>
-                                <i class="fa fa-fw fa-check"></i>Bid for <%= buy.numofstock%> stocks of <% @stockname = Stock.select('stockname').where('id'=>buy.stock_id).first %><%=@stockname.stockname%></a>
+                                <i class="fa fa-fw fa-check"></i>Bid for <%= buy.numofstock%> stocks of <% @stockname = Stock.select('stockname').where('id'=>buy.stock_id).first %><%=@stockname.stockname%> at $<%= buy.price%> per share</a>
                                 <% end %>
                                 </div>
                                 <div class="text-right">
@@ -165,7 +165,7 @@
                                 <% @sell_history.each do |sell|%>
                                 <a href="#" class="list-group-item">
                                 <span class="badge"><%= sell.updated_at%></span>
-                                <i class="fa fa-fw fa-check"></i>Ask for <%= sell.numofstock%> stocks of <% @stockname = Stock.select('stockname').where('id'=>sell.stock_id).first %><%=@stockname.stockname%></a>
+                                <i class="fa fa-fw fa-check"></i>Ask for <%= sell.numofstock%> stocks of <% @stockname = Stock.select('stockname').where('id'=>sell.stock_id).first %><%=@stockname.stockname%> at $<%= sell.priceexpected%> per share</a>
                                 <% end %>
                                 </div>
                                 <div class="text-right">

@@ -4,6 +4,13 @@ protect_from_forgery with: :null_session
 
 require "json"
 
+ before_filter :set_cache_buster
+  def set_cache_buster
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
+  
 layout "../dalal_dashboard/layout/layout.html.erb"
 
 	def index
@@ -186,8 +193,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
 	def buy_sell_history
         if user_signed_in?
-        	@buy_history = Buy.select("stock_id,numofstock,updated_at").where('user_id' => current_user.id).last(10).reverse
-        	@sell_history = Sell.select("stock_id,numofstock,updated_at").where('user_id' => current_user.id).last(10).reverse
+        	@buy_history = Buy.select("stock_id,numofstock,updated_at,price").where('user_id' => current_user.id).last(10).reverse
+        	@sell_history = Sell.select("stock_id,numofstock,updated_at,priceexpected").where('user_id' => current_user.id).last(10).reverse
 	        @notifications_list = Notification.get_notice(current_user.id,10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
         else
