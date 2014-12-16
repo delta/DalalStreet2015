@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141210162035) do
+ActiveRecord::Schema.define(version: 20141216112143) do
 
   create_table "banks", force: true do |t|
     t.integer  "user_id"
@@ -37,6 +37,17 @@ ActiveRecord::Schema.define(version: 20141210162035) do
     t.integer  "user_id"
     t.integer  "stock_id"
     t.string   "log"
+  end
+
+  create_table "market_events", force: true do |t|
+    t.integer  "stock_id"
+    t.string   "eventname"
+    t.integer  "event_type"
+    t.integer  "event_turn"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "event"
+    t.integer  "event_done"
   end
 
   create_table "notifications", force: true do |t|
