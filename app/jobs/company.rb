@@ -47,8 +47,8 @@ class Company < ActiveRecord::Base
 
 
   def self.event_selector(event_type,event)
-  	puts event_type
-  	puts event
+  	# puts event_type
+  	# puts event
     if event_type == 0 ##negative events
       case event
 		when 1    

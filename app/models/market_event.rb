@@ -1,4 +1,5 @@
 class MarketEvent < ActiveRecord::Base
+  MarketEvent.connection.clear_query_cache
 
   def self.new_event(id,eventname,event_type,event,event_turn,event_done)
    @create_new_market = MarketEvent.create(:stock_id => id, :eventname => eventname, :event_type => event_type, :event => event,:event_turn => event_turn, :event_done => event_done)
@@ -6,17 +7,21 @@ class MarketEvent < ActiveRecord::Base
 
   def self.distil
     @market_ids = MarketEvent.where("event_done" => 0).uniq.pluck(:stock_id) 
-    if @market_ids.blank?
-    	@market_ids = [0]
-    end 	
+    # if @market_ids.blank?
+    # 	@market_ids = [0]
+    # end
+    puts "market_ids"
+    puts @market_ids
+    puts " " 	
     @stock_ids = Stock.pluck(:id)
     @filtered_ids = @stock_ids - @market_ids
+    puts "filtered_ids"
     puts @filtered_ids
     if @filtered_ids.blank?
        @log = Company.custom_logger("All companies occupied with events")
        @random_id = 0
     else
-       @random_id = @filtered_ids.sample(1)
+       @random_id = @filtered_ids.sample
     end
     return @random_id 
   end
@@ -41,17 +46,19 @@ class MarketEvent < ActiveRecord::Base
 	       if market_event.event_type == 0 ##negative event
 	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
 	          @stock.currentprice = @stock.currentprice - @stock.currentprice*0.02
-	          market_event.event_turn = market_event.event_turn + 1 
 	       else
 	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
 	          @stock.currentprice = @stock.currentprice + @stock.currentprice*0.02
 	       end
-	   market_event.event_turn = market_event.event_turn + 1 
-	   if market_event.event_turn == 3
-	      market_event.event_done = 1
-	   end
-	   @stock.save
-	   market_event.save
+		   market_event.event_turn = market_event.event_turn + 1 
+		   if market_event.event_turn == 3
+		      market_event.event_done = 1
+		   end
+		   @stock.save
+		   market_event.save
+	       if market_event.save
+	        @log = Company.custom_logger("save success")
+	       end
        end      
   end ##end event_runner
 
