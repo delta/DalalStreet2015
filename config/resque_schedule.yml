@@ -1,5 +1,5 @@
 load_company:
-  every: 5s
+  every: 10s
   class: Company
   args:
   description: Runs the perform method in Company

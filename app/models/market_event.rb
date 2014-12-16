@@ -5,19 +5,25 @@ class MarketEvent < ActiveRecord::Base
   end 
 
   def self.distil
-    @market_ids = MarketEvent.uniq.where("event_done = 0").pluck(:stock_id) 
+    @market_ids = MarketEvent.where("event_done" => 0).uniq.pluck(:stock_id) 
     if @market_ids.blank?
     	@market_ids = [0]
     end 	
     @stock_ids = Stock.pluck(:id)
     @filtered_ids = @stock_ids - @market_ids
-    @random_id = @filtered_ids.sample(1)
+    puts @filtered_ids
+    if @filtered_ids.blank?
+       @log = Company.custom_logger("All companies occupied with events")
+       @random_id = 0
+    else
+       @random_id = @filtered_ids.sample(1)
+    end
     return @random_id 
   end
 
   def self.acquire(id,event_type)
     @stock = Stock.where(:id => id).first
-    @market_stock = MarketEvent.select("stockname,stock_id").where("event_done = 1,event_type = 0").order("RANDOM()").first
+    @market_stock = MarketEvent.select("stock_id").where("event_done" => 1,"event_type" => 0).order("RANDOM()").first
     if !@market_stock.blank?
 	    @acquired_stock =  Stock.where(:id => @market_stock.stock_id).first
 	    eventname1 = "#{@stock.stockname} acquires #{@acquired_stock.stockname}"
@@ -30,22 +36,22 @@ class MarketEvent < ActiveRecord::Base
   end ##acquire def end
 
   def self.event_runner
-    @running_events = MarketEvent.where("event_done = 0").all
+    @running_events = MarketEvent.where("event_done" => 0).all
 	   @running_events.each do |market_event|
 	       if market_event.event_type == 0 ##negative event
-	          @stock = Stock.select("currentprice")where(:id => @market_event.stock_id).first     
+	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
 	          @stock.currentprice = @stock.currentprice - @stock.currentprice*0.02
-	          @market_event.event_turn = @market_event.event_turn + 1 
+	          market_event.event_turn = market_event.event_turn + 1 
 	       else
-	          @stock = Stock.select("currentprice")where(:id => @market_event.stock_id).first     
+	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
 	          @stock.currentprice = @stock.currentprice + @stock.currentprice*0.02
 	       end
-	   @market_event.event_turn = @market_event.event_turn + 1 
-	   if @market_event.event_turn == 3
-	      @market_event.event_done = 1
+	   market_event.event_turn = market_event.event_turn + 1 
+	   if market_event.event_turn == 3
+	      market_event.event_done = 1
 	   end
 	   @stock.save
-	   @market_event.save
+	   market_event.save
        end      
   end ##end event_runner
 
