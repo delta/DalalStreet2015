@@ -53,7 +53,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Dalal Street</a>
+                <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'show' do %>
+                <span class="navbar-brand" >Dalal Street</span>
+                <% end %>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -190,7 +192,9 @@
                         <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-fw fa-wrench"></i> Market Events</a>
+                    <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'market_events' do %>    
+                        <span id="span"><i class="fa fa-fw fa-wrench"></i> Market Events</span>
+                    <% end %>
                     </li>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
@@ -235,5 +239,4 @@
 
 </body>
 </html>
-
 

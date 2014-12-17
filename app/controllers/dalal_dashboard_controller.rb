@@ -213,5 +213,16 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	    end
 
     end
+    def market_events
+        if user_signed_in?
+           # @stocks_list = Stock.return_bought_stocks(current_user.id)
+	       # @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+	       # @notifications_list = Notification.get_notice(current_user.id,10)
+	        
+           
+        else
+            redirect_to :action => 'show'
+        end
+    end 
 
 end  #class def  

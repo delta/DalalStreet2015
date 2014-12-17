@@ -9,10 +9,11 @@ Rails.application.routes.draw do
 
  #get 'dalal_dashboard/index'  remove it later only for development purpose
 
-  get '/dalal_dashboard/:id' => 'dalal_dashboard#show' 
+  get '/dalal_dashboard/:id' => 'dalal_dashboard#show'
+  get '/dalal_dashboard/:id/index' => 'dalal_dashboard#show'
   get '/dalal_dashboard/:id/stock' => 'dalal_dashboard#stock'
   post '/dalal_dashboard/:id/stock_ajax_handler' => 'dalal_dashboard#stock_ajax_handler'
-  get '/dalal_dashboard/:id/events' => 'dalal_dashboard#market_events'
+  get '/dalal_dashboard/:id/market_events' => 'dalal_dashboard#market_events'
   get '/dalal_dashboard/:id/buy_sell_page' => 'dalal_dashboard#buy_sell_page'
   get '/dalal_dashboard/:id/buy_sell_stock'=> 'dalal_dashboard#buy_sell_stock'
   post '/dalal_dashboard/:id/buy_sell_stock'=> 'dalal_dashboard#buy_sell_stock'
