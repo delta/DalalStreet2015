@@ -95,7 +95,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
                 @user_cash_inhand = User.find(current_user.id)
              
                 if @stock.stocksinmarket.to_f > @numofstock_buy_for.to_f
-	                if @user_cash_inhand.cash.to_f > @numofstock_buy_for.to_f*@bid_price.to_f 
+	                if @user_cash_inhand.cash.to_f >= @numofstock_buy_for.to_f*@bid_price.to_f 
 		                @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
 		                flash[:notice] = "Successful Bid."
                         @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
@@ -119,7 +119,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
                 @ask_price = params[:sell]
                 @user_stock_inhand = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.id' => @stockid ).group("stock_id")
                 
-                if @user_stock_inhand[0].totalstock.to_f > @numofstock_sell_for.to_f
+                if @user_stock_inhand[0].totalstock.to_f >= @numofstock_sell_for.to_f
                 	@sell_ask  = Sell.create(:user_id=>current_user.id, :stock_id=>@stockid, :priceexpected=>@ask_price, :numofstock=>@numofstock_sell_for)
                	 	flash[:notice] = "Sell request made."
                	 	@notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
@@ -205,8 +205,9 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
     def company
     	if user_signed_in?
-	        @notifications_list = Notification.get_notice(current_user.id,10)
+          @market_event_list  = MarketEvent.get_events(10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+          @stock_list = Stock.pluck(:stockname)
 	    else
 	      redirect_to :action => 'index'
 	    end

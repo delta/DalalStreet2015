@@ -5,11 +5,12 @@ class MarketEvent < ActiveRecord::Base
    @create_new_market = MarketEvent.create(:stock_id => id, :eventname => eventname, :event_type => event_type, :event => event,:event_turn => event_turn, :event_done => event_done)
   end 
 
+  def self.get_events(num)
+	@get_market_event = MarketEvent.select("eventname,updated_at").last(num).reverse
+  end
+
   def self.distil
     @market_ids = MarketEvent.where("event_done" => 0).uniq.pluck(:stock_id) 
-    # if @market_ids.blank?
-    # 	@market_ids = [0]
-    # end
     puts "market_ids"
     puts @market_ids
     puts " " 	
@@ -26,8 +27,8 @@ class MarketEvent < ActiveRecord::Base
     return @random_id 
   end
 
-  def self.acquire(id,event_type)
-    @stock = Stock.where(:id => id).first
+  def self.acquire(id,event_type,event)
+    @stock = Stock.where("stocks.id" => id).first
     @market_stock = MarketEvent.select("stock_id").where("event_done" => 1,"event_type" => 0).order("RANDOM()").first
     if !@market_stock.blank?
 	    @acquired_stock =  Stock.where(:id => @market_stock.stock_id).first

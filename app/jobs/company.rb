@@ -1,7 +1,6 @@
 class Company < ActiveRecord::Base
   @queue = :company
 
-
   def self.perform()
     @call_event_company = Company.Company_event
     @update_statistics = Company.update_statistics
@@ -52,28 +51,32 @@ class Company < ActiveRecord::Base
     if event_type == 0 ##negative events
       case event
 		when 1    
-		  variation = ["reports quaterly loss in revenue","faces lawsuit for illegal patent frauds"].sample(1)
-		  eventname = "#{@stock.stockname} #{variation}" 
+		  variation = ["reports quaterly loss in revenue","faces lawsuit for illegal patent frauds"].sample
+		  random_partial_event = variation.to_s
+		  eventname = "#{@stock.stockname} #{random_partial_event}" 
 	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
 		when 2  
 		  eventname = "CEO of #{@stock.stockname} sacked" 
 	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
 		else
-		  @acquired = MarketEvent.acquire(@stock.id,@event_type) 
+		  @acquired = MarketEvent.acquire(@stock.id,event_type,event) 
       end
     else ## positive events
       case event 
 		when 1    
-		  variation = ["reports higher profit margins","set to expand globally"].sample(1)
-          eventname = "#{@stock.stockname} #{variation}"  
+		  variation = ["reports higher profit margins","set to expand globally"].sample
+          random_partial_event = variation.to_s
+          eventname = "#{@stock.stockname} #{random_partial_event}"  
 	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
 		when 2    
-		  variation = ["releases new products for holiday season","set to invest on the latest tech"].sample(1)
-		  eventname = "#{@stock.stockname} #{variation}"  
+		  variation = ["releases new products for holiday season","set to invest on the latest tech"].sample
+		  random_partial_event = variation.to_s
+		  eventname = "#{@stock.stockname} #{random_partial_event}"  
 	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
 		else
-		  variation = ["plans to split stocks"].sample(1)
-		  eventname = "#{@stock.stockname} #{variation}"  
+		  variation = ["plans to split stocks"].sample
+		  random_partial_event = variation.to_s
+		  eventname = "#{@stock.stockname} #{random_partial_event}"  
 	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
       end
     end
