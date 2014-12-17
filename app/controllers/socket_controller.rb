@@ -103,5 +103,18 @@ require "json"
        WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
     end
 
+    def company_handler
+       if user_signed_in?
+           company_name = data[:name]
+           stock = Stock.select("id").where("stockname" => company_name).first
+           @get_market_event = MarketEvent.select("eventname,updated_at").where("stock_id" => stock.id).last(10).reverse
+           
+           send_message :company_handler, :sent_data => {:market_list => @get_market_event}
+        else
+           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+           redirect_to :action => 'index'
+        end
+    end
+
 end ## end of socket controller
  

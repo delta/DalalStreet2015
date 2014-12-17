@@ -7,6 +7,7 @@ WebsocketRails::EventMap.describe do
     subscribe :update_stock_all, to: SocketController, with_method: :update_stock_all
     subscribe :notification_update, to: SocketController, with_method: :notification_update
     subscribe :stock_ajax_handler, to: SocketController, with_method: :stock_ajax_handler
+    subscribe :company_handler, to: SocketController, with_method: :company_handler
 
  
   

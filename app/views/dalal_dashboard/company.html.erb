@@ -151,8 +151,8 @@
                                      </button>
                                      <ul class="dropdown-menu" role="menu">
                                       <%@stock_list.each do |list|%>
-                                       <li><a href="#"><%= list%></a></li>
-                                      <%end-%> 
+                                       <li><a href="#" <%= "onclick=get_company_name('#{list}');"%>><%= list%></a></li> 
+                                       <%end-%>
                                      </ul>
                                    </div>
                                </div>   
@@ -182,7 +182,7 @@
                                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Market Event Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="list-group">
+                                <div class="list-group" id="market_event_list" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                  <%@market_event_list.each do |event|%>
                                     <a href="#" class="list-group-item">
                                     <span class="badge"><%= event.updated_at%></span>
@@ -205,31 +205,6 @@
 
         </div>
         <!-- /#page-wrapper -->
-
-<style>
-.btn-input {
-   display: block;
-}
-
-.btn-input .btn.form-control {
-    text-align: left;
-}
-
-.btn-input .btn.form-control span:first-child {
-   left: 10px;
-   overflow: hidden;
-   position: absolute;
-   right: 25px;
-}
-
-.btn-input .btn.form-control .caret {
-   margin-top: -1px;
-   position: absolute;
-   right: 10px;
-   top: 50%;
-}
-</style>
-
 <% end %>
 
 <% content_for :script do %>
@@ -237,22 +212,26 @@
    <script type="text/javascript">
 
      $(function(){
-      var dispatcher = new WebSocketRails($('.table').data('uri'), true);
       var channel = dispatcher.subscribe('stocks');
 
       dispatcher.on_open = function(){
         console.log("Connection established");
       };
 
-      channel.bind('update_stock_user', function(get_value) {  
-        console.log(get_value);
-        get_userstock_info(get_value,dispatcher);
+      channel.bind('update_stock_user', function(get) {  
+        console.log(get);
       });
     });
 
-    var get_userstock_info  = function(bool,dispatcher){
+    var dispatcher = new WebSocketRails($('#market_event_list').data('uri'), true);
+    
+    var get_company_name = function(name){
+       get_company_info(name,dispatcher);
+    };
 
-         var sent = {receive: bool};
+    var get_company_info  = function(company_name,dispatcher){
+
+         var data = {name: company_name};
 
          var success = function(response) {
                   console.log("Wow it worked: "+response.message);
@@ -263,28 +242,17 @@
                    console.log("That just totally failed: "+response.message);
                   };
 
-             dispatcher.bind('update_stock_user', function(get_value) {
+             dispatcher.bind('company_handler', function(get_value) {
                   console.log(get_value);
      
-                  for(var i = 0; i < 10; i++) {
-                                var obj = get_value.sent_data.notice[i];
-                                var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
+             for(var i = 0; i < get_value.sent_data.market_list.length; i++) {
+                                var obj = get_value.sent_data.market_list[i];
+                               var fill_table = fill_table+'<a href="#" class=\"list-group-item\"><span class=\"badge\">'+obj.updated_at+'</span><i class=\"fa fa-fw fa-check\"></i>'+obj.eventname+'</a>';
                             }
-             
-             $( "#ajax_notice" ).empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
-             $(".list-group").empty().append(notify);
-
-             for(var i = 0; i < 15; i++) {
-                                var obj = get_value.sent_data.stock_update[i];
-
-                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+obj.net_cash+'</td></tr>';
-                            }
-
-                         $("#render_tbody").empty().append(fill_table);
-                         
+                         $("#market_event_list").empty().append(fill_table);
       });
      
-         dispatcher.trigger('update_stock_user', sent, success, failure); 
+         dispatcher.trigger('company_handler', data, success, failure); 
 
     }; 
             
