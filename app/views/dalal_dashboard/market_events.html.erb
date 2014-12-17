@@ -1,7 +1,303 @@
 <% content_for :page_wrapper do %>
+
         <div id="page-wrapper">
-            <h2 style="color:yellow;background:transparent;">Coming soon</h2>
-            
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Dalal Panel <small>Market Events</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                             <i class="fa fa-dashboard"></i> Dashboard
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+ 
+                    <div class="col-lg-12">
+                        <div class="alert alert-info alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-info-circle"></i>  <strong>Like Dalal Street?</strong> Like our FB page <a href="#">Dalal Street</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-comments fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">26</div>
+                                        <div>Market Events</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                       <i class="fa fa-money fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div>Cash</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-yellow">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-tasks fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge"><%=@price_of_tot_stock%></div>
+                                        <div>Stock</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="panel panel-red">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-support fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge">13</div>
+                                        <div>Support Tickets!</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                 <div class="row">
+                  <div class="col-lg-12">
+                    <div id="ajax_notice">
+                    </div>
+                    <% if flash[:notice] %>
+                    <div class="notice"><%= flash[:notice] %></div>
+                    <% end %>
+                    <% if flash[:error] %>
+                    <div class="error"><%= flash[:error] %></div>
+                    <% end %>
+                  </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Company Panel</h3>
+                            </div>
+                            <div class="panel-body">
+                              <div class="list-group">
+                                  
+                               </div>   
+                             
+                                <div class="text-right">
+                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                               </div>  
+                            </div>
+                        
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
+                            </div>
+                            <div class="panel-body">
+                            <div>
+                            <canvas id="canvas_line" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
+                            </div>
+                                <!-- <div id="morris-area-chart"></div> -->
+                            </div>
+                        </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Market Event Panel</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="list-group">
+                                
+                                </div>
+                                <div class="text-right">
+                                    <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                       
+                </div> 
+                <!-- /.row -->
+
+
+            </div>
+            <!-- /.container-fluid -->
+
         </div>
         <!-- /#page-wrapper -->
 <% end %>
+
+<% content_for :script do %>
+
+   <script type="text/javascript">
+
+     $(function(){
+      var dispatcher = new WebSocketRails($('.table').data('uri'), true);
+      var channel = dispatcher.subscribe('stocks');
+
+      dispatcher.on_open = function(){
+        console.log("Connection established");
+      };
+
+      channel.bind('update_stock_user', function(get_value) {  
+        console.log(get_value);
+        get_userstock_info(get_value,dispatcher);
+      });
+    });
+
+    var get_userstock_info  = function(bool,dispatcher){
+
+         var sent = {receive: bool};
+
+         var success = function(response) {
+                  console.log("Wow it worked: "+response.message);
+                  //dispatcher.unbind('notification_update');
+                  };
+
+         var failure = function(response) {
+                   console.log("That just totally failed: "+response.message);
+                  };
+
+             dispatcher.bind('update_stock_user', function(get_value) {
+                  console.log(get_value);
+     
+                  for(var i = 0; i < 10; i++) {
+                                var obj = get_value.sent_data.notice[i];
+                                var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
+                            }
+             
+             $( "#ajax_notice" ).empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
+             $(".list-group").empty().append(notify);
+
+             for(var i = 0; i < 15; i++) {
+                                var obj = get_value.sent_data.stock_update[i];
+
+                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+obj.net_cash+'</td></tr>';
+                            }
+
+                         $("#render_tbody").empty().append(fill_table);
+                         
+      });
+     
+         dispatcher.trigger('update_stock_user', sent, success, failure); 
+
+    }; 
+            
+    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+        var lineChartData = {
+            labels : ["January","February","March","April","May","June","July"],
+            datasets : [
+                {
+                    label: "My First dataset",
+                    fillColor : "rgba(220,220,220,0.2)",
+                    strokeColor : "rgba(220,220,220,1)",
+                    pointColor : "rgba(220,220,220,1)",
+                    pointStrokeColor : "#fff",
+                    pointHighlightFill : "#fff",
+                    pointHighlightStroke : "rgba(220,220,220,1)",
+                    data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                },
+                {
+                    label: "My Second dataset",
+                    fillColor : "rgba(151,187,205,0.2)",
+                    strokeColor : "rgba(151,187,205,1)",
+                    pointColor : "rgba(151,187,205,1)",
+                    pointStrokeColor : "#fff",
+                    pointHighlightFill : "#fff",
+                    pointHighlightStroke : "rgba(151,187,205,1)",
+                    data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                }
+            ]
+
+        }
+
+            window.onload = function(){
+                var ctx1 = document.getElementById("canvas_line").getContext("2d");
+                window.myLine = new Chart(ctx1).Line(lineChartData, {
+                    responsive: true
+                });
+
+             }
+
+   $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+
+      var $target = $( event.currentTarget );
+
+      $target.closest( '.btn-group' )
+         .find( '[data-bind="label"]' ).text( $target.text() )
+            .end()
+         .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+
+      return false;
+
+   });
+
+</script>
+
+<% end %>    
