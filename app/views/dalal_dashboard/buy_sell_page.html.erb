@@ -60,7 +60,7 @@
                                        <i class="fa fa-money fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div class="huge"><%=current_user.cash.round(2)%></div>
                                         <div>Cash</div>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=@price_of_tot_stock%></div>
+                                        <div class="huge"><%=@price_of_tot_stock.round(2)%></div>
                                         <div>Stock</div>
                                     </div>
                                 </div>
@@ -156,11 +156,11 @@
                                             <% @stocks_list.each do |stock| %>
                                                 <tr>
                                         <td><%= link_to "#{stock.stockname}", {:controller=>"dalal_dashboard",:id =>"#{current_user.id}",:action =>"buy_sell_stock",:stockname =>"#{stock.stockname}"}, id: "#{stock.stockname}_#{stock.id}", class: "stock_name"%></td>
-                                                    <td><%=stock.alltimelow %></td>
-                                                    <td><%=stock.alltimehigh %></td>
-                                                    <td><%=stock.daylow %></td>
-                                                    <td><%=stock.dayhigh %></td>
-                                                    <td><%=stock.currentprice %></td>
+                                                    <td><%=stock.alltimelow.round(2) %></td>
+                                                    <td><%=stock.alltimehigh.round(2) %></td>
+                                                    <td><%=stock.daylow.round(2) %></td>
+                                                    <td><%=stock.dayhigh.round(2) %></td>
+                                                    <td><%=stock.currentprice.round(2) %></td>
                                                     <td><%=stock.stocksinmarket%></td>
                                                 </tr>
                                             <% end %>     
@@ -184,7 +184,7 @@
                                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Notification Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="list-group">
+                                <div class="list-group" id ="notification">
                                 <%= render partial:"dalal_dashboard/notification_partial",locals: { notifications_list: @notifications_list } %>
                                 </div>
                                 <div class="text-right">
@@ -242,7 +242,7 @@
                             }
              
              $("#ajax_notice").empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
-             $(".list-group").empty().append(notify);
+             $("#notification").empty().append(notify);
 
              for(var i = 0; i < get_value.sent_data.stock_update.length; i++) {
                                 var obj = get_value.sent_data.stock_update[i];

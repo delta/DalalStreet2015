@@ -1,9 +1,9 @@
 <% @stocks.each do |stock| %>
    <tr> 
       <td><%=stock.stockname %></td>
-      <td><%=stock.daylow %></td> 
-      <td><%=stock.dayhigh %></td> 
-      <td><%=stock.currentprice %></td> 
+      <td><%=stock.daylow.round(2) %></td> 
+      <td><%=stock.dayhigh.round(2) %></td> 
+      <td><%=stock.currentprice.round(2) %></td> 
       <td><%=stock.stocksinmarket%></td> 
       <td><%=stock.stocksinexchange %></td> 
       <td><input type="text" maxlength="2" style="width:75px;"<%="id=#{current_user.id}_#{stock.id}"%> onchange="swapper(this.id);" onkeypress="return isNumber(event)"/></td> 

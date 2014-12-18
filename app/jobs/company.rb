@@ -22,10 +22,10 @@ class Company < ActiveRecord::Base
     @current_price_vary = Stock.all
       @current_price_vary.each do |stock|
 	    if stock.daylow.to_f > stock.currentprice.to_f
-	       stock.daylow = stock.currentprice
+	       stock.daylow = stock.currentprice.to_f
         end
 	    if stock.dayhigh.to_f < stock.currentprice.to_f
-	       stock.dayhigh = stock.currentprice
+	       stock.dayhigh = stock.currentprice.to_f
 	    end
 	    stock.save
       end

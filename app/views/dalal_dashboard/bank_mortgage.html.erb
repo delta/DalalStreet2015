@@ -188,7 +188,7 @@
                                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Notification Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="list-group">
+                                <div class="list-group" id ="notification">
                                 <%= render partial:"dalal_dashboard/notification_partial",locals: { notifications_list: @notifications_list } %>
                                 </div>
                                 <div class="text-right">
@@ -246,7 +246,7 @@
                             }
              
              $("#ajax_notice").empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
-             $(".list-group").empty().append(notify);
+             $("#notification").empty().append(notify);
 
              for(var i = 0; i < 15; i++) {
                                 var obj = get_value.sent_data.stock_update[i];

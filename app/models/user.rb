@@ -258,7 +258,7 @@ class User < ActiveRecord::Base
    
    def self.currentprice_cal
       totalstock = @stockname.stocksinmarket+@stockname.stocksinexchange
-      @stockname.currentprice = (@Buy_id.price*@Buy_id.numofstock + (totalstock-@Buy_id.numofstock)*@stockname.currentprice)/totalstock
+      @stockname.currentprice = (@Buy_id.price.to_f*@Buy_id.numofstock.to_f + (totalstock.to_f-@Buy_id.numofstock.to_f)*@stockname.currentprice.to_f)/totalstock.to_f
       @stockname.save
    end
 

@@ -30,6 +30,12 @@ class MarketEvent < ActiveRecord::Base
   def self.acquire(id,event_type,event)
     @stock = Stock.where("stocks.id" => id).first
     @market_stock = MarketEvent.select("stock_id").where("event_done" => 1,"event_type" => 0).order("RANDOM()").first
+    
+    loop do 
+     @market_stock = MarketEvent.select("stock_id").where("event_done" => 1,"event_type" => 0).order("RANDOM()").first
+    break if id != @market_stock.stock_id
+    end 
+
     if !@market_stock.blank?
 	    @acquired_stock =  Stock.where(:id => @market_stock.stock_id).first
 	    eventname1 = "#{@stock.stockname} acquires #{@acquired_stock.stockname}"
@@ -46,10 +52,10 @@ class MarketEvent < ActiveRecord::Base
 	   @running_events.each do |market_event|
 	       if market_event.event_type == 0 ##negative event
 	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
-	          @stock.currentprice = @stock.currentprice - @stock.currentprice*0.02
+	          @stock.currentprice = @stock.currentprice.to_f - @stock.currentprice*0.02.to_f
 	       else
 	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
-	          @stock.currentprice = @stock.currentprice + @stock.currentprice*0.02
+	          @stock.currentprice = @stock.currentprice.to_f + @stock.currentprice*0.02.to_f
 	       end
 		   market_event.event_turn = market_event.event_turn + 1 
 		   if market_event.event_turn == 3

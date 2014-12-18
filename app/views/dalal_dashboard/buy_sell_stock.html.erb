@@ -60,7 +60,7 @@
                                        <i class="fa fa-money fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div class="huge"><%=current_user.cash.round(2)%></div>
                                         <div>Cash</div>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=@price_of_tot_stock%></div>
+                                        <div class="huge"><%=@price_of_tot_stock.round(2)%></div>
                                         <div>Stock</div>
                                     </div>
                                 </div>
@@ -157,11 +157,11 @@
                                         <tbody>
                                              <tr>
                                                     <td><%=@stocks.stockname %></td>
-                                                    <td><%=@stocks.alltimelow %></td>
-                                                    <td><%=@stocks.alltimehigh %></td>
-                                                    <td><%=@stocks.daylow %></td>
-                                                    <td><%=@stocks.dayhigh %></td>
-                                                    <td><%=@stocks.currentprice %></td>
+                                                    <td><%=@stocks.alltimelow.round(2) %></td>
+                                                    <td><%=@stocks.alltimehigh.round(2) %></td>
+                                                    <td><%=@stocks.daylow.round(2) %></td>
+                                                    <td><%=@stocks.dayhigh.round(2) %></td>
+                                                    <td><%=@stocks.currentprice.round(2) %></td>
                                                     <td><%=@stocks.stocksinmarket%></td>
                                                     <td><%=@stocks.totalstock %></td>
                                                 </tr>
@@ -255,7 +255,7 @@
                                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Notification Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="list-group">
+                                <div class="list-group" id ="notification">
 
                            <%= render partial:"dalal_dashboard/notification_partial",locals: { notifications_list: @notifications_list }%>
 

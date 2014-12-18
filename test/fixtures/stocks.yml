@@ -6,17 +6,17 @@
 #
 a:
    stockname: 'ESAT'
-   currentprice: 34.00
-   dayhigh: 43.00
-   daylow: 32.00
-   alltimehigh: 55.00
+   currentprice: 3.20
+   dayhigh: 43.20
+   daylow: 32.02
+   alltimehigh: 55.1
    alltimelow: 13.00
    stocksinexchange: 23
    stocksinmarket: 0
 
 b:
    stockname: 'Apple' 
-   currentprice: 23.00
+   currentprice: 63.20
    dayhigh: 32.00
    daylow: 32.00
    alltimehigh: 45.00
@@ -26,131 +26,131 @@ b:
 
 c:
    stockname: 'Infy'
-   currentprice: 34.00
-   dayhigh: 34.00
-   daylow: 33.00
-   alltimehigh: 34.00
-   alltimelow: 22.00
-   stocksinexchange: 22
+   currentprice: 34.20
+   dayhigh: 31.50
+   daylow: 33.05
+   alltimehigh: 34.04
+   alltimelow: 22.03
+   stocksinexchange: 62
    stocksinmarket: 0
 
 d:
    stockname: 'Ranbaxy'
-   currentprice: 67.00
-   dayhigh: 67.00
-   daylow: 35.00
-   alltimehigh: 77.00
-   alltimelow: 78.00
+   currentprice: 67.45
+   dayhigh: 67.04
+   daylow: 35.33
+   alltimehigh: 77.34
+   alltimelow: 78.30
    stocksinexchange: 37
    stocksinmarket: 0
 
 e:
    stockname: 'HP' 
-   currentprice: 58.00
-   dayhigh: 58.00
+   currentprice: 58.20
+   dayhigh: 58.10
    daylow: 8.00
-   alltimehigh: 64.00
-   alltimelow: 6.00
+   alltimehigh: 64.30
+   alltimelow: 6.20
    stocksinexchange: 40
    stocksinmarket: 0
 
 f:
    stockname: 'TCS' 
    currentprice: 44
-   dayhigh: 43.00
-   daylow: 24.00
-   alltimehigh: 77.00
-   alltimelow: 11.00
+   dayhigh: 43.60
+   daylow: 24.05
+   alltimehigh: 77.48
+   alltimelow: 11.42
    stocksinexchange: 75
    stocksinmarket: 0
 
 g:
    stockname: 'Intel' 
    currentprice: 45.00
-   dayhigh: 55.00
-   daylow: 22.00
-   alltimehigh: 45.00
-   alltimelow: 22.00
-   stocksinexchange: 40
+   dayhigh: 55.20
+   daylow: 22.01
+   alltimehigh: 45.70
+   alltimelow: 22.09
+   stocksinexchange: 50
    stocksinmarket: 0
 
 h:
    stockname: 'HDFC'
-   currentprice: 56.0
-   dayhigh: 66.00
-   daylow: 33.00
-   alltimehigh: 66.00
-   alltimelow: 11.00
-   stocksinexchange: 32
+   currentprice: 56.44
+   dayhigh: 66.03
+   daylow: 33.53
+   alltimehigh: 66.26
+   alltimelow: 11.81
+   stocksinexchange: 52
    stocksinmarket: 0
 
 i:
    stockname: 'Github'
-   currentprice: 32.00
-   dayhigh: 44.00
-   daylow: 23.00
-   alltimehigh: 34.00
-   alltimelow: 32.00
+   currentprice: 32.10
+   dayhigh: 44.02
+   daylow: 23.33
+   alltimehigh: 34.30
+   alltimelow: 32.44
    stocksinexchange: 33
    stocksinmarket: 0
 
 
 j:
    stockname: 'Sony'
-   currentprice: 23.00
-   dayhigh: 32.00
-   daylow: 23.00
-   alltimehigh: 43.00
-   alltimelow: 32.00
+   currentprice: 23.32
+   dayhigh: 32.24
+   daylow: 23.13
+   alltimehigh: 43.39
+   alltimelow: 32.02
    stocksinexchange: 97
    stocksinmarket: 0
 
 k:
    stockname: 'Dell' 
-   currentprice: 34.00
-   dayhigh: 23.00
-   daylow: 43.00
-   alltimehigh: 23.00
-   alltimelow: 32.00
+   currentprice: 34.02
+   dayhigh: 23.02
+   daylow: 43.07
+   alltimehigh: 23.65
+   alltimelow: 32.84
    stocksinexchange: 40
    stocksinmarket: 0
 
 l:
    stockname: 'Delta' 
-   currentprice: 3.00
-   dayhigh: 4.00
-   daylow: 2.00
-   alltimehigh: 3.00
-   alltimelow: 3.00
+   currentprice: 3.30
+   dayhigh: 4.03
+   daylow: 2.95
+   alltimehigh: 3.43
+   alltimelow: 3.91
    stocksinexchange: 43
    stocksinmarket: 0
 
 m:
    stockname: 'Pragyan'
-   currentprice: 22.00
-   dayhigh: 23.00
-   daylow: 34.3
-   alltimehigh: 45.00
-   alltimelow: 3.00
-   stocksinexchange: 55
+   currentprice: 22.10
+   dayhigh: 23.04
+   daylow: 34.39
+   alltimehigh: 45.77
+   alltimelow: 3.41
+   stocksinexchange: 57
    stocksinmarket: 0
 
 n:
-   stockname: 'Morgan Stanley' 
-   currentprice: 66.00
-   dayhigh: 44.00
-   daylow: 67.5
-   alltimehigh: 45.4
-   alltimelow: 45.4
-   stocksinexchange: 54
+   stockname: 'MorganStanley' 
+   currentprice: 66.02
+   dayhigh: 44.03
+   daylow: 67.59
+   alltimehigh: 50.82
+   alltimelow: 45.41
+   stocksinexchange: 60
    stocksinmarket: 0
 
 o:
    stockname: 'LG'
-   currentprice: 32.00
-   dayhigh: 43.00
-   daylow: 34.00
-   alltimehigh: 44.4
-   alltimelow: 45.4
+   currentprice: 32.22
+   dayhigh: 43.01
+   daylow: 34.38
+   alltimehigh: 44.42
+   alltimelow: 45.49
    stocksinexchange: 220
    stocksinmarket: 0

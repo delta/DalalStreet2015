@@ -60,7 +60,7 @@
                                        <i class="fa fa-money fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div class="huge"><%=current_user.cash.round(2)%></div>
                                         <div>Cash</div>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=@price_of_tot_stock%></div>
+                                        <div class="huge"><%=@price_of_tot_stock.round(2)%></div>
                                         <div>Stock</div>
                                     </div>
                                 </div>
