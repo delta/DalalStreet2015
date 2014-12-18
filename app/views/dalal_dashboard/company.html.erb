@@ -223,6 +223,10 @@
       });
     });
 
+    function round(value, decimals) {
+       return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 
+    }
+
     var dispatcher = new WebSocketRails($('#market_event_list').data('uri'), true);
     
     var get_company_name = function(name){
@@ -244,6 +248,8 @@
 
              dispatcher.bind('company_handler', function(get_value) {
                   console.log(get_value);
+                  console.log(get_value.sent_data.price_list);
+                 // alert(get_value.sent_data.price_list);    
      
              for(var i = 0; i < get_value.sent_data.market_list.length; i++) {
                                 var obj = get_value.sent_data.market_list[i];

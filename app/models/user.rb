@@ -117,7 +117,7 @@ class User < ActiveRecord::Base
            @stockused = StockUsed.create(:user_id => @Sell_id.user_id, :stock_id => @Sell_id.stock_id,:numofstock => -@Sell_id.numofstock)
            
            @stockname = Stock.select('stockname,stocksinmarket,stocksinexchange,currentprice').where('id'=>id).first
-           User.currentprice_cal
+           User.currentprice_cal(id)
 
            @notification = Notification.create(:user_id =>@Buy_id.user_id, :notification => "You bought #{@Sell_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Buy_id.price} per share", :seen => 1, :notice_type => 1)
            @notification = Notification.create(:user_id =>@Sell_id.user_id, :notification => "You sold #{@Sell_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Sell_id.priceexpected} per share", :seen => 1, :notice_type => 1)
@@ -155,7 +155,7 @@ class User < ActiveRecord::Base
            @stockused = StockUsed.create(:user_id => @Sell_id.user_id, :stock_id => @Sell_id.stock_id,:numofstock => -@Buy_id.numofstock)
            
            @stockname = Stock.select('stockname,stocksinmarket,stocksinexchange,currentprice').where('id'=>id).first
-           User.currentprice_cal
+           User.currentprice_cal(id)
 
            @notification = Notification.create(:user_id =>@Buy_id.user_id, :notification => "You bought #{@Buy_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Buy_id.price} per share", :seen => 1, :notice_type => 1)
            @notification = Notification.create(:user_id =>@Sell_id.user_id, :notification => "You sold #{@Buy_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Sell_id.priceexpected} per share", :seen => 1, :notice_type => 1)
@@ -172,9 +172,10 @@ class User < ActiveRecord::Base
            @Sell_id.save
            @Buy_id.destroy
 
-           if @offset_buy_count != 0 
-            @offset_buy_count = @offset_buy_count - 1
-           end
+           # if @offset_buy_count != 0 
+           #  @offset_buy_count = @offset_buy_count - 1
+           # end
+           @offset_buy_count = 0
            @next_compatible_stock_bid_ask = User.next_compatible_stock_bid_ask(id,mode)
            
         else
@@ -189,7 +190,7 @@ class User < ActiveRecord::Base
            @stockused = StockUsed.create(:user_id => @Sell_id.user_id, :stock_id => @Sell_id.stock_id,:numofstock => -@Sell_id.numofstock)
  
            @stockname = Stock.select('stockname,stocksinmarket,stocksinexchange,currentprice').where('id'=>id).first
-           User.currentprice_cal
+           User.currentprice_cal(id)
 
            @notification = Notification.create(:user_id =>@Buy_id.user_id, :notification => "You bought #{@Buy_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Buy_id.price} per share", :seen => 1, :notice_type => 1)
            @notification = Notification.create(:user_id =>@Sell_id.user_id, :notification => "You sold #{@Sell_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Sell_id.priceexpected} per share", :seen => 1, :notice_type => 1)
@@ -256,9 +257,11 @@ class User < ActiveRecord::Base
      somefile.close
    end
    
-   def self.currentprice_cal
+   def self.currentprice_cal(id)
       totalstock = @stockname.stocksinmarket+@stockname.stocksinexchange
-      @stockname.currentprice = (@Buy_id.price.to_f*@Buy_id.numofstock.to_f + (totalstock.to_f-@Buy_id.numofstock.to_f)*@stockname.currentprice.to_f)/totalstock.to_f
+      @stockname.currentprice= (@Buy_id.price.to_f*@Buy_id.numofstock.to_f + (totalstock.to_f-@Buy_id.numofstock.to_f)*@stockname.currentprice.to_f)/totalstock.to_f
+      @stockname.currentprice= @stockname.currentprice.to_f
+      @update_currentprice_files = Stock.update_current_price(id,@stockname.currentprice)
       @stockname.save
    end
 

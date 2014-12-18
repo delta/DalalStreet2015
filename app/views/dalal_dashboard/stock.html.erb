@@ -208,6 +208,10 @@
         }
         return true;
     };
+    
+    function round(value, decimals) {
+       return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 
+    }
 
          var connection = function(){var data = {connected : true}; return data;};
 
@@ -288,7 +292,7 @@
                       for(var i = 0; i < get_stock_value.sent_stock_data.stock_update.length; i++) {
                             var obj = get_stock_value.sent_stock_data.stock_update[i];
 
-                            var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
+                            var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.daylow, 2)+'</td><td>'+round(obj.dayhigh, 2)+'</td><td>'+round(obj.currentprice, 2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
                         }
 
                      $("#render_tbody_stock").empty().append(fill_table);

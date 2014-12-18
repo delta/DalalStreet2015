@@ -17,4 +17,23 @@ has_many :stock_useds
    return @stocks
  end
 
+ def self.update_current_price(id,price)
+     file_name = Rails.root.join('app','chart-data',id.to_s+'.log')
+     if file_name.exist?
+      file = File.open(file_name, "a")
+     else
+      file = File.new(file_name, "a+")
+     end
+     file.print price.round(2).to_s+","
+     file.close
+ end
+
+ def self.read_current_price(id)
+	file_name = Rails.root.join('app','chart-data',id.to_s+'.log')
+    file = File.open(file_name, "rb")
+ 	price_list = file.read
+ 	file.close
+ 	return price_list.to_s
+ end
+
 end

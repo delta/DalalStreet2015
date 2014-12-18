@@ -263,6 +263,10 @@
       });
     });
 
+     function round(value, decimals) {
+       return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 
+    }
+
     var get_userstock_info  = function(bool,dispatcher){
 
          var sent = {receive: bool};
@@ -290,7 +294,7 @@
              for(var i = 0; i < get_value.sent_data.stock_update.length; i++) {
                                 var obj = get_value.sent_data.stock_update[i];
                                 
-                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+obj.alltimelow+'</td><td>'+obj.alltimehigh+'</td><td>'+obj.daylow+'</td><td>'+obj.dayhigh+'</td><td>'+obj.currentprice+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+obj.netcash+'</td></tr>';
+                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.alltimelow,2)+'</td><td>'+round(obj.alltimehigh,2)+'</td><td>'+round(obj.daylow,2)+'</td><td>'+round(obj.dayhigh,2)+'</td><td>'+round(obj.currentprice,2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+round(obj.netcash,2)+'</td></tr>';
                             }
 
                          $("#render_tbody").empty().append(fill_table);
