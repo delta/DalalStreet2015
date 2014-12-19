@@ -24,7 +24,9 @@ Rails.application.routes.draw do
   get '/dalal_dashboard/:id/buy_sell_history' => 'dalal_dashboard#buy_sell_history'
 
   get '/admin/index' => 'admin#index' ###controller not yet created
-
+  get '/admin/market_events' => 'admin#market_events'
+  get '/admin/company_events' => 'admin#company_events'
+  get '/admin/bank_rates' => 'admin#bank_rates'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
