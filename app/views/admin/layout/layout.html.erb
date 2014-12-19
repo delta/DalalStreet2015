@@ -177,12 +177,12 @@
                     <% end %>   
                     </li>
                     <li>
-                    <%= link_to :controller=>'admin', :action=>'index' do %>
+                    <%= link_to :controller=>'admin', :action=>'bank_rates' do %>
                         <span id="span"><i class="fa fa-fw fa-desktop"></i> Bank Rates</span>
                     <% end %>
                     </li>
                     <li>
-                    <%= link_to :controller=>'admin', :action=>'index' do %>
+                    <%= link_to :controller=>'admin', :action=>'company_events' do %>
                         <span id="span"><i class="fa fa-fw fa-edit"></i> Company Events</span>
                     <% end %>
                     </li>
@@ -190,7 +190,9 @@
                         <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-fw fa-wrench"></i> Market Events</a>
+                    <%= link_to :controller=>'admin', :action=>'market_events' do %>
+                        <span id="span" ><i class="fa fa-fw fa-wrench"></i> Market Events</span>
+                    <% end %>
                     </li>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
