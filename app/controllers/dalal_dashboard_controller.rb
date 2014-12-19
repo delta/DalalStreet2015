@@ -4,12 +4,12 @@ protect_from_forgery with: :null_session
 
 require "json"
 
- before_filter :set_cache_buster
-  def set_cache_buster
-    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
-  end
+ # before_filter :set_cache_buster
+ #  def set_cache_buster
+ #    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+ #    response.headers["Pragma"] = "no-cache"
+ #    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+ #  end
 
 layout "../dalal_dashboard/layout/layout.html.erb"
 
@@ -56,9 +56,10 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     def buy_sell_page
     
 	    if user_signed_in?
-	    	  #@stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
+	    	     @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id").first
 	           @stocks_list = Stock.all
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+             @no_stock_found = nil
 	           @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	    else
 	       redirect_to :action => 'index'
@@ -68,21 +69,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
 ########################IMPORTANT :::::: Dont forget to block url to http://0.0.0.0:3000/dalal_dashboard/298486374/buy_sell_stock :::::####################################
     def buy_sell_stock
-      if request.get? 	
-    	if user_signed_in?
-            @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.stockname' => params[:stockname] ).group("stock_id").first
-	        @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-            if !@stocks
-              @stocks = Stock.select("stocks.*").where('stocks.stockname' => params[:stockname]).first
-              @No_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
-            end   
-        else
-	       redirect_to :action => 'index'
-	    end
-
-	  else
-	  	
+      
 	  	if user_signed_in?
 	  		## to check post from which form
 	  		logger.info params[:identity_buy]
@@ -140,14 +127,13 @@ layout "../dalal_dashboard/layout/layout.html.erb"
         else
            redirect_to :action => 'index'
         end	
-
-	  end ##block for get or post request 
     end ####end of buy def
 
     
     def bank_mortgage
     	 if user_signed_in?
 	       	   @stocks_list = Stock.return_bought_stocks(current_user.id)
+             @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id").first
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	           @notifications_list = Notification.get_notice(current_user.id,10)
 	     else
@@ -156,28 +142,21 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     end ###bank_mortgage
 
     def bank_mortgage_stock
-    	if request.get?
 	    	if user_signed_in?
-	          @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.stockname' => params[:stockname] ).group("stock_id").first
-	          @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-	    	else
-	    	  redirect_to :action => 'index'
-	    	end
-	    else
-	    	if user_signed_in?
-	    		@stockid = params[:identity_bank].split("_")[1]
+	    	      	@stockid = params[:identity_bank].split("_")[1]
                 @numofstock_to_mortgage = params[:num_of_stock]
-	            @check_stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.id' => @stockid ).group("stock_id").first
-                logger.info @check_stock.totalstock 
+	              @check_stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.id' => @stockid ).group("stock_id").first
+                logger.info @check_stock.totalstock.to_f
+                logger.info @numofstock_to_mortgage
                 ##check if he has enough stock
-                if @check_stock.totalstock.to_f >= @numofstock.to_f
+                if @check_stock.totalstock.to_f >= @numofstock_to_mortgage.to_f
                    @user_cash_inhand = User.find(current_user.id)
                    @user_cash_inhand.cash = @user_cash_inhand.cash.to_f + 0.75*@numofstock_to_mortgage.to_f*@check_stock.currentprice.to_f
                    @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @stockid,:numofstock => -1*@numofstock_to_mortgage.to_f)
                    @mortgage = Bank.create(:user_id => current_user.id, :stock_id => @stockid,:pricerendered => @check_stock.currentprice, :numofstock => @numofstock_to_mortgage)
                    @user_cash_inhand.save  
                    @extra_cash = 0.75*@numofstock_to_mortgage.to_f*@check_stock.currentprice.to_f
+                   @extra_cash = @extra_cash.round(2)
                    flash[:notice] = "Mortgage Successful.$#{@extra_cash} added to your account"
                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
               	   redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
@@ -189,7 +168,6 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	    	else
 	    	  redirect_to :action => 'index'
 	    	end ##end of user_signed_in
-	    end ##end of request
     end##end of bank_mortgage
 
 	def buy_sell_history
@@ -207,12 +185,13 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     	if user_signed_in?
           @market_event_list  = MarketEvent.get_events(10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+          @stock = Stock.select("*").where("id" =>30677878).first
           @stock_list = Stock.pluck(:stockname)
 	    else
 	      redirect_to :action => 'index'
 	    end
-
     end
+
     def market_events
         if user_signed_in?
             @stocks_list = Stock.return_bought_stocks(current_user.id)

@@ -154,7 +154,7 @@
                                                 <th>StockWorth</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="render_tbody">
+                                        <tbody id="render_tbody_show">
                                              <% @stocks.each do |stock| %>
                                                 <tr>
                                                     <td><%=stock.stockname %></td>
@@ -297,7 +297,7 @@
                                 var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.alltimelow,2)+'</td><td>'+round(obj.alltimehigh,2)+'</td><td>'+round(obj.daylow,2)+'</td><td>'+round(obj.dayhigh,2)+'</td><td>'+round(obj.currentprice,2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+round(obj.netcash,2)+'</td></tr>';
                             }
 
-                         $("#render_tbody").empty().append(fill_table);
+                         $("#render_tbody_show").empty().append(fill_table);
                          
       });
      

@@ -8,8 +8,9 @@ WebsocketRails::EventMap.describe do
     subscribe :notification_update, to: SocketController, with_method: :notification_update
     subscribe :stock_ajax_handler, to: SocketController, with_method: :stock_ajax_handler
     subscribe :company_handler, to: SocketController, with_method: :company_handler
+    subscribe :buy_sell_partial_render, to: SocketController, with_method: :buy_sell_partial_render
+    subscribe :bank_mortgage_partial_render, to: SocketController, with_method: :bank_mortgage_partial_render
 
- 
   
   # Uncomment and edit the next line to handle the client connected event:
   #   subscribe :client_connected, :to => Controller, :with_method => :method_name

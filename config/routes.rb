@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   post '/dalal_dashboard/:id/stock_ajax_handler' => 'dalal_dashboard#stock_ajax_handler'
   get '/dalal_dashboard/:id/market_events' => 'dalal_dashboard#market_events'
   get '/dalal_dashboard/:id/buy_sell_page' => 'dalal_dashboard#buy_sell_page'
-  get '/dalal_dashboard/:id/buy_sell_stock'=> 'dalal_dashboard#buy_sell_stock'
+  # get '/dalal_dashboard/:id/buy_sell_stock'=> 'dalal_dashboard#buy_sell_stock'
   post '/dalal_dashboard/:id/buy_sell_stock'=> 'dalal_dashboard#buy_sell_stock'
   get '/dalal_dashboard/:id/bank_mortgage'=> 'dalal_dashboard#bank_mortgage'
   get '/dalal_dashboard/:id/bank_mortgage_stock'=> 'dalal_dashboard#bank_mortgage_stock'

@@ -1,4 +1,18 @@
 <% content_for :page_wrapper do %>
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+      <div class="modal-content contcustom">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <br>         
+            <div class="modal-body">
+            <%= render partial:"dalal_dashboard/buy_sell_partial",locals: { stock: @stock, no_stock_found: @no_stock_found } %>
+            </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -13,7 +27,8 @@
                             <li class="active">
                              <i class="fa fa-dashboard"></i> Dashboard
                             </li>
-                        </ol>
+                            
+                        </ol>   
                     </div>
                 </div>
                 <!-- /.row -->
@@ -155,13 +170,13 @@
                                         <tbody id="render_tbody">
                                             <% @stocks_list.each do |stock| %>
                                                 <tr>
-                                        <td><%= link_to "#{stock.stockname}", {:controller=>"dalal_dashboard",:id =>"#{current_user.id}",:action =>"buy_sell_stock",:stockname =>"#{stock.stockname}"}, id: "#{stock.stockname}_#{stock.id}", class: "stock_name"%></td>
+<td><a href="#myModal" data-toggle="modal" data-target="#myModal" <%="onclick=get_single_stock_id('#{stock.id}');"%> ><%=stock.stockname%></a></td>
                                                     <td><%=stock.alltimelow.round(2) %></td>
                                                     <td><%=stock.alltimehigh.round(2) %></td>
                                                     <td><%=stock.daylow.round(2) %></td>
                                                     <td><%=stock.dayhigh.round(2) %></td>
                                                     <td><%=stock.currentprice.round(2) %></td>
-                                                    <td><%=stock.stocksinmarket%></td>
+                                                    <td><%=stock.stocksinmarket %></td>
                                                 </tr>
                                             <% end %>     
                                         </tbody>
@@ -174,8 +189,6 @@
                         </div>
                     </div>
                  </div> <!-- row -->
-
-                <!-- /.row -->
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -201,13 +214,44 @@
 
         </div>
         <!-- /#page-wrapper -->
+
+
+<style>
+
+    .contcustom {
+        text-align: center;
+        width: 800px;
+        border-radius: 0.5rem;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 10px auto;
+        background-color: white;
+        padding: 20px;
+    }
+
+</style>
 <% end %>
 
 <% content_for :script do %>
 
    <script type="text/javascript">
-  $(function(){
+
+   $('#myModal').modal('hide')
+
+    jQuery(function ($) {
+        function check_values() {
+            if ($("#username").val().length != 0 && $("#password").val().length != 0) {
+                $("#button1").removeClass("hidden").animate({ left: '250px' });
+                $("#lock1").addClass("hidden").animate({ left: '250px' });
+            }
+        }
+    });
+
       var dispatcher = new WebSocketRails($('.table').data('uri'), true);
+
+  $(function(){
       
       dispatcher.on_open = function(){
         console.log("Connection established");
@@ -215,15 +259,46 @@
 
       var channel = dispatcher.subscribe('stocks_all');
       channel.bind('call_channel_stock_all', function(get_value) {  
-        console.log(get_value);
+      //  console.log(get_value);
         get_completestock_info(get_value,dispatcher);
+
       });
     });
 
-    function round(value, decimals) {
+    
+    var round = function(value, decimals) {
        return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 
-    }
+    };
 
+    var get_single_stock_id = function(stock_id){
+
+        get_single_stock_modal(stock_id,dispatcher);
+    };
+
+    var get_single_stock_modal = function(stock_id,dispatcher){
+
+             var data = {id: stock_id};
+
+             var success = function(response) {
+                      console.log("success : "+response.message);
+                      //dispatcher.unbind('notification_update');
+                      };
+
+             var failure = function(response) {
+                       console.log("failure: "+response.message);
+                      };
+
+                 dispatcher.bind('buy_sell_partial_render', getdata);
+                 dispatcher.trigger('buy_sell_partial_render', data, success, failure); 
+                
+                 function getdata(get_data) {
+                          var rs = new RestfulWebsockets();
+                          console.log(get_data)
+                          rs.refresh(get_data); 
+                    }
+    };
+
+/////////////  websocket for notifications and table ////////////////////////////////
     var get_completestock_info  = function(bool,dispatcher){
 
          var sent = {receive: bool};
@@ -261,6 +336,15 @@
          dispatcher.trigger('update_stock_all', sent, success, failure); 
 
     }; 
+
+     var isNumber= function(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    };
 </script>
 
 <% end %>    

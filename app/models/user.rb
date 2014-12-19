@@ -284,6 +284,4 @@ class User < ActiveRecord::Base
      end
    end ##end of check_next_buy
 
-
-
 end

@@ -1,7 +1,8 @@
 class SocketController < WebsocketRails::BaseController
+include SocketHelper
 before_filter :authenticate_user!
-
 require "json"
+# include RestfulWebsocketsHelper
 
     def initialize_session
     # perform application setup here
@@ -116,5 +117,45 @@ require "json"
         end
     end
 
+    def buy_sell_partial_render
+      if user_signed_in?
+       id = data[:id]
+       logger.info id
+       @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stock_useds.stock_id' => id).group("stock_id").first
+       @no_stock_found = nil
+       if !@stock
+         @stock = Stock.select("*").where('stocks.id' => id).first
+         @no_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
+       end   
+      
+      update_partial_input('dalal_dashboard/buy_sell_partial', :@stock, @stock);
+      update_partial_input('dalal_dashboard/buy_sell_partial', :@no_stock_found , @no_stock_found);
+      data = {};
+      data = load_data_with_partials(data);
+      send_message :buy_sell_partial_render, data
+      else
+           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+           redirect_to :action => 'index'
+        end
+      #{:controller=>"dalal_dashboard",:id =>"#{current_user.id}",:action =>"buy_sell_stock",:stockname =>"#{stock.stockname}"},
+
+     end 
+
+     def bank_mortgage_partial_render
+      if user_signed_in?
+        id = data[:id]
+        @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stock_useds.stock_id' => id).group("stock_id").first
+
+        update_partial_input('dalal_dashboard/bank_mortgage_partial', :@stock, @stock);
+
+        data = {};
+        data = load_data_with_partials(data);
+        send_message :bank_mortgage_partial_render, data
+
+        else
+          flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+          redirect_to :action => 'index'
+        end
+     end 
 end ## end of socket controller
  

@@ -1,4 +1,17 @@
 <% content_for :page_wrapper do %>
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+      <div class="modal-content contcustom">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <br>         
+            <div class="modal-body">
+            <%= render partial:"dalal_dashboard/bank_mortgage_partial",locals: { stock: @stock } %>
+            </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -60,7 +73,7 @@
                                        <i class="fa fa-money fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div class="huge"><%=current_user.cash.round(2)%></div>
                                         <div>Cash</div>
                                     </div>
                                 </div>
@@ -82,7 +95,7 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=@price_of_tot_stock%></div>
+                                        <div class="huge"><%=@price_of_tot_stock.round(2)%></div>
                                         <div>Stock</div>
                                     </div>
                                 </div>
@@ -157,15 +170,15 @@
                                         <tbody id="render_tbody">
                                             <% @stocks_list.each do |stock| %>
                                                 <tr>
-                                        <td><%= link_to "#{stock.stockname}", {:controller=>"dalal_dashboard",:id =>"#{current_user.id}",:action =>"bank_mortgage_stock",:stockname =>"#{stock.stockname}"}, id: "#{stock.stockname}_#{stock.id}", class: "stock_name"%></td>
-                                                    <td><%=stock.alltimelow %></td>
-                                                    <td><%=stock.alltimehigh %></td>
-                                                    <td><%=stock.daylow %></td>
-                                                    <td><%=stock.dayhigh %></td>
-                                                    <td><%=stock.currentprice %></td>
-                                                    <td><%=stock.stocksinmarket%></td>
-                                                    <td><%=stock.totalstock%></td>
-                                                    <td><%=stock.netcash%></td>
+                                                    <td><a href="#myModal" data-toggle="modal" data-target="#myModal" <%="onclick=get_single_stock_id('#{stock.id}');"%> ><%=stock.stockname%></a></td>
+                                                    <td><%=stock.alltimelow.round(2) %></td>
+                                                    <td><%=stock.alltimehigh.round(2) %></td>
+                                                    <td><%=stock.daylow.round(2) %></td>
+                                                    <td><%=stock.dayhigh.round(2) %></td>
+                                                    <td><%=stock.currentprice.round(2) %></td>
+                                                    <td><%=stock.stocksinmarket.round(2)%></td>
+                                                    <td><%=stock.totalstock.round(2)%></td>
+                                                    <td><%=stock.netcash.round(2)%></td>
                                                 </tr>
                                             <% end %>     
                                         </tbody>
@@ -205,14 +218,40 @@
 
         </div>
         <!-- /#page-wrapper -->
+<style>
+    .contcustom {
+        text-align: center;
+        width: 800px;
+        border-radius: 0.5rem;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 10px auto;
+        background-color: white;
+        padding: 20px;
+    }
+</style>
+
 <% end %>
 
 <% content_for :script do %>
 
    <script type="text/javascript">
-  $(function(){
+
+   $('#myModal').modal('hide')
+
+    jQuery(function ($) {
+        function check_values() {
+            if ($("#username").val().length != 0 && $("#password").val().length != 0) {
+                $("#button1").removeClass("hidden").animate({ left: '250px' });
+                $("#lock1").addClass("hidden").animate({ left: '250px' });
+            }
+        }
+    });
       var dispatcher = new WebSocketRails($('.table').data('uri'), true);
-      
+
+  $(function(){
       dispatcher.on_open = function(){
         console.log("Connection established");
       };
@@ -223,6 +262,36 @@
         get_completestock_info(get_value,dispatcher);
       });
     });
+
+    var get_single_stock_id = function(stock_id){
+
+        get_single_stock_modal(stock_id,dispatcher);
+    };
+
+    var get_single_stock_modal = function(stock_id,dispatcher){
+
+             var data = {id: stock_id};
+
+             var success = function(response) {
+                      console.log("success : "+response.message);
+                      //dispatcher.unbind('notification_update');
+                      };
+
+             var failure = function(response) {
+                       console.log("failure: "+response.message);
+                      };
+
+                 dispatcher.bind('bank_mortgage_partial_render', getdata);
+                 dispatcher.trigger('bank_mortgage_partial_render', data, success, failure); 
+                
+                 function getdata(get_data) {
+                          var rs = new RestfulWebsockets();
+                          console.log(get_data)
+                          rs.refresh(get_data); 
+                    }
+    };
+
+
 
     var get_completestock_info  = function(bool,dispatcher){
 
