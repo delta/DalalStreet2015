@@ -259,10 +259,10 @@ class User < ActiveRecord::Base
    
    def self.currentprice_cal(id)
       totalstock = @stockname.stocksinmarket+@stockname.stocksinexchange
-      @stockname.currentprice= (@Buy_id.price.to_f*@Buy_id.numofstock.to_f + (totalstock.to_f-@Buy_id.numofstock.to_f)*@stockname.currentprice.to_f)/totalstock.to_f
-      @stockname.currentprice= @stockname.currentprice.to_f
-      @update_currentprice_files = Stock.update_current_price(id,@stockname.currentprice)
+      @stockname.currentprice = (@Buy_id.price.to_f*@Buy_id.numofstock.to_f + (totalstock.to_f-@Buy_id.numofstock.to_f)*@stockname.currentprice.to_f)/totalstock.to_f
       @stockname.save
+      #@stockname.update(currentprice: @stockname.currentprice.to_f)
+      @update_currentprice_files = Stock.update_current_price(id,@stockname.currentprice)
    end
 
    def self.check_next_buy_sell(id,mode)

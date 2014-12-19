@@ -61,7 +61,7 @@
                                        <i class="fa fa-money fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash%></div>
+                                        <div class="huge"><%=current_user.cash.round(2)%></div>
                                         <div>Cash</div>
                                     </div>
                                 </div>
@@ -233,6 +233,11 @@
        get_company_info(name,dispatcher);
     };
 
+    var current_price_list_array = function(pricelist){
+     var price_list_array = pricelist.split(",")
+     return price_list_array
+    };
+
     var get_company_info  = function(company_name,dispatcher){
 
          var data = {name: company_name};
@@ -249,8 +254,8 @@
              dispatcher.bind('company_handler', function(get_value) {
                   console.log(get_value);
                   console.log(get_value.sent_data.price_list);
-                 // alert(get_value.sent_data.price_list);    
-     
+                  chart_loader(current_price_list_array(get_value.sent_data.price_list));
+              
              for(var i = 0; i < get_value.sent_data.market_list.length; i++) {
                                 var obj = get_value.sent_data.market_list[i];
                                var fill_table = fill_table+'<a href="#" class=\"list-group-item\"><span class=\"badge\">'+obj.updated_at+'</span><i class=\"fa fa-fw fa-check\"></i>'+obj.eventname+'</a>';
@@ -261,9 +266,34 @@
          dispatcher.trigger('company_handler', data, success, failure); 
 
     }; 
-            
-    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-        var lineChartData = {
+
+    
+    var chart_loader = function(pricelist){
+
+    var canvas = document.getElementById("canvas_line");
+    var ctx1 = document.getElementById("canvas_line").getContext("2d");
+    ctx1.clearRect(0, 0, canvas.width, canvas.height);
+           
+    var min,step,length;   
+        
+    var manipulator = function(pricelist){
+
+        pricelist.splice(pricelist.length-1, 1);
+        Array.min = function(pricelist){
+                      return Math.min.apply( Math, pricelist );
+                    };
+        Array.max = function(pricelist){
+                      return Math.max.apply( Math, pricelist );
+                    };              
+         min = Array.min(pricelist);
+         var max = Array.max(pricelist);
+         length = pricelist.length/2;
+         step = round((max - min)/length,1);
+
+    };  
+
+       manipulator(pricelist);
+       var lineChartData = {
             labels : ["January","February","March","April","May","June","July"],
             datasets : [
                 {
@@ -274,32 +304,23 @@
                     pointStrokeColor : "#fff",
                     pointHighlightFill : "#fff",
                     pointHighlightStroke : "rgba(220,220,220,1)",
-                    data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                },
-                {
-                    label: "My Second dataset",
-                    fillColor : "rgba(151,187,205,0.2)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    pointHighlightFill : "#fff",
-                    pointHighlightStroke : "rgba(151,187,205,1)",
-                    data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                }
-            ]
-
-        }
-
-            window.onload = function(){
-                var ctx1 = document.getElementById("canvas_line").getContext("2d");
-                window.myLine = new Chart(ctx1).Line(lineChartData, {
-                    responsive: true
+                    data : pricelist
+                }]
+        };  
+            
+            window.myLine = new Chart(ctx1).Line(lineChartData, {
+                    responsive: true,
+                    scaleOverride: true,
+                    scaleSteps: length,
+                    scaleStepWidth: step,
+                    scaleStartValue: min,
                 });
 
-             }
+            myLine.destroy();
+
+    };         
 
    $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
-
       var $target = $( event.currentTarget );
 
       $target.closest( '.btn-group' )

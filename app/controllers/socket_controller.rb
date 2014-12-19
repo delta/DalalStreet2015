@@ -106,10 +106,10 @@ require "json"
     def company_handler
        if user_signed_in?
            company_name = data[:name]
-           stock = Stock.select("id").where("stockname" => company_name).first
+           stock = Stock.select("*").where("stockname" => company_name).first
            stock_price = Stock.read_current_price(stock.id)
            @get_market_event = MarketEvent.select("eventname,updated_at").where("stock_id" => stock.id).last(10).reverse
-           send_message :company_handler, :sent_data => {:market_list => @get_market_event,:price_list => stock_price}
+           send_message :company_handler, :sent_data => {:market_list => @get_market_event,:price_list => stock_price,:stock_details => stock}
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            redirect_to :action => 'index'

@@ -1,5 +1,6 @@
 class Stock < ActiveRecord::Base
-
+      validates :currentprice, presence: true
+      
 has_many :stock_useds
 
 

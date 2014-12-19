@@ -109,6 +109,9 @@ ul.alert-dropdown {
     width: 200px;
 }
 
+.table{
+    font-size: 12px;
+}
 /* Side Navigation */
 
 @media(min-width:768px) {

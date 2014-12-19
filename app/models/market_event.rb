@@ -53,9 +53,11 @@ class MarketEvent < ActiveRecord::Base
 	       if market_event.event_type == 0 ##negative event
 	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
 	          @stock.currentprice = @stock.currentprice.to_f - @stock.currentprice*0.02.to_f
+              @update_currentprice_files = Stock.update_current_price(id,@stockname.currentprice)
 	       else
 	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
 	          @stock.currentprice = @stock.currentprice.to_f + @stock.currentprice*0.02.to_f
+              @update_currentprice_files = Stock.update_current_price(id,@stockname.currentprice)
 	       end
 		   market_event.event_turn = market_event.event_turn + 1 
 		   if market_event.event_turn == 3
