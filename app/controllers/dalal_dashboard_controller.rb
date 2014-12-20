@@ -54,7 +54,6 @@ layout "../dalal_dashboard/layout/layout.html.erb"
     end #stock def
 
     def buy_sell_page
-    
 	    if user_signed_in?
 	    	     @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id").first
 	           @stocks_list = Stock.all

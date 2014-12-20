@@ -157,12 +157,19 @@
                                         <tbody id="render_tbody_show">
                                              <% @stocks.each do |stock| %>
                                                 <tr>
+                                                <% if stock.updown == 1%>
+                                                <% @color="style=color:green"%>
+                                                <% @image="<img src=/public/assets/up-arrow.gif></img>"%>
+                                                <% else %>
+                                                <% @color="style=color:red" %>
+                                                <% @image="<img src=/public/assets/stock_down.gif></img>"%>
+                                                <%end%> 
                                                     <td><%=stock.stockname %></td>
                                                     <td><%=stock.alltimelow.round(2) %></td>
                                                     <td><%=stock.alltimehigh.round(2) %></td>
                                                     <td><%=stock.daylow.round(2) %></td>
                                                     <td><%=stock.dayhigh.round(2) %></td>
-                                                    <td><%=stock.currentprice.round(2) %></td>
+                                                    <td <%=@color%> ><%=stock.currentprice.round(2) %><span><%= @image %></span></td>
                                                     <td><%=stock.stocksinmarket%></td>
                                                     <td><%=stock.totalstock %></td>
                                                     <td><%=stock.netcash.round(2) %></td>

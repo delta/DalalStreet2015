@@ -137,26 +137,7 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Stocks </h3>
                             </div>
                             <div class="panel-body">
-                                <div class="table-responsive">                            
-                                  <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
-                                        <thead>
-                                            <tr>
-                                                <th>Stock</th>
-                                                <th>DayLow</th>
-                                                <th>DayHigh</th>
-                                                <th>Current (USD)</th>
-                                                <th>StockInMarket</th>
-                                                <th>StockInExchange</th>
-                                                <th>TradeStock</th>
-                                                <th>Trade</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="render_tbody_stock">
-                                         <%= render partial:"dalal_dashboard/stock_partial",locals: { stocks: @stocks }%>  
-                                        </tbody>
-                                    </table>
-                                </div>
-
+                             <%= render partial:"dalal_dashboard/stock_partial",locals: { stocks: @stocks }%>  
                                 <div class="text-right">
                                     <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
@@ -286,23 +267,26 @@
                   };
 
                  var gettable = function (get_stock_value) {
-                      console.log(get_stock_value.sent_stock_data.current_user);
-                      console.log(get_stock_value.sent_stock_data.stock_update);
+                     // console.log(get_stock_value.sent_stock_data.current_user);
+                     // console.log(get_stock_value.sent_stock_data.stock_update);
 
-                      for(var i = 0; i < get_stock_value.sent_stock_data.stock_update.length; i++) {
-                            var obj = get_stock_value.sent_stock_data.stock_update[i];
+                      // for(var i = 0; i < get_stock_value.sent_stock_data.stock_update.length; i++) {
+                      //       var obj = get_stock_value.sent_stock_data.stock_update[i];
 
-                            var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.daylow, 2)+'</td><td>'+round(obj.dayhigh, 2)+'</td><td>'+round(obj.currentprice, 2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
-                        }
+                      //       var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.daylow, 2)+'</td><td>'+round(obj.dayhigh, 2)+'</td><td>'+round(obj.currentprice, 2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
+                      //    }
+                      // $("#render_tbody_stock").empty().append(fill_table);
+                      console.log(get_stock_value);
 
-                     $("#render_tbody_stock").empty().append(fill_table);
-                     getnotifications();
+                      var rs = new RestfulWebsockets();
+                      rs.refresh(get_stock_value);
+                      
+                      getnotifications();
                 
                   };
 
                 if(!bind_check)
                     bind_check = dispatcher.bind('stock_ajax_handler', gettable);
-
                     dispatcher.trigger('stock_ajax_handler', data, success, failure); 
                
     };

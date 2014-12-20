@@ -60,13 +60,15 @@ require "json"
                @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3) 
             end ##main if block 1
 
-                ## update block send response to client
-                @stockall = Stock.all
+               @stockall = Stock.all
                if @success == 1
-                    WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
-                    broadcast_message :stock_ajax_handler, :sent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}  
+                    stock_ajax_handler_helper(@stockall)
+                    # WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
+                    # broadcast_message :stock_ajax_handler, :sent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}  
                else
-                    broadcast_message :stock_ajax_handler, :ent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}
+                    stock_ajax_handler_helper(@stockall)
+                    # WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
+                    # broadcast_message :stock_ajax_handler, :ent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}
                end
                 ## end update block send response to client
            

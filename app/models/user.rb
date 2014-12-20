@@ -189,7 +189,7 @@ class User < ActiveRecord::Base
            @stockused = StockUsed.create(:user_id => @Buy_id.user_id, :stock_id => @Buy_id.stock_id,:numofstock => @Buy_id.numofstock)
            @stockused = StockUsed.create(:user_id => @Sell_id.user_id, :stock_id => @Sell_id.stock_id,:numofstock => -@Sell_id.numofstock)
  
-           @stockname = Stock.select('stockname,stocksinmarket,stocksinexchange,currentprice').where('id'=>id).first
+           @stockname = Stock.select('*').where('id'=>id).first
            User.currentprice_cal(id)
 
            @notification = Notification.create(:user_id =>@Buy_id.user_id, :notification => "You bought #{@Buy_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Buy_id.price} per share", :seen => 1, :notice_type => 1)
@@ -259,14 +259,20 @@ class User < ActiveRecord::Base
    
    def self.currentprice_cal(id)
       totalstock = @stockname.stocksinmarket+@stockname.stocksinexchange
-      @stockname.currentprice = (@Buy_id.price.to_f*@Buy_id.numofstock.to_f + (totalstock.to_f-@Buy_id.numofstock.to_f)*@stockname.currentprice.to_f)/totalstock.to_f
+      new_price = (@Buy_id.price.to_f*@Buy_id.numofstock.to_f + (totalstock.to_f-@Buy_id.numofstock.to_f)*@stockname.currentprice.to_f)/totalstock.to_f
+      
+      if new_price < @stockname.currentprice
+         @stockname.updown = 0
+      else
+         @stockname.updown = 1
+      end
+
+      @stockname.currentprice = new_price
       @stockname.save
-      #@stockname.update(currentprice: @stockname.currentprice.to_f)
       @update_currentprice_files = Stock.update_current_price(id,@stockname.currentprice)
    end
 
    def self.check_next_buy_sell(id,mode)
-    # count_buy  = Buy.where(:stock_id => id).order('price DESC').count
     # count_sell = Sell.where(:stock_id => id).order('priceexpected ASC').count
      @Buy_id = Buy.select('*').where(:stock_id => id).order('price DESC').limit(1).offset(@offset_buy_count+1).first
      @Sell_id = Sell.select('*').where(:stock_id => id).order('priceexpected ASC').limit(1).offset(@offset_sell_count+1).first

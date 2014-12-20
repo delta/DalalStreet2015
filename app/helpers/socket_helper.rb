@@ -54,4 +54,20 @@ module SocketHelper
    def find_partial_name(file_path)
       return name = file_path.split('/').last.to_sym;
    end
+   
+
+   def stock_ajax_handler_helper(stocks)
+      if user_signed_in?
+        update_partial_input('dalal_dashboard/stock_partial', :@stocks, stocks);
+        data = {};
+        data = load_data_with_partials(data);
+         WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
+        broadcast_message :stock_ajax_handler, data
+        else
+          flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+          redirect_to :action => 'index'
+        end
+   end
+
+
 end
