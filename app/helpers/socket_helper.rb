@@ -61,7 +61,7 @@ module SocketHelper
         update_partial_input('dalal_dashboard/stock_partial', :@stocks, stocks);
         data = {};
         data = load_data_with_partials(data);
-         WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
+         WebsocketRails[:show].trigger(:show_channel, "true")
         broadcast_message :stock_ajax_handler, data
         else
           flash[:error] = "You have encountered an unexpected error.Please login and Try again."

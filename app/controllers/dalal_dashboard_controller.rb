@@ -1,15 +1,14 @@
 class DalalDashboardController < ApplicationController
-before_filter :authenticate_user! #devise filters#
+before_filter :authenticate_user!, :set_cache_buster #devise filters#
 protect_from_forgery with: :null_session
 
 require "json"
 
- # before_filter :set_cache_buster
- #  def set_cache_buster
- #    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
- #    response.headers["Pragma"] = "no-cache"
- #    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
- #  end
+  def set_cache_buster
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
 
 layout "../dalal_dashboard/layout/layout.html.erb"
 
@@ -44,7 +43,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
  	def stock
 	       if user_signed_in?
-                Stock.connection.clear_query_cache
+            Stock.connection.clear_query_cache
 	        	@stocks = Stock.all
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	            @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
@@ -55,6 +54,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
     def buy_sell_page
 	    if user_signed_in?
+             Stock.connection.clear_query_cache
 	    	     @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id").first
 	           @stocks_list = Stock.all
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
@@ -63,7 +63,6 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	    else
 	       redirect_to :action => 'index'
 	    end
-
     end ####end of buy def
 
 ########################IMPORTANT :::::: Dont forget to block url to http://0.0.0.0:3000/dalal_dashboard/298486374/buy_sell_stock :::::####################################
@@ -122,10 +121,9 @@ layout "../dalal_dashboard/layout/layout.html.erb"
                @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
                redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'     		
 	  		 end
-	  		   
-        else
-           redirect_to :action => 'index'
-        end	
+      else
+        redirect_to :action => 'index'
+      end	
     end ####end of buy def
 
     

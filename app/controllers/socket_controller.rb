@@ -63,7 +63,7 @@ require "json"
                @stockall = Stock.all
                if @success == 1
                     stock_ajax_handler_helper(@stockall)
-                    # WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
+                      # WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
                     # broadcast_message :stock_ajax_handler, :sent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}  
                else
                     stock_ajax_handler_helper(@stockall)
@@ -84,7 +84,12 @@ require "json"
               Stock.connection.clear_query_cache
               @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-              send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
+              #send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
+              update_partial_input('dalal_dashboard/show_partial', :@stocks, @stocks);
+              update_partial_input('dalal_dashboard/notification_partial', :@notifications_list , @notifications_list);
+              data = {};
+              data = load_data_with_partials(data);
+              send_message :update_stock_user, data
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            redirect_to :action => 'index'
@@ -93,9 +98,15 @@ require "json"
 
     def update_stock_all
        if user_signed_in?
+              Stock.connection.clear_query_cache
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-              @stocks = Stock.all
-              send_message :update_stock_all, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
+              @stock = Stock.all
+              #send_message :update_stock_all, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
+              update_partial_input('dalal_dashboard/main_buy_sell_partial', :@stocks_list, @stock);
+              update_partial_input('dalal_dashboard/notification_partial', :@notifications_list , @notifications_list);
+              data = {};
+              data = load_data_with_partials(data);
+              send_message :update_stock_all, data
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            redirect_to :action => 'index'
@@ -103,7 +114,8 @@ require "json"
     end
 
     def self.call_update_stock_user
-       WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
+       WebsocketRails[:show].trigger(:show_channel, "true")
+       WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
     end
 
     def company_handler
@@ -139,8 +151,6 @@ require "json"
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            redirect_to :action => 'index'
         end
-      #{:controller=>"dalal_dashboard",:id =>"#{current_user.id}",:action =>"buy_sell_stock",:stockname =>"#{stock.stockname}"},
-
      end 
 
      def bank_mortgage_partial_render

@@ -1,0 +1,36 @@
+<div id="main_buy_sell_partial">
+<div class="table-responsive">
+                                     <table class="table table-bordered table-hover table-striped"  data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                        <thead>
+                                            <tr>
+                                                <th>Stock</th>
+                                                <th>AllTimeLow</th>
+                                                <th>AllTimeHigh</th>
+                                                <th>DayLow</th>
+                                                <th>DayHigh</th>
+                                                <th>Current (USD)</th>
+                                                <th>StockInMarket</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="render_tbody">
+                                            <% @stocks_list.each do |stock| %>
+                                               <% if stock.updown == 1%>
+                                                <% @color="style=color:green"%> 
+                                                <% @image="src=/assets/up-arrow.jpg"%> 
+                                                <% else %> 
+                                                <% @color="style=color:red" %>
+                                                <% @image="src=/assets/stock_down.gif"%> 
+                                               <%end%>
+                                                <tr>
+                                                    <td><a href="#myModal" data-toggle="modal" data-target="#myModal" <%="onclick=get_single_stock_id('#{stock.id}');"%> ><%=stock.stockname%></a></td>
+                                                    <td><%=stock.alltimelow.round(2) %></td>
+                                                    <td><%=stock.alltimehigh.round(2) %></td>
+                                                    <td><%=stock.daylow.round(2) %></td>
+                                                    <td><%=stock.dayhigh.round(2) %></td>
+                                                    <td <%=@color%> ><%=stock.currentprice.round(2) %><span> <img <%=@image%> style="width:7px;height:7px;"></img></span></td>
+                                                    <td><%=stock.stocksinmarket %></td>
+                                                </tr>
+                                            <% end %>     
+                                        </tbody>
+                                    </table>
+                                </div>

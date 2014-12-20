@@ -49,26 +49,32 @@ class MarketEvent < ActiveRecord::Base
 
   def self.event_runner
     @running_events = MarketEvent.where("event_done" => 0).all
-	   @running_events.each do |market_event|
-	       if market_event.event_type == 0 ##negative event
-	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
-	          @stock.currentprice = @stock.currentprice.to_f - @stock.currentprice*0.02.to_f
-              @update_currentprice_files = Stock.update_current_price(id,@stockname.currentprice)
-	       else
-	          @stock = Stock.select("currentprice").where(:id => market_event.stock_id).first     
-	          @stock.currentprice = @stock.currentprice.to_f + @stock.currentprice*0.02.to_f
-              @update_currentprice_files = Stock.update_current_price(id,@stockname.currentprice)
-	       end
-		   market_event.event_turn = market_event.event_turn + 1 
-		   if market_event.event_turn == 3
-		      market_event.event_done = 1
-		   end
-		   @stock.save
-		   market_event.save
-	       if market_event.save
-	        @log = Company.custom_logger("save success")
-	       end
-       end      
+    if !@running_events.blank?
+  	   @running_events.each do |market_event|
+  	       if market_event.event_type == 0 ##negative event
+  	          @stockname = Stock.select("*").where(:id => market_event.stock_id).first     
+  	          @stockname.currentprice = @stockname.currentprice.to_f - @stockname.currentprice*0.02.to_f
+              @stockname.updown = 0
+              @update_currentprice_files = Stock.update_current_price(@stockname.id,@stockname.currentprice)
+  	       else
+  	          @stockname = Stock.select("*").where(:id => market_event.stock_id).first     
+  	          @stockname.currentprice = @stockname.currentprice.to_f + @stockname.currentprice*0.02.to_f
+              @stockname.updown = 1
+              @update_currentprice_files = Stock.update_current_price(@stockname.id,@stockname.currentprice)
+  	       end
+  		   market_event.event_turn = market_event.event_turn + 1 
+  		   if market_event.event_turn == 3
+  		      market_event.event_done = 1
+  		   end
+  		   @stockname.save
+  		   market_event.save
+  	       if market_event.save
+  	        @log = Company.custom_logger("save success")
+  	       end
+         end
+    else
+      @log = Company.custom_logger("No event companies found");
+    end           
   end ##end event_runner
 
 end

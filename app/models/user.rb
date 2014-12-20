@@ -122,7 +122,7 @@ class User < ActiveRecord::Base
            @notification = Notification.create(:user_id =>@Buy_id.user_id, :notification => "You bought #{@Sell_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Buy_id.price} per share", :seen => 1, :notice_type => 1)
            @notification = Notification.create(:user_id =>@Sell_id.user_id, :notification => "You sold #{@Sell_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Sell_id.priceexpected} per share", :seen => 1, :notice_type => 1)
            
-           WebsocketRails[:stocks_all].trigger(:call_channel_stock_all, "true")
+           WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
 
            # if mode == "buy"
            # 	 flash[:notice] = "You bought #{@Sell_id.numofstock} stocks at the rate of $#{@Buy_id.price} per share"
@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
            @notification = Notification.create(:user_id =>@Buy_id.user_id, :notification => "You bought #{@Buy_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Buy_id.price} per share", :seen => 1, :notice_type => 1)
            @notification = Notification.create(:user_id =>@Sell_id.user_id, :notification => "You sold #{@Buy_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Sell_id.priceexpected} per share", :seen => 1, :notice_type => 1)
            
-           WebsocketRails[:stocks_all].trigger(:call_channel_stock_all, "true")
+           WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
 
            # if mode == "buy"
            # 	 flash[:notice] = "You bought #{@Buy_id.numofstock} stocks at the rate of $#{@Buy_id.price} per share"
@@ -195,7 +195,7 @@ class User < ActiveRecord::Base
            @notification = Notification.create(:user_id =>@Buy_id.user_id, :notification => "You bought #{@Buy_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Buy_id.price} per share", :seen => 1, :notice_type => 1)
            @notification = Notification.create(:user_id =>@Sell_id.user_id, :notification => "You sold #{@Sell_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Sell_id.priceexpected} per share", :seen => 1, :notice_type => 1)
              
-           WebsocketRails[:stocks_all].trigger(:call_channel_stock_all, "true")
+           WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
            # if mode == "buy"
            # 	 flash[:notice] = "You bought #{@Buy_id.numofstock} stocks at the rate of $#{@Buy_id.price} per share"
            # else

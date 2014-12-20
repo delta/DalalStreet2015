@@ -291,43 +291,6 @@
                
     };
 
-    var channel = function(){
-                // var channel = dispatcher.subscribe('<%=current_user.id%>');
-                // channel.trigger('notification_update',sent,success,failure);
-                // channel.bind('notification_update', function(data) {
-                // console.log('channel event received: ' + data);});
-                // channel.unbind('notification_update');
-    };
-
-    // $(".trade1").submit(function(){  
-    //     var data = $(this).serialize();
-    //     $.ajax({
-    //         headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
-    //         type: "POST",
-    //         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-    //         url: $(this).attr('action'),
-    //         data: data,
-    //         dataType: "json",
-    //         cashe: false,
-    //         success: function(data){console.log(data); return_result_div(data);},
-    //         error  : function(){console.log("Error.Did not receive data"); return_result_div("Error.Did not receive data");}
-    //       });
-    //     return false; 
-    // });
-
-  //////// IMPORTANT  ...................   Please check for websocket support  /////////////////   
-// var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
-// if (support == null) {
-//     alert("Your browser doesn't support Websockets.");
-//     return;   
-//}
-
-// for(var i = 0; i < json.length; i++) {
-//     var obj = json[i];
-
-//     console.log(obj.id);
-// }
-
 </script>
 
 <% end %>    

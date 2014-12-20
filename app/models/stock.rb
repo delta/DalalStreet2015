@@ -23,7 +23,7 @@ has_many :stock_useds
      if file_name.exist?
       file = File.open(file_name, "a")
      else
-      file = File.new(file_name, "a+")
+      file = File.new(file_name, "w+")
      end
      file.print price.round(2).to_s+","
      file.close

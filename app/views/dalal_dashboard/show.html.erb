@@ -139,44 +139,7 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="table-responsive">
-                                     <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
-                                        <thead>
-                                            <tr>
-                                                <th>Stock</th>
-                                                <th>AllTimeLow</th>
-                                                <th>AllTimeHigh</th>
-                                                <th>DayLow</th>
-                                                <th>DayHigh</th>
-                                                <th>Current (USD)</th>
-                                                <th>StockInMarket</th>
-                                                <th>StockBought</th>
-                                                <th>StockWorth</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="render_tbody_show">
-                                             <% @stocks.each do |stock| %>
-                                                <tr>
-                                                <% if stock.updown == 1%>
-                                                <% @color="style=color:green"%>
-                                                <% @image="<img src=/public/assets/up-arrow.gif></img>"%>
-                                                <% else %>
-                                                <% @color="style=color:red" %>
-                                                <% @image="<img src=/public/assets/stock_down.gif></img>"%>
-                                                <%end%> 
-                                                    <td><%=stock.stockname %></td>
-                                                    <td><%=stock.alltimelow.round(2) %></td>
-                                                    <td><%=stock.alltimehigh.round(2) %></td>
-                                                    <td><%=stock.daylow.round(2) %></td>
-                                                    <td><%=stock.dayhigh.round(2) %></td>
-                                                    <td <%=@color%> ><%=stock.currentprice.round(2) %><span><%= @image %></span></td>
-                                                    <td><%=stock.stocksinmarket%></td>
-                                                    <td><%=stock.totalstock %></td>
-                                                    <td><%=stock.netcash.round(2) %></td>
-                                                </tr>
-                                            <% end %>     
-                                        </tbody>
-                                    </table>
+                 <%= render partial:"dalal_dashboard/show_partial",locals: { stocks: @stocks }%>  
                                 </div>
                                 <div class="text-right">
                                     <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
@@ -258,14 +221,14 @@
             // };
      $(function(){
       var dispatcher = new WebSocketRails($('.table').data('uri'), true);
-      var channel = dispatcher.subscribe('stocks');
+      var channel = dispatcher.subscribe('show');
 
       dispatcher.on_open = function(){
         console.log("Connection established");
       };
 
-      channel.bind('channel_update_stock_user', function(get_value) {
-        console.log(get_value);
+      channel.bind('show_channel', function(get_value) {
+        //console.log(get_value);
         get_userstock_info(get_value,dispatcher);
       });
     });
@@ -287,24 +250,27 @@
                    console.log("That just totally failed: "+response.message);
                   };
 
-             dispatcher.bind('update_stock_user', function(get_value) {
-                  console.log(get_value);
-     
-                  for(var i = 0; i < get_value.sent_data.notice.length; i++) {
-                                var obj = get_value.sent_data.notice[i];
-                                var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
-                            }
+             dispatcher.bind('update_stock_user', function(show_value) {
+
+                      console.log(show_value);
+                      var rs = new RestfulWebsockets();
+                      rs.refresh(show_value);
+                           
+             //      for(var i = 0; i < get_value.sent_data.notice.length; i++) {
+             //                    var obj = get_value.sent_data.notice[i];
+             //                    var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
+             //                }
              
-             $( "#ajax_notice" ).empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
-             $("#notification").empty().append(notify);
+             // $( "#ajax_notice" ).empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
+             // $("#notification").empty().append(notify);
 
-             for(var i = 0; i < get_value.sent_data.stock_update.length; i++) {
-                                var obj = get_value.sent_data.stock_update[i];
+             // for(var i = 0; i < get_value.sent_data.stock_update.length; i++) {
+             //                    var obj = get_value.sent_data.stock_update[i];
                                 
-                                var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.alltimelow,2)+'</td><td>'+round(obj.alltimehigh,2)+'</td><td>'+round(obj.daylow,2)+'</td><td>'+round(obj.dayhigh,2)+'</td><td>'+round(obj.currentprice,2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+round(obj.netcash,2)+'</td></tr>';
-                            }
+             //                    var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.alltimelow,2)+'</td><td>'+round(obj.alltimehigh,2)+'</td><td>'+round(obj.daylow,2)+'</td><td>'+round(obj.dayhigh,2)+'</td><td>'+round(obj.currentprice,2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+round(obj.netcash,2)+'</td></tr>';
+             //                }
 
-                         $("#render_tbody_show").empty().append(fill_table);
+             //             $("#render_tbody_show").empty().append(fill_table);
                          
       });
      
