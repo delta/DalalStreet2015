@@ -180,9 +180,9 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
     def company
     	if user_signed_in?
-          @market_event_list  = MarketEvent.get_events(10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-          @stock = Stock.select("*").where("id" =>30677878).first
+          @stock = Stock.select("*").first
+          @market_event_list  = MarketEvent.get_events(10,30677878)
           @stock_list = Stock.pluck(:stockname)
 	    else
 	      redirect_to :action => 'index'

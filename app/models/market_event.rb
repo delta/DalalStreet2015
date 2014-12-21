@@ -5,8 +5,8 @@ class MarketEvent < ActiveRecord::Base
    @create_new_market = MarketEvent.create(:stock_id => id, :eventname => eventname, :event_type => event_type, :event => event,:event_turn => event_turn, :event_done => event_done)
   end 
 
-  def self.get_events(num)
-	@get_market_event = MarketEvent.select("eventname,updated_at").last(num).reverse
+  def self.get_events(num,id)
+	@get_market_event = MarketEvent.select("eventname,updated_at").where(:stock_id => id).last(num).reverse
   end
 
   def self.distil
