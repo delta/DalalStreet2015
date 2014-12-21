@@ -53,12 +53,12 @@ class MarketEvent < ActiveRecord::Base
   	   @running_events.each do |market_event|
   	       if market_event.event_type == 0 ##negative event
   	          @stockname = Stock.select("*").where(:id => market_event.stock_id).first     
-  	          @stockname.currentprice = @stockname.currentprice.to_f - @stockname.currentprice*0.02.to_f
+  	          @stockname.currentprice = @stockname.currentprice.to_f - @stockname.currentprice.to_f*[0.01,0.02,0.025,0.013,0.032].sample
               @stockname.updown = 0
               @update_currentprice_files = Stock.update_current_price(@stockname.id,@stockname.currentprice)
   	       else
   	          @stockname = Stock.select("*").where(:id => market_event.stock_id).first     
-  	          @stockname.currentprice = @stockname.currentprice.to_f + @stockname.currentprice*0.02.to_f
+  	          @stockname.currentprice = @stockname.currentprice.to_f + @stockname.currentprice.to_f*[0.021,0.018,0.035,0.014,0.012].sample
               @stockname.updown = 1
               @update_currentprice_files = Stock.update_current_price(@stockname.id,@stockname.currentprice)
   	       end
