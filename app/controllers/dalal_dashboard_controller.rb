@@ -167,7 +167,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	    	end ##end of user_signed_in
     end##end of bank_mortgage
 
-	def buy_sell_history
+	  def buy_sell_history
         if user_signed_in?
         	@buy_history = Buy.select("stock_id,numofstock,updated_at,price").where('user_id' => current_user.id).last(10).reverse
         	@sell_history = Sell.select("stock_id,numofstock,updated_at,priceexpected").where('user_id' => current_user.id).last(10).reverse
@@ -176,7 +176,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
         else
         	redirect_to :action => 'index'
         end
-	end
+	  end
 
     def company
     	if user_signed_in?

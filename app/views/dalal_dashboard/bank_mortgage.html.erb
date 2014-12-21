@@ -225,7 +225,7 @@
         border-radius: 0.5rem;
         top: 0;
         bottom: 0;
-        left: 0;
+        left: -50px;
         right: 0;
         margin: 10px auto;
         background-color: white;
@@ -238,7 +238,6 @@
 <% content_for :script do %>
 
    <script type="text/javascript">
-
    $('#myModal').modal('hide')
 
     jQuery(function ($) {
@@ -261,10 +260,10 @@
         console.log(get_value);
         get_completestock_info(get_value,dispatcher);
       });
+      
     });
 
     var get_single_stock_id = function(stock_id){
-
         get_single_stock_modal(stock_id,dispatcher);
     };
 
@@ -288,6 +287,7 @@
                           var rs = new RestfulWebsockets();
                           console.log(get_data)
                           rs.refresh(get_data); 
+                          $( ".modal-backdrop" ).remove();
                     }
     };
 

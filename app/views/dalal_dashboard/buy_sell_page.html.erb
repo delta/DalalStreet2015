@@ -197,7 +197,7 @@
         border-radius: 0.5rem;
         top: 0;
         bottom: 0;
-        left: 0;
+        left: -50px;
         right: 0;
         margin: 10px auto;
         background-color: white;
@@ -210,9 +210,8 @@
 <% content_for :script do %>
 
    <script type="text/javascript">
-
+   $( ".modal-backdrop" ).remove();
    $('#myModal').modal('hide')
-
     jQuery(function ($) {
         function check_values() {
             if ($("#username").val().length != 0 && $("#password").val().length != 0) {
@@ -244,6 +243,7 @@
     var get_single_stock_id = function(stock_id){
 
         get_single_stock_modal(stock_id,dispatcher);
+        
     };
 
     var get_single_stock_modal = function(stock_id,dispatcher){
@@ -266,6 +266,7 @@
                           var rs = new RestfulWebsockets();
                           console.log(get_data)
                           rs.refresh(get_data); 
+                          $( ".modal-backdrop" ).remove();
                     }
     };
 

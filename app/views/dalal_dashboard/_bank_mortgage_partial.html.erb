@@ -33,12 +33,19 @@
                                         </thead>
                                         <tbody id="render_tbody">
                                              <tr>
+                                              <% if @stock.updown == 1%>
+                                                    <% @color="style=color:green"%> 
+                                                    <% @image="src=/assets/up-arrow.jpg"%> 
+                                                <% else %> 
+                                                    <% @color="style=color:red" %>
+                                                    <% @image="src=/assets/stock_down.gif"%> 
+                                                <%end%>
                                                     <td><%=@stock.stockname%></td>
                                                     <td><%=@stock.alltimelow.round(2) %></td>
                                                     <td><%=@stock.alltimehigh.round(2) %></td>
                                                     <td><%=@stock.daylow.round(2) %></td>
                                                     <td><%=@stock.dayhigh.round(2) %></td>
-                                                    <td><%=@stock.currentprice.round(2) %></td>
+                                                    <td <%=@color%> ><%=@stock.currentprice.round(2) %><span><img <%=@image%> style="width:7px;height:7px;"></img></span></td>
                                                     <td><%=@stock.stocksinmarket%></td>
                                                     <td><%=@stock.totalstock %></td>
                                                 </tr>
