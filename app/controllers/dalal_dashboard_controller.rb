@@ -31,6 +31,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 		   if !user_signed_in?
 	         redirect_to :action => 'index'
 	       else
+            @stocks_list = Stock.all
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	       	  @stocks = Stock.return_bought_stocks(current_user.id)
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
@@ -46,7 +47,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
             Stock.connection.clear_query_cache
 	        	@stocks = Stock.all
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	            @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	       else
 	          redirect_to :action => 'index'
 	       end	   
