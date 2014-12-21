@@ -248,6 +248,18 @@
 <% content_for :script do %>
 
    <script type="text/javascript">
+    
+    $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+      var $target = $( event.currentTarget );
+
+      $target.closest( '.btn-group' )
+         .find( '[data-bind="label"]' ).text( $target.text() )
+            .end()
+         .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+
+      return false;
+
+   });
 
      $(function(){
       var channel = dispatcher.subscribe('stocks');
@@ -317,11 +329,9 @@
     var canvas = document.getElementById("canvas_line");
     var ctx1 = document.getElementById("canvas_line").getContext("2d");
     ctx1.clearRect(0, 0, canvas.width, canvas.height);
-           
-    var min,step,length;   
+    var min,step,width_div=[],label=[];   
         
     var manipulator = function(pricelist){
-
         pricelist.splice(pricelist.length-1, 1);
         Array.min = function(pricelist){
                       return Math.min.apply( Math, pricelist );
@@ -331,14 +341,21 @@
                     };              
          min = Array.min(pricelist);
          var max = Array.max(pricelist);
-         length = pricelist.length/2;
-         step = round((max - min)/length,1);
-
+         step = round((max - min)/10,1);
+         
+         for(var i = 0; i<pricelist.length; i++)
+             label.push(i);
+    
+         width_div.push(min-step);
+         for(var i = 1; i <11; i++)
+             width_div.push(width_div[i-1]+step);
+    
     };  
-
+       //process raw - data
        manipulator(pricelist);
+
        var lineChartData = {
-            labels : ["January","February","March","April","May","June","July"],
+            labels : label,
             datasets : [
                 {
                     label: "My First dataset",
@@ -354,27 +371,17 @@
             
             window.myLine = new Chart(ctx1).Line(lineChartData, {
                     responsive: true,
-                    scaleOverride: true,
-                    scaleSteps: length,
-                    scaleStepWidth: step,
-                    scaleStartValue: min,
+                    // scaleOverride: true,
+                    // scaleSteps: 11,
+                    // scaleStepWidth: step,
+                    // scaleStartValue: min-step,
                 });
 
             myLine.destroy();
 
     };         
 
-   $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
-      var $target = $( event.currentTarget );
-
-      $target.closest( '.btn-group' )
-         .find( '[data-bind="label"]' ).text( $target.text() )
-            .end()
-         .children( '.dropdown-toggle' ).dropdown( 'toggle' );
-
-      return false;
-
-   });
+ 
 
 </script>
 
