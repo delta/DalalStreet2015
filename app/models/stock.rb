@@ -2,6 +2,7 @@ class Stock < ActiveRecord::Base
       validates :currentprice, presence: true
       
 has_many :stock_useds
+has_many :banks
 
 
  def self.get_total_stock_price(id) 

@@ -32,13 +32,13 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 	         redirect_to :action => 'index'
 	       else
             @stocks_list = Stock.all
-	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(5).reverse
 	       	  @stocks = Stock.return_bought_stocks(current_user.id)
             @stock = @stocks[0]
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
             @market_event_list  = MarketEvent.get_events(7,@stocks[0].id)
             @stock_price = Stock.read_current_price(@stock.id)
-
+            @mortgage = Stock.joins(:banks).select("*,banks.numofstock*stocks.currentprice as netcash").where("banks.user_id" => current_user.id)
 	       end
 	    else
 	       ##fill up
