@@ -1,8 +1,11 @@
 class MarketEvent < ActiveRecord::Base
   MarketEvent.connection.clear_query_cache
+  
 
   def self.new_event(id,eventname,event_type,event,event_turn,event_done)
-   @create_new_market = MarketEvent.create(:stock_id => id, :eventname => eventname, :event_type => event_type, :event => event,:event_turn => event_turn, :event_done => event_done)
+    if !id.blank?
+     @create_new_market = MarketEvent.create(:stock_id => id, :eventname => eventname, :event_type => event_type, :event => event,:event_turn => event_turn, :event_done => event_done)
+    end
   end 
 
   def self.get_events(num,id)

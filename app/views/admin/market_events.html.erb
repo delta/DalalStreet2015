@@ -1,0 +1,117 @@
+<% content_for :jQuery do %>
+	<script type="text/javascript" >
+		$(document).ready(function(){
+	    $("#newEveBtn").click(function(){
+	    $("#newEve").animate({
+	      height:'toggle'
+	    });
+	    });
+
+	    $("#showEveBtn").click(function(){
+	    $("#showEve").animate({
+	      height:'toggle'
+	    });
+	    });
+	    });
+
+	</script>
+<%end%>
+<div class="jumbotron" >
+		<header class="container" >
+			<button type="button" class="btn btn-info" id="newEveBtn"  >Add Market Events</button>
+			<button type="button" class="btn btn-info" id="showEveBtn"  >Market Events</button>
+		</header>
+		<% if flash[:queryStatus] %>	
+			<div class="alert alert-success"><%= flash[:queryStatus] %></div>
+		<% end %>	
+		<div id="newEve" style="display:none;margin:4%;" >	
+			<%= form_for @market_event,:html=>{:class => "form-vertical",:role=>"form",:method=>"get"} , url:{action: "market_events"} do |f| %>
+			<%= render 'shared/error_messages', object: @market_event %>
+			
+			<div class="form-group">	
+				<%= f.label :stock_id %>
+				<div class="col-sm-4">
+					<%= f.text_field :stock_id %>
+				</div>
+			</div>
+			<div class="form-group">	
+				<%= f.label :eventname %>
+				<div class="col-sm-4">
+					<%= f.text_field :eventname %>
+				</div>
+			</div>
+			<div class="form-group">
+				<%= f.label :event_type %>
+				<div class="col-sm-4">
+					<%= f.text_field :event_type %>
+				</div>
+			</div>
+			<div class="form-group">	
+				<%= f.label :event_turn %>
+				<div class="col-sm-4">
+					<%= f.text_field :event_turn %>
+				</div>
+			</div>
+			<div class="form-group">	
+				<%= f.label :event %>
+				<div class="col-sm-4">
+					<%= f.text_field :event %>
+				</div>
+			</div>
+			<div class="form-group">	
+				<%= f.label :event_done %>
+				<div class="col-sm-4">
+					<%= f.text_field :event_done %>
+				</div>
+			</div>
+			
+			<%= f.submit "Add ", class: "btn btn-large btn-primary" %>
+			<% end %>
+
+		</div>
+
+		<div style="display:none;margin:4%;" id="showEve" >
+		<% if !@allEvent.respond_to?(:to_str) %>
+		<% eventList=["Stock ID","Event Name","Event Type","Event turn","Event","Event Done"] %>	
+			<table class="table table-hover" > 
+				<thead>
+					<tr>
+						<% (0..5).each do |i| %>
+							<th> <%= eventList[i] %> </th>
+						<% end %>
+					</tr>
+				</thead>
+				<tbody>
+					<% @allEvent.each do |f| %>
+						<tr>	
+							<td><%= f.stock_id %></td>
+							<td><%= f.eventname %></td>
+							<td><%= f.event_type %></td>
+							<td><%= f.event_turn %></td>
+							<td><%= f.event %></td>
+							<td><%= f.event_done %></td>
+							<td><button type="button" class="btn btn-danger" onclick="destroy('<%= f.stock_id %>',1)" > Remove</button></td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% else %>
+			<h2><%= @allEvent %></h2>
+		<% end %>
+			
+
+		</div>
+</div>
+
+<% content_for :script do %>
+	<script type="text/javascript">
+		
+		function destroy(eveObj,del){
+			//window.open("localhost:3000//admin/market_events?eveObj="+eveObj+"&del="+del,"_self")
+			//	destroy this row from datanase 
+
+			alert(eveObj);
+		}
+
+	</script>
+<%end%>
