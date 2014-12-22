@@ -86,12 +86,12 @@ require "json"
               @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               #send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
-              update_partial_input('dalal_dashboard/show_partial', :@stocks, @stocks);
-              update_partial_input('dalal_dashboard/notification_partial', :@notifications_list , @notifications_list);
-              update_partial_input('dalal_dashboard/stock_marquee_partial', :@stocks_list , @stocks_list);
+              update_partial_input('dalal_dashboard/show_partial', :@stocks, @stocks)
+              update_partial_input('dalal_dashboard/notification_partial', :@notifications_list , @notifications_list)
+              update_partial_input('dalal_dashboard/stock_marquee_partial', :@stocks_list , @stocks_list)
               
-              data = {};
-              data = load_data_with_partials(data);
+              data = {}
+              data = load_data_with_partials(data)
               send_message :update_stock_user, data
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
@@ -105,12 +105,12 @@ require "json"
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               @stock = Stock.all
               #send_message :update_stock_all, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
-              update_partial_input('dalal_dashboard/main_buy_sell_partial', :@stocks_list, @stock);
-              update_partial_input('dalal_dashboard/notification_partial', :@notifications_list , @notifications_list);
-              update_partial_input('dalal_dashboard/stock_marquee_partial', :@stocks_list , @stock);
+              update_partial_input('dalal_dashboard/main_buy_sell_partial', :@stocks_list, @stock)
+              update_partial_input('dalal_dashboard/notification_partial', :@notifications_list , @notifications_list)
+              update_partial_input('dalal_dashboard/stock_marquee_partial', :@stocks_list , @stock)
 
-              data = {};
-              data = load_data_with_partials(data);
+              data = {}
+              data = load_data_with_partials(data)
               send_message :update_stock_all, data
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
@@ -148,9 +148,9 @@ require "json"
        end   
       
       update_partial_input('dalal_dashboard/buy_sell_partial', :@stock, @stock);
-      update_partial_input('dalal_dashboard/buy_sell_partial', :@no_stock_found , @no_stock_found);
-      data = {};
-      data = load_data_with_partials(data);
+      update_partial_input('dalal_dashboard/buy_sell_partial', :@no_stock_found , @no_stock_found)
+      data = {}
+      data = load_data_with_partials(data)
       send_message :buy_sell_partial_render, data
       else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
@@ -163,10 +163,10 @@ require "json"
         id = data[:id]
         @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stock_useds.stock_id' => id).group("stock_id").first
 
-        update_partial_input('dalal_dashboard/bank_mortgage_partial', :@stock, @stock);
+        update_partial_input('dalal_dashboard/bank_mortgage_partial', :@stock, @stock)
 
-        data = {};
-        data = load_data_with_partials(data);
+        data = {}
+        data = load_data_with_partials(data)
         send_message :bank_mortgage_partial_render, data
 
         else
