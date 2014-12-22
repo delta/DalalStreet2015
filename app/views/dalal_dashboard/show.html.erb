@@ -141,9 +141,9 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
                             </div>
                             <div class="panel-body">
-                 <%= render partial:"dalal_dashboard/show_partial",locals: { stocks: @stocks }%>  
-                                </div>
-                                <div class="text-right">
+                             <%= render partial:"dalal_dashboard/show_partial",locals: { stocks: @stocks }%>  
+                            </div>
+                              <div class="text-right">
                                     <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
@@ -155,19 +155,90 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
+                                <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Company Panel</h3>
                             </div>
+                            
+                          <div class="row">
+                           <div class="col-lg-8">
+
                             <div class="panel-body">
-                            <div>
-                                    <canvas id="canvas_line" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
+                              <div class="list-group">
+                                  <label>Company</label>
+                                  <div class="btn-group btn-input clearfix">
+                                     <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown">
+                                       <span data-bind="label">Select One</span>&nbsp;<span class="caret"></span>
+                                     </button>
+                                     <ul id="company_panel" class="dropdown-menu" role="menu">
+                                      <%@stocks.each do |stock|%>
+                                      <li><a href="#company_panel" <%= "onclick=get_company_name('#{stock.stockname}');"%>><%= stock.stockname%></a></li> 
+                                       <%end-%>
+                                     </ul>
+                                   </div>
+                               </div>   
+                             </div>  
                         
+                                <div class="panel-body">
+                                <div class="table-responsive">
+                                     <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                        <thead>
+                                            <tr>
+                                                <th>Stock</th>
+                                                <th>AllTimeLow</th>
+                                                <th>AllTimeHigh</th>
+                                                <th>DayLow</th>
+                                                <th>DayHigh</th>
+                                                <th>Current (USD)</th>
+                                                <th>StockInMarket</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stock_details">
+                                                <tr>
+                                                    <td><%=@stock.stockname %></td>
+                                                    <td><%=@stock.alltimelow.round(2) %></td>
+                                                    <td><%=@stock.alltimehigh.round(2) %></td>
+                                                    <td><%=@stock.daylow.round(2) %></td>
+                                                    <td><%=@stock.dayhigh.round(2) %></td>
+                                                    <td><%=@stock.currentprice.round(2) %></td>
+                                                    <td><%=@stock.stocksinmarket%></td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+
+                            <div class="panel-body">
+                                <ul class="nav nav-tabs" id="#company_tab">
+                                  <li role="presentation" class="active"><a href="#company_tab">Line</a></li>
+                                  <li role="presentation"><a href="#company_tab">Bar</a></li>
+                                </ul>
+                            <div>
+                                <canvas id="canvas_line" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
                             </div>
                                 <!-- <div id="morris-area-chart"></div> -->
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                        </div><!-- col-->
+
+                            
+                        <div class="col-lg-4">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Company Event</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="list-group" id="market_event_list" data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                    <%@market_event_list.each do |event|%>
+                                     <a href="#" class="list-group-item">
+                                     <span class="badge"><%= event.updated_at%></span>
+                                     <i class="fa fa-fw fa-check"></i> <%= event.eventname%> </a> 
+                                    <% end %>
+                                 </div>
+                            </div>
+                        </div>  
+
+                        </div> <!--row -->
+
+                        </div><!--panel default-->
+                    </div><!-- col -->
+                </div><!-- /.row -->
 
                 <div class="row">
                     <div class="col-lg-6">
@@ -178,7 +249,7 @@
                             <div class="panel-body">
                                <div id="canvas-holder">
 
-                    <!--CANVAS -->            <canvas id="chart-area" height="203" width="203" style="width: 203px; height: 203px;">
+                    <!--CANVAS --><canvas id="chart-area" height="203" width="203" style="width: 203px; height: 203px;">
                                 </canvas>
 
                               </div>
@@ -211,7 +282,10 @@
 
         </div>
         <!-- /#page-wrapper -->
-        <style>
+<% end %>
+
+<% content_for :style do %>
+<style>
 
 .slider{
     width:100%;
@@ -282,8 +356,54 @@
             requestAnimationFrame(currencySlide);
     })();
 
-     $(function(){
+      $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+      var $target = $( event.currentTarget );
+
+      $target.closest( '.btn-group' )
+         .find( '[data-bind="label"]' ).text( $target.text() )
+            .end()
+         .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+
+      return false;
+
+   });
+
       var dispatcher = new WebSocketRails($('.table').data('uri'), true);
+
+     $(function(){
+
+      var canvas = document.getElementById("canvas_line");
+      var ctx1 = document.getElementById("canvas_line").getContext("2d");
+      ctx1.clearRect(0, 0, canvas.width, canvas.height);
+
+      var pricelist = current_price_list_array('<%=@stock_price%>');
+      var label = [];
+      pricelist.splice(pricelist.length-1, 1);
+      
+         for(var i = 0; i<pricelist.length; i++)
+             label.push(i);
+      
+       var lineChartData = {
+            labels : label,
+            datasets : [
+                {
+                    label: "My First dataset",
+                    fillColor : "rgba(220,220,220,0.2)",
+                    strokeColor : "rgba(220,220,220,1)",
+                    pointColor : "rgba(220,220,220,1)",
+                    pointStrokeColor : "#fff",
+                    pointHighlightFill : "#fff",
+                    pointHighlightStroke : "rgba(220,220,220,1)",
+                    data : pricelist
+                }]
+        };  
+            
+            window.myLine = new Chart(ctx1).Line(lineChartData, {
+                    responsive: true,
+                });
+
+            myLine.destroy();
+
       var channel = dispatcher.subscribe('show');
 
       dispatcher.on_open = function(){
@@ -317,22 +437,6 @@
                       console.log(show_value);
                       var rs = new RestfulWebsockets();
                       rs.refresh(show_value);
-                           
-             //      for(var i = 0; i < get_value.sent_data.notice.length; i++) {
-             //                    var obj = get_value.sent_data.notice[i];
-             //                    var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
-             //                }
-             
-             // $( "#ajax_notice" ).empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
-             // $("#notification").empty().append(notify);
-
-             // for(var i = 0; i < get_value.sent_data.stock_update.length; i++) {
-             //                    var obj = get_value.sent_data.stock_update[i];
-                                
-             //                    var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.alltimelow,2)+'</td><td>'+round(obj.alltimehigh,2)+'</td><td>'+round(obj.daylow,2)+'</td><td>'+round(obj.dayhigh,2)+'</td><td>'+round(obj.currentprice,2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.totalstock+'</td><td>'+round(obj.netcash,2)+'</td></tr>';
-             //                }
-
-             //             $("#render_tbody_show").empty().append(fill_table);
                          
       });
      
@@ -340,9 +444,90 @@
 
     }; 
             
-    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-        var lineChartData = {
-            labels : ["January","February","March","April","May","June","July"],
+   var get_company_name = function(name){
+       get_company_info(name,dispatcher);
+    };
+
+    var current_price_list_array = function(pricelist){
+     var price_list_array = pricelist.split(",")
+     return price_list_array
+    };
+
+    var get_company_info  = function(company_name,dispatcher){
+
+         var data = {name: company_name};
+
+         var success = function(response) {
+                  console.log("Wow it worked: "+response.message);
+                  //dispatcher.unbind('notification_update');
+                  };
+
+         var failure = function(response) {
+                   console.log("That just totally failed: "+response.message);
+                  };
+
+             dispatcher.bind('company_handler', function(get_value) {
+                  console.log(get_value);
+                  console.log(get_value.sent_data.price_list);
+                  console.log(get_value.sent_data.stock_details);
+                  chart_loader(current_price_list_array(get_value.sent_data.price_list));
+                        
+             if (get_value.sent_data.market_list.length >= 7)
+                var length = 7;
+             else
+                var length = get_value.sent_data.market_list.length;
+
+             for(var i = 0; i < length; i++) {
+                           
+                           var obj = get_value.sent_data.market_list[i];
+                 
+                           var fill_table = fill_table+'<a href="#" class=\"list-group-item\"><span class=\"badge\">'+obj.updated_at+'</span><i class=\"fa fa-fw fa-check\"></i>'+obj.eventname+'</a>';
+                            }
+
+             var stock = get_value.sent_data.stock_details;
+             var stock_table = stock_table+'<tr><td>'+stock.stockname+'</td><td>'+round(stock.alltimelow,2)+'</td><td>'+round(stock.alltimehigh,2)+'</td><td>'+round(stock.daylow,2)+'</td><td>'+round(stock.dayhigh,2)+'</td><td>'+round(stock.currentprice,2)+'</td><td>'+stock.stocksinmarket+'</td></tr>';
+                            
+                    $("#market_event_list").empty().append(fill_table);
+                    $("#stock_details").empty().append(stock_table);
+
+      });
+     
+         dispatcher.trigger('company_handler', data, success, failure); 
+
+    }; 
+
+    
+    var chart_loader = function(pricelist){
+
+    var canvas = document.getElementById("canvas_line");
+    var ctx1 = document.getElementById("canvas_line").getContext("2d");
+    ctx1.clearRect(0, 0, canvas.width, canvas.height);
+    var min,step,width_div=[],label=[];   
+        
+    var manipulator = function(pricelist){
+        pricelist.splice(pricelist.length-1, 1);
+        Array.min = function(pricelist){
+                      return Math.min.apply( Math, pricelist );
+                    };
+        Array.max = function(pricelist){
+                      return Math.max.apply( Math, pricelist );
+                    };              
+         min = Array.min(pricelist);
+         var max = Array.max(pricelist);
+         step = round((max - min)/10,1);
+         
+         for(var i = 0; i<pricelist.length; i++)
+             label.push(i);
+    
+         width_div.push(min-step);
+         for(var i = 1; i <11; i++)
+             width_div.push(width_div[i-1]+step);
+    };  
+       //process raw - data
+       manipulator(pricelist);
+
+       var lineChartData = {
+            labels : label,
             datasets : [
                 {
                     label: "My First dataset",
@@ -352,65 +537,17 @@
                     pointStrokeColor : "#fff",
                     pointHighlightFill : "#fff",
                     pointHighlightStroke : "rgba(220,220,220,1)",
-                    data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                },
-                {
-                    label: "My Second dataset",
-                    fillColor : "rgba(151,187,205,0.2)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    pointHighlightFill : "#fff",
-                    pointHighlightStroke : "rgba(151,187,205,1)",
-                    data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                }
-            ]
-
-        }
-
-        var doughnutData = [
-                {
-                    value: 300,
-                    color:"#F7464A",
-                    highlight: "#FF5A5E",
-                    label: "Red"
-                },
-                {
-                    value: 50,
-                    color: "#46BFBD",
-                    highlight: "#5AD3D1",
-                    label: "Green"
-                },
-                {
-                    value: 100,
-                    color: "#FDB45C",
-                    highlight: "#FFC870",
-                    label: "Yellow"
-                },
-                {
-                    value: 40,
-                    color: "#949FB1",
-                    highlight: "#A8B3C5",
-                    label: "Grey"
-                },
-                {
-                    value: 120,
-                    color: "#4D5360",
-                    highlight: "#616774",
-                    label: "Dark Grey"
-                }
-
-            ];
-
-            window.onload = function(){
-                var ctx1 = document.getElementById("canvas_line").getContext("2d");
-                window.myLine = new Chart(ctx1).Line(lineChartData, {
-                    responsive: true
+                    data : pricelist
+                }]
+        };  
+            
+            window.myLine = new Chart(ctx1).Line(lineChartData, {
+                    responsive: true,
                 });
 
-                var ctx2 = document.getElementById("chart-area").getContext("2d");
-                window.myDoughnut = new Chart(ctx2).Doughnut(doughnutData, {responsive : true});
-            }
+            myLine.destroy();
+
+    };         
 
 </script>
 

@@ -170,8 +170,10 @@
 
         </div>
         <!-- /#page-wrapper -->
+<% end %>
 
-        <style>
+<% content_for :style do %>
+<style>
 
 .slider{
     width:100%;
@@ -336,6 +338,7 @@
                   };
 
                  var gettable = function (get_stock_value) {
+
                      // console.log(get_stock_value.sent_stock_data.current_user);
                      // console.log(get_stock_value.sent_stock_data.stock_update);
 
@@ -345,11 +348,11 @@
                       //       var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.daylow, 2)+'</td><td>'+round(obj.dayhigh, 2)+'</td><td>'+round(obj.currentprice, 2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
                       //    }
                       // $("#render_tbody_stock").empty().append(fill_table);
+                      
                       console.log(get_stock_value);
 
                       var rs = new RestfulWebsockets();
                       rs.refresh(get_stock_value);
-                      
                       getnotifications();
                 
                   };

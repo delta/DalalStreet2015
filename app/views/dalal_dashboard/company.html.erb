@@ -261,17 +261,51 @@
 
    });
 
-     $(function(){
-      var channel = dispatcher.subscribe('stocks');
+       $(function(){
+
+      var canvas = document.getElementById("canvas_line");
+      var ctx1 = document.getElementById("canvas_line").getContext("2d");
+      ctx1.clearRect(0, 0, canvas.width, canvas.height);
+
+      var pricelist = current_price_list_array('<%=@stock_price%>');
+      var label = [];
+      pricelist.splice(pricelist.length-1, 1);
+      
+         for(var i = 0; i<pricelist.length; i++)
+             label.push(i);
+      
+       var lineChartData = {
+            labels : label,
+            datasets : [
+                {
+                    label: "My First dataset",
+                    fillColor : "rgba(220,220,220,0.2)",
+                    strokeColor : "rgba(220,220,220,1)",
+                    pointColor : "rgba(220,220,220,1)",
+                    pointStrokeColor : "#fff",
+                    pointHighlightFill : "#fff",
+                    pointHighlightStroke : "rgba(220,220,220,1)",
+                    data : pricelist
+                }]
+        };  
+            
+            window.myLine = new Chart(ctx1).Line(lineChartData, {
+                    responsive: true,
+                });
+
+            myLine.destroy();
+
+      var channel = dispatcher.subscribe('show');
 
       dispatcher.on_open = function(){
         console.log("Connection established");
       };
 
-      channel.bind('channel_update_stock_user', function(get) {  
-        console.log(get);
+      channel.bind('show_channel', function(get_value) {
+        get_userstock_info(get_value,dispatcher);
       });
     });
+
 
     function round(value, decimals) {
        return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 

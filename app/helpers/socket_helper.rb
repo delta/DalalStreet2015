@@ -59,15 +59,12 @@ module SocketHelper
    def stock_ajax_handler_helper(stocks)
       if user_signed_in?
         update_partial_input('dalal_dashboard/stock_partial', :@stocks_list, stocks)
-        update_partial_input('dalal_dashboard/stock_marquee_partial', :@stocks_list , @stock)
+        update_partial_input('dalal_dashboard/stock_marquee_partial', :@stocks_list , stocks)
         data = {}
         data = load_data_with_partials(data)
-         WebsocketRails[:show].trigger(:show_channel, "true")
+        WebsocketRails[:show].trigger(:show_channel, "true")
         broadcast_message :stock_ajax_handler, data
-        else
-          flash[:error] = "You have encountered an unexpected error.Please login and Try again."
-          redirect_to :action => 'index'
-        end
+      end
    end
 
 

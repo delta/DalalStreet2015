@@ -5,7 +5,6 @@ class CreateBanks < ActiveRecord::Migration
       t.integer :stock_id
       t.decimal :pricerendered
       t.integer :numofstock
-
       t.timestamps
     end
   end
