@@ -25,7 +25,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
   		end 	
 	end
 	
-	def show
+def show
 		## the chart and pie charts fix em .........works only on reload ...... #####################
 		if request.get?
 		   if !user_signed_in?
@@ -34,13 +34,19 @@ layout "../dalal_dashboard/layout/layout.html.erb"
             @stocks_list = Stock.all
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(5).reverse
 	       	  @stocks = Stock.return_bought_stocks(current_user.id)
-            @stock = @stocks[0]
-            logger.info @stock
-	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-            @market_event_list  = MarketEvent.get_events(7,@stock.id)
-            @stock_price = Stock.read_current_price(@stock.id)
+           if !@stocks.blank?
+                @stock = @stocks[0]
+                @stock_price = Stock.read_current_price(@stock.id)
+                @market_event_list  = MarketEvent.get_events(7,@stocks[0].id)
+            else
+                @no_stock_found = "You have not bought any stocks yet"    
+	          end
+            @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
             @mortgage = Stock.joins(:banks).select("*,banks.numofstock*stocks.currentprice as netcash").where("banks.user_id" => current_user.id)
-	       end
+	          if @mortgage.blank?
+               @no_mortgage_found = "You have not mortgaged any stocks yet."
+            end
+         end
 	    else
 	       ##fill up
 
