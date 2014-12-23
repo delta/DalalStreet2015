@@ -48,10 +48,6 @@ class AdminController < ApplicationController
                 render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
            else
                 @banks_list = Bank.all
-                # Stock.connection.clear_query_cache
-                # @stocks_list = Stock.all
-                # @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-                # @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
            end    
     end
 

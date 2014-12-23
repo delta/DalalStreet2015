@@ -9,3 +9,73 @@
 # #
 # two: {}
 # #  column: value
+one:
+    stock_id: 369541888
+    eventname: "Delta faces lawsuit for illegal patent frauds"
+    event_type: 0
+    event_turn: 3
+    event: 1
+    event_done: 1
+two:
+    stock_id: 140662621
+    eventname: "Dell plans to split stocks"
+    event_type: 1
+    event_turn: 3
+    event: 3
+    event_done: 1
+three:
+    stock_id: 30677878
+    eventname: "Intel reports higher profit margins"
+    event_type: 1
+    event_turn: 3
+    event: 1
+    event_done: 1
+four:
+    stock_id: 292226793
+    eventname: "HDFC acquires Delta"
+    event_type: 0
+    event_turn: 3
+    event: 3
+    event_done: 1
+five:
+    stock_id: 369541888
+    eventname: "Delta acquired by HDFC"
+    event_type: 1
+    event_turn: 3
+    event: 3
+    event_done: 1 
+six:
+    stock_id: 940090323
+    eventname: "MorganStanley releases new products for holiday season"
+    event_type: 1
+    event_turn: 3
+    event: 2
+    event_done: 1
+seven: 
+    stock_id: 553775723
+    eventname: "CEO of Pragyan sacked"
+    event_type: 0
+    event_turn: 3
+    event: 2
+    event_done: 1
+eight:
+    stock_id: 834596858
+    eventname: "CEO of Apple sacked"
+    event_type: 0
+    event_turn: 3
+    event: 2
+    event_done: 1 
+nine:
+    stock_id: 802847325
+    eventname: "HP set to expand globally"
+    event_type: 1
+    event_turn: 3
+    event: 1
+    event_done: 1
+ten:
+    stock_id: 30677878
+    eventname: "Intel faces lawsuit for illegal patent frauds"
+    event_type: 0
+    event_turn: 3
+    event: 1
+    event_done: 1

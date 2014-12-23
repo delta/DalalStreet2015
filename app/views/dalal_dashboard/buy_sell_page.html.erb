@@ -6,7 +6,7 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <br>         
             <div class="modal-body">
-            <%= render partial:"dalal_dashboard/buy_sell_partial",locals: { stock: @stock, no_stock_found: @no_stock_found } %>
+            <%= render partial:"dalal_dashboard/partials/buy_sell_partial",locals: { stock: @stock, no_stock_found: @no_stock_found } %>
             </div>
           </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -35,7 +35,7 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                    <%= render partial:"dalal_dashboard/stock_marquee_partial",locals: { stocks_list: @stocks_list }%>
+          <%= render partial:"dalal_dashboard/partials/stock_marquee_partial",locals: { price_of_tot_stock: @price_of_tot_stock }%>
                     </div>
 
                     <div class="col-lg-12">
@@ -48,125 +48,25 @@
                 <!-- /.row -->
 
                 <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-comments fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">26</div>
-                                        <div>Market Events</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-green">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                       <i class="fa fa-money fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash.round(2)%></div>
-                                        <div>Cash</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-yellow">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-tasks fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=@price_of_tot_stock.round(2)%></div>
-                                        <div>Stock</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-red">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-support fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">13</div>
-                                        <div>Support Tickets!</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                <%= render partial:"dalal_dashboard/partials/panel_dashboard_partial",locals: { stocks_list: @stocks_list }%>
                 </div>
                 <!-- /.row -->
                 <div class="row">
-                 
-                  <div class="col-lg-12">
-                  <div id="ajax_notice">
-                    </div>
-                    <% if flash[:notice] %>
-                    <div class="notice"><%= flash[:notice] %></div>
-                    <% end %>
-                    <% if flash[:error] %>
-                    <div class="error"><%= flash[:error] %></div>
-                    <% end %>
-                  </div>
-
                   <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <%= render partial:"dalal_dashboard/main_buy_sell_partial",locals: { stocks_list: @stocks_list }%>  
+                                <%= render partial:"dalal_dashboard/partials/main_buy_sell_partial",locals: { stocks_list: @stocks_list }%>  
                                 <div class="text-right">
                                     <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                 </div> <!-- row -->
+                </div>
 
-                <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -174,7 +74,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="list-group" id ="notification">
-                                <%= render partial:"dalal_dashboard/notification_partial",locals: { notifications_list: @notifications_list } %>
+                                <%= render partial:"dalal_dashboard/partials/notification_partial",locals: { notifications_list: @notifications_list } %>
                                 </div>
                                 <div class="text-right">
                                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
@@ -184,7 +84,7 @@
                     </div>
                 </div>
                 <!-- /.row -->
-
+                
             </div>
             <!-- /.container-fluid -->
 
@@ -371,7 +271,7 @@
              // for(var i = 0; i < get_value.sent_data.stock_update.length; i++) {
              //                    var obj = get_value.sent_data.stock_update[i];
 
-             //                    var fill_table = fill_table+'<tr><td><a class="stock_name" href="/dalal_dashboard/298486374/buy_sell_stock?stockname='+obj.stockname+'" id="'+obj.stockname+'"_"'+obj.id+'">'+obj.stockname+'</a></td><td>'+round(obj.alltimelow,2)+'</td><td>'+round(obj.alltimehigh,2)+'</td><td>'+round(obj.daylow,2)+'</td><td>'+round(obj.dayhigh,2)+'</td><td>'+round(obj.currentprice,2)+'</td><td>'+obj.stocksinmarket+'</td></tr>';
+             //                    var fill_table = fill_table+'<tr><td><a class="stock_name" href="/dalal_dashboard/partials/298486374/buy_sell_stock?stockname='+obj.stockname+'" id="'+obj.stockname+'"_"'+obj.id+'">'+obj.stockname+'</a></td><td>'+round(obj.alltimelow,2)+'</td><td>'+round(obj.alltimehigh,2)+'</td><td>'+round(obj.daylow,2)+'</td><td>'+round(obj.dayhigh,2)+'</td><td>'+round(obj.currentprice,2)+'</td><td>'+obj.stocksinmarket+'</td></tr>';
              //                }
 
              //             $("#render_tbody").empty().append(fill_table);
