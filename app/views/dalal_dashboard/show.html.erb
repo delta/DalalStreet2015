@@ -81,6 +81,7 @@
                         
                                 <div class="panel-body">
                                 <div class="table-responsive">
+                                    <% if !@no_stock_found %>
                                      <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>
                                             <tr>
@@ -112,6 +113,9 @@
                                                 </tr>
                                         </tbody>
                                     </table>
+                                     <% else %>
+                                        <div><%= "#{@no_stock_found}" %></div>
+                                     <% end %>
                                 </div>
                                 </div>
 
@@ -146,11 +150,13 @@
                             </div>
                             <div class="panel-body">
                                 <div class="list-group" id="market_event_list" data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                 <% if !@no_stock_found %>
                                     <%@market_event_list.each do |event|%>
                                      <a href="#" class="list-group-item">
                                      <span class="badge"><%= event.updated_at%></span>
                                      <i class="fa fa-fw fa-check"></i> <%= event.eventname%> </a> 
                                     <% end %>
+                                 <% end %>   
                                  </div>
                             </div>
                         </div>  
@@ -169,6 +175,7 @@
                             </div>
                                 <div class="panel-body">
                                 <div class="table-responsive">
+                                 <% if !@no_mortgage_found %>
                                      <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>
                                             <tr>
@@ -181,6 +188,7 @@
                                                 <th>StockWorth</th>
                                             </tr>
                                         </thead>
+                                        
                                         <tbody id="render_tbody_show">
                                              <% @mortgage.each do |stock| %>
                                                 <tr>
@@ -202,6 +210,9 @@
                                             <% end %>     
                                         </tbody>
                                     </table>
+                                    <% else %>
+                                      <div><%= "#{@no_mortgage_found}" %></div>
+                                    <% end %>
                                     </div>
                                 <div class="text-right">
                                     <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
