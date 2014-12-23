@@ -44,10 +44,14 @@ class AdminController < ApplicationController
     end
     
     def bank_rates
-         if !user_signed_in?
-            render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-            
-         end
+         if user_signed_in?
+            Stock.connection.clear_query_cache
+                @stocks_list = Stock.all
+                @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+              @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+           else
+              redirect_to :action => 'index'
+           end    
     end
 
 end
