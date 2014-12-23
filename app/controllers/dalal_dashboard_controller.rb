@@ -25,7 +25,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
   		end 	
 	end
 	
-	def show
+def show
 		## the chart and pie charts fix em .........works only on reload ...... #####################
 		if request.get?
 		   if !user_signed_in?
