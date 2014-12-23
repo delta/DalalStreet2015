@@ -86,9 +86,11 @@ require "json"
               @stocks = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id")
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               #send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
+              @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
               update_partial_input('dalal_dashboard/partials/show_partial', :@stocks, @stocks)
               update_partial_input('dalal_dashboard/partials/notification_partial', :@notifications_list , @notifications_list)
               update_partial_input('dalal_dashboard/partials/stock_marquee_partial', :@stocks_list , @stocks_list)
+              update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
               
               data = {}
               data = load_data_with_partials(data)
@@ -105,10 +107,12 @@ require "json"
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               @stock = Stock.all
               #send_message :update_stock_all, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
+              @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
               update_partial_input('dalal_dashboard/partials/main_buy_sell_partial', :@stocks_list, @stock)
               update_partial_input('dalal_dashboard/partials/notification_partial', :@notifications_list , @notifications_list)
               update_partial_input('dalal_dashboard/partials/stock_marquee_partial', :@stocks_list , @stock)
-
+              update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
+  
               data = {}
               data = load_data_with_partials(data)
               send_message :update_stock_all, data
@@ -146,9 +150,10 @@ require "json"
          @stock = Stock.select("*").where('stocks.id' => id).first
          @no_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
        end   
-      
+      @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
       update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@stock, @stock);
       update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@no_stock_found , @no_stock_found)
+      update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
       data = {}
       data = load_data_with_partials(data)
       send_message :buy_sell_partial_render, data
@@ -162,8 +167,9 @@ require "json"
       if user_signed_in?
         id = data[:id]
         @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stock_useds.stock_id' => id).group("stock_id").first
-
+        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
         update_partial_input('dalal_dashboard/partials/bank_mortgage_partial', :@stock, @stock)
+        update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
 
         data = {}
         data = load_data_with_partials(data)
