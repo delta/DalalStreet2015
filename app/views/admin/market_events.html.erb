@@ -48,19 +48,21 @@
 						<%= f.text_field :event_done %>
 					</div>
 				</div>
+
 				
 				<%= f.submit "Add ", class: "btn btn-large btn-primary" %>
 				<% end %>
 
 			</div>
-
+			
 			<div style="margin:4%;" id="showEve" >
-				<% if !@allEvent.respond_to?(:to_str) %>
-				<% eventList=["Stock ID","Event Name","Event Type","Event turn","Event","Event Done"] %>	
-					<table class="table table-hover" > 
+					<%= will_paginate @allEvent %>
+
+					<% eventList=["Stock ID","Event Name","Event Type","Event turn","Event","Event Done","Current Price"] %>	
+					<table class="table table-hover table-condensed table-bordered" > 
 						<thead>
 							<tr>
-								<% (0..5).each do |i| %>
+								<% (0..6).each do |i| %>
 									<th> <%= eventList[i] %> </th>
 								<% end %>
 							</tr>
@@ -74,15 +76,19 @@
 									<td><%= f.event_turn %></td>
 									<td><%= f.event %></td>
 									<td><%= f.event_done %></td>
+									<% @stock.each do |s| %>
+										<% if s.id==f.stock_id %>
+											<td><%= s.currentprice.round(2)  %></td>
+										<% end %>
+									<% end %>
+										
+									
 									<td><button type="button" class="btn btn-danger"  > Remove</button></td>
 								</tr>
 							<% end %>
 						</tbody>
 					</table>
-				<% else %>
-					<h2><%= @allEvent %></h2>
-				<% end %>
-					
+					<%= will_paginate @allEvent %>
 
 			</div>
 	</div>
