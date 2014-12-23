@@ -17,14 +17,15 @@ class AdminController < ApplicationController
             # creating new event
             if params[:market_event] 
                 @market_event=MarketEvent.new(stock_id:params[:market_event][:stock_id],eventname:params[:market_event][:eventname],event_type:params[:market_event][:event_type],event:params[:market_event][:event],event_turn:params[:market_event][:event_turn],event_done:params[:market_event][:event_done])
-                #@market_event=MarketEvent.new_event(params[:market_event][:id],params[:market_event][:eventname],params[:market_event][:event_type],params[:market_event][:event],params[:market_event][:event_turn],params[:market_event][:event_done])
                 if @market_event.save
                     flash[:queryStatus] = "Saved Successfully"
+                    redirect_to action:'market_events'
                 end
             end
             # showing all events
             if !MarketEvent.all.empty?
-                @allEvent=MarketEvent.all
+                @stock= Stock.paginate(:page => params[:page], :per_page => 5)
+                @allEvent = MarketEvent.paginate(:page => params[:page], :per_page => 5)
                 
             else
                 @allEvent="Event Empty. Please add new Events"    
