@@ -3,34 +3,18 @@
      <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
              <thead>
                  <tr>
-                   <th>Stock</th>
-                   <th>DayLow</th>
-                   <th>DayHigh</th>
-                   <th>Current (USD)</th>
-                   <th>StockInMarket</th>
-                   <th>StockInExchange</th>
-                   <th>TradeStock</th>
-                   <th>Trade</th>
+                   <th>Stock Id</th>
+                   <th>Price Rendered</th>
+                   <th>Number Of stock</th>
+                   
                  </tr>
              </thead>
       <tbody id="render_tbody_stock">
-         <% @stocks_list.each do |stock| %>
+         <% @banks_list.each do |bank| %>
             <tr> 
-               <% if stock.updown == 1%>
-                <% @color="style=color:green"%> 
-                <% @image="src=/assets/up-arrow.jpg"%> 
-                <% else %> 
-                <% @color="style=color:red" %>
-                <% @image="src=/assets/stock_down.gif"%> 
-               <%end%>
-               <td><%=stock.stockname %></td>
-               <td><%=stock.daylow.round(2) %></td> 
-               <td><%=stock.dayhigh.round(2) %></td> 
-               <td <%=@color%> ><%=stock.currentprice.round(2) %><span> <img <%=@image%> style="width:7px;height:7px;"></img></span></td>
-               <td><%=stock.stocksinmarket%></td> 
-               <td><%=stock.stocksinexchange %></td> 
-               <td><input type="text" maxlength="2" style="width:75px;"<%="id=#{current_user.id}_#{stock.id}"%> onchange="swapper(this.id);" onkeypress="return isNumber(event)"/></td> 
-               <td> <%= hidden_field_tag "stocktrade_#{stock.id}"%> <%= hidden_field_tag "identity","stocktrade_#{stock.id}"%> <%= tag "input", { "type" => "button", "value" => "Trade","name" => "Trade", "onclick" => "getvalues('stocktrade_#{stock.id}');" } %> </td> 
+               <td><%=bank.stock_id %></td>
+               <td><%=bank.pricerendered %></td> 
+               <td><%=bank.numofstock %></td> 
             </tr> 
          <% end %>
       </tbody>

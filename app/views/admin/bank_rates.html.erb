@@ -34,7 +34,7 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Stocks </h3>
                             </div>
                             <div class="panel-body">
-                             <%= render partial:"admin/bank_rates_partial",locals: { stocks: @stocks }%>  
+                             <%= render partial:"admin/bank_rates_partial" %>  
                                 <div class="text-right">
                                     <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
@@ -49,9 +49,6 @@
                                 <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Notification Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="list-group" data-uri="<%= request.host %>:<%= request.port %>/websocket">
-                                <%= render partial:"dalal_dashboard/notification_partial",locals: { notifications_list: @notifications_list }%> 
-                                </div>
                                 <div class="text-right">
                                     <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
