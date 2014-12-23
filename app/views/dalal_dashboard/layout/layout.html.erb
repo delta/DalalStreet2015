@@ -189,9 +189,6 @@
                     <% end %>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
-                    </li>
-                    <li>
                     <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'market_events' do %>    
                         <span id="span"><i class="fa fa-fw fa-wrench"></i> Market Events</span>
                     <% end %>
@@ -225,7 +222,7 @@
   </div>
     <!-- /#wrapper -->
 
-      <%= yield :style %>
+  <%= yield :style %>
 
 
      <!-- jQuery -->

@@ -214,18 +214,30 @@
                                 </div>
 
                             <div class="panel-body">
-                                <ul class="nav nav-tabs" id="#company_tab">
-                                  <li role="presentation" class="active"><a href="#company_tab">Line</a></li>
-                                  <li role="presentation"><a href="#company_tab">Bar</a></li>
-                                </ul>
-                            <div>
-                                <canvas id="canvas_line" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
-                            </div>
-                                <!-- <div id="morris-area-chart"></div> -->
-                            </div>
-                        </div><!-- col-->
 
-                            
+                            <div role="tabpanel">
+                              <ul id="myTab" class="nav nav-tabs" role="tablist">
+                                <li role="presentation"  class="active"><a href="#cur_price" aria-controls="home" role="tab" data-toggle="tab" onclick="tab_selector('cur_price');">Current Price</a></li>
+                                <li role="presentation"><a href="#mark_cap" aria-controls="profile" role="tab" data-toggle="tab" onclick="tab_selector('mark_cap');">Market capital</a></li>
+                              </ul>
+                              <!-- Tab panes -->
+                              <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="cur_price"> 
+                                    <div>
+                                    <canvas id="canvas_line" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="mark_cap">
+                                    <div>
+                                    <canvas id="canvas_line2" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            </div>
+
+                        </div><!-- col-->
                         <div class="col-lg-4">
                             <div class="panel-heading">
                                 <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Company Event</h3>
@@ -405,7 +417,8 @@
 
    });
 
-      var dispatcher = new WebSocketRails($('.table').data('uri'), true);
+   
+    var dispatcher = new WebSocketRails($('.table').data('uri'), true);
 
      $(function(){
 
@@ -433,13 +446,14 @@
                     pointHighlightStroke : "rgba(220,0,0,0.3)",
                     data : pricelist
                 }]
-        };  
-            
+        };
+
             window.myLine = new Chart(ctx1).Line(lineChartData, {
                     responsive: true,
                 });
 
             myLine.destroy();
+
 
       var channel = dispatcher.subscribe('show');
 
@@ -541,33 +555,59 @@
 
     }; 
 
-    
+     $('#myTab a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    var tab_selector = function(id){
+      
+      var pricelist = current_price_list_array('<%=@stock_price%>');
+      var label = [];
+      pricelist.splice(pricelist.length-1, 1);
+      
+         for(var i = 0; i<pricelist.length; i++)
+             label.push(i);
+      
+    if (id == 'mark_cap')
+        {console.log( id );
+        chart_loader2(pricelist);
+        }
+    else
+        chart_loader(pricelist);
+        
+    };
+
+
     var chart_loader = function(pricelist){
 
     var canvas = document.getElementById("canvas_line");
     var ctx1 = document.getElementById("canvas_line").getContext("2d");
     ctx1.clearRect(0, 0, canvas.width, canvas.height);
+
     var min,step,width_div=[],label=[];   
         
     var manipulator = function(pricelist){
+
         pricelist.splice(pricelist.length-1, 1);
+        
         Array.min = function(pricelist){
                       return Math.min.apply( Math, pricelist );
                     };
         Array.max = function(pricelist){
                       return Math.max.apply( Math, pricelist );
                     };              
-         min = Array.min(pricelist);
-         var max = Array.max(pricelist);
-         step = round((max - min)/10,1);
+         // min = Array.min(pricelist);
+         // var max = Array.max(pricelist);
+         // step = round((max - min)/10,1);
          
          for(var i = 0; i<pricelist.length; i++)
              label.push(i);
     
-         width_div.push(min-step);
-         for(var i = 1; i <11; i++)
-             width_div.push(width_div[i-1]+step);
-    };  
+    //      width_div.push(min-step);
+    //      for(var i = 1; i <11; i++)
+    //          width_div.push(width_div[i-1]+step);
+         };  
        //process raw - data
        manipulator(pricelist);
 
@@ -591,6 +631,53 @@
                 });
 
             myLine.destroy();
+
+    };         
+
+ 
+    var chart_loader2 = function(pricelist){
+
+    var canvas2 = document.getElementById("canvas_line2");
+    var ctx2 = document.getElementById("canvas_line2").getContext("2d");
+    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+
+    var label=[];   
+        
+    var manipulator = function(pricelist){
+        pricelist.splice(pricelist.length-1, 1);
+
+        Array.min = function(pricelist){
+                      return Math.min.apply( Math, pricelist );
+                    };
+        Array.max = function(pricelist){
+                      return Math.max.apply( Math, pricelist );
+                    };              
+    
+         for(var i = 0; i<pricelist.length; i++)
+             label.push(i);
+    };  
+       //process raw - data
+       manipulator(pricelist);
+
+    var lineChartData2 = {
+            labels : label,
+            datasets : [
+                {
+                    label: "My second dataset",
+                    fillColor : "rgba(255,0,0,0.1)",
+                    strokeColor : "rgba(220,0,0,0.3)",
+                    pointColor : "rgba(220,0,0,0.3)",
+                    pointStrokeColor : "#fff",
+                    pointHighlightFill : "#fff",
+                    pointHighlightStroke : "rgba(220,0,0,0.3)",
+                    data : pricelist
+                }]
+        };
+           window.myLine2 = new Chart(ctx2).Line(lineChartData2,  {
+                    responsive: true,
+                });
+
+            myLine2.destroy();
 
     };         
 
