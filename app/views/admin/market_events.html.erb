@@ -3,7 +3,7 @@
 	<div class="jumbotron" >
 			<header class="container" >
 				<button type="button" class="btn btn-info" id="newEveBtn"  >Add Market Events</button>
-				<button type="button" class="btn btn-info" id="showEveBtn"  >Market Events</button>
+				
 			</header>
 			<% if flash[:queryStatus] %>	
 				<div class="alert alert-success"><%= flash[:queryStatus] %></div>
@@ -54,7 +54,7 @@
 
 			</div>
 
-			<div style="display:none;margin:4%;" id="showEve" >
+			<div style="margin:4%;" id="showEve" >
 				<% if !@allEvent.respond_to?(:to_str) %>
 				<% eventList=["Stock ID","Event Name","Event Type","Event turn","Event","Event Done"] %>	
 					<table class="table table-hover" > 
@@ -97,11 +97,6 @@
 	    });
 	    });
 
-	    $("#showEveBtn").click(function(){
-	    $("#showEve").animate({
-	      height:'toggle'
-	    });
-	    });
 	    });
 
 	</script>
