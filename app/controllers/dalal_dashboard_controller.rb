@@ -14,8 +14,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
 
 	def index
 		if user_signed_in?
-         #caution ::::   change to devise parameters later #####
-         #######.................redirect to main page if user not valid ..............instead it is redirecting now to /user/sign_in...which is not correct
+       #caution ::::   change to devise parameters later #####
+       #######.................redirect to main page if user not valid ..............instead it is redirecting now to /user/sign_in...which is not correct
   		 #######....Wats the limit of stocks user can buy from stocksinmarket,,how much he can bid for etc.........###########################
   		 #######....wat to do if sum of total stock is zero in stock_useds ..........................#########################
   		 @user = User.find(current_user)

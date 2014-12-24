@@ -12,6 +12,17 @@
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <div class="modal" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+      <div class="modal-content contcustom">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <br>         
+            <div class="modal-body">
+            <%= render partial:"dalal_dashboard/partials/marketevent_partial",locals: { stock: @stock, no_stock_found: @no_stock_found } %>
+            </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
         <div id="page-wrapper">
 
