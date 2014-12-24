@@ -1,8 +1,0 @@
-#!/bin/bash
-# My first script
-
-
-sudo service redis_6379 start
-#rails server &
-#rake resque:scheduler &
-#rake resque:work &

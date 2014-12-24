@@ -1,7 +1,0 @@
-#!/bin/bash
-# Startup script
-#start by going to root folder and type in ./run Dalal 
-sudo service redis_6379 start
-rails server &
-rake resque:scheduler &
-rake resque:work &
