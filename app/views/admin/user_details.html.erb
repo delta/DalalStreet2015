@@ -1,0 +1,148 @@
+<% content_for :page_wrapper do %>
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Admin Panel <small>User Details</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                             <i class="fa fa-dashboard"></i> Dashboard
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+ 
+                    <div class="col-lg-12">
+                        <div class="alert alert-info alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-info-circle"></i>  <strong>Like Dalal Street?</strong> Like our FB page <a href="#">Dalal Street</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                
+                <div class="row">
+                  <div class="col-lg-12">
+                  <div id="ajax_notice">
+                    </div>
+                    <% if flash[:notice] %>
+                    <div class="notice"><%= flash[:notice] %></div>
+                    <% end %>
+                    <% if flash[:error] %>
+                    <div class="error"><%= flash[:error] %></div>
+                    <% end %>
+                  </div>
+                </div> <!-- row -->
+			
+		<center>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>User id</h3>
+                            </div>
+                            <div class="panel-body">
+			<%= form_for @users, url: {action: "user_details" } do |f| %>
+      			<%= select_tag(:id, options_for_select(@user_all),:include_blank => true) %>
+			<%= f.submit "Show" %>      			
+			<% end %>				
+      			                         </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+		</center>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Panel 2</h3>
+                            </div>
+                            <div class="panel-body">
+<% if @user %>
+							<table>
+<tr>
+<th>User id</th><td><%= @user.id %></td>
+</tr>
+<tr>
+<th>email</th><td><%= @user.email %></td>
+</tr>
+<tr>
+<th>reset_password_token</th><td><%= @user.reset_password_token %></td>
+</tr>
+<tr>
+<th> reset_password_sent_at</th><td><%= @user.reset_password_sent_at %></td>
+</tr>
+<tr>
+<th>remember_created_at</th><td><%= @user.remember_created_at %></td>
+</tr>
+<tr>
+<th>sign_in_count</th><td><%= @user.sign_in_count %></td>
+</tr>
+<tr>
+<th>current_sign_in_at</th><td><%= @user.current_sign_in_at %></td>
+</tr>
+<tr>
+<th>last_sign_in_at</th><td><%= @user.last_sign_in_at %></td>
+</tr>
+<tr>
+<th>current_sign_in_ip</th><td><%= @user.current_sign_in_ip %></td>
+</tr>
+<tr>
+<th>last_sign_in_ip</th><td><%= @user.last_sign_in_ip %></td>
+</tr>
+<tr>
+<th>created_at</th><td><%= @user.created_at %></td>
+</tr>
+<tr>
+<th>updated_at</th><td><%= @user.updated_at %></td>
+</tr>
+<tr>
+<th>status</th><td><%= @user.status %></td>
+</tr>
+<tr>
+<th>username</th><td><%= @user.username %></td>
+</tr>
+<tr>
+<th>cash</th><td><%= @user.cash %></td>
+</tr>
+</tr>
+</table>
+ <% end %>                               <div class="text-right">
+                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                   </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+<% end %>
+
+<% content_for :script do %>
+
+   <script type="text/javascript">
+
+    // window.onload = function(){
+            //     var ctx = document.getElementById("chart-area").getContext("2d");
+            //     window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
+            // };
+
+   </script>
+ 
+<% end %>    
