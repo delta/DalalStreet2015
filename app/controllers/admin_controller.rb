@@ -7,56 +7,55 @@ class AdminController < ApplicationController
               
         end
             
-<<<<<<< Updated upstream
-	end
+    end
 	
 	def user_details
         	if !user_signed_in?
             	render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
         	else      
-		@user_all = User.all.map{|u| [ u.id, u.id ] }
-		@users = User.new	
-			if params[:id]
-				@user=User.find(params[:id])
-			end
-		end
+		          @user_all = User.all.map{|u| [ u.id, u.id ] }
+		          @users = User.new	
+			         if params[:id]
+				        @user=User.find(params[:id])
+			         end
+		      end
 	end
 	
 	def stockmanipulator
 		if !user_signed_in?
             	render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-        	else      
-		@stock= Stock.new
-		@stocks_list = Stock.all
-   		     if params[:stock] 
-  			       @stock=Stock.new(id:params[:stock][:stock_id],stockname:params[:stock][:stockname],currentprice:params[:stock][:currentprice], stocksinexchange:params[:stock][:stocksinexchange],daylow:params[:stock][:daylow],dayhigh:params[:stock][:dayhigh],alltimelow:params[:stock][:alltimelow],alltimehigh:params[:stock][:alltimehigh],stocksinmarket:params[:stock][:stocksinmarket])
-	                        if @stock.save
-		                    flash[:queryStatus] = "Saved Successfully"
-		                    redirect_to action:'stockmanipulator'
-		                end
-        	    end	
-		    if params[:update_id]
+  	else      
+      @stock= Stock.new
+      @stocks_list = Stock.all
+	       if params[:stock] 
+	           @stock=Stock.new(id:params[:stock][:stock_id],stockname:params[:stock][:stockname],currentprice:params[:stock][:currentprice], stocksinexchange:params[:stock][:stocksinexchange],daylow:params[:stock][:daylow],dayhigh:params[:stock][:dayhigh],alltimelow:params[:stock][:alltimelow],alltimehigh:params[:stock][:alltimehigh],stocksinmarket:params[:stock][:stocksinmarket])
+              if @stock.save
+                  flash[:queryStatus] = "Saved Successfully"
+                  redirect_to action:'stockmanipulator'
+              end
+  	    end	
+		    
+        if params[:update_id]
     			 @updatestock=Stock.find(params[:update_id])  
-	            end
+	      end
 
  		    if params[:up_id]
      			@updatestock=Stock.find(params[:up_id])
-			if @updatestock.update(stock_params)
-				@updatestock=Stock.delete
-				redirect_to action:'stockmanipulator'
-	                 
-			end
+    			if @updatestock.update(stock_params)
+    				@updatestock=Stock.delete
+    				redirect_to action:'stockmanipulator'
+    	                 
+			    end
 		    end
 
 		    if params[:delete_id]
      			@deletestock=Stock.find(params[:delete_id]).delete  
 		    end
 
-		end
-	end 
-=======
     end
->>>>>>> Stashed changes
+	
+  end
+
     
     def market_events
         if !user_signed_in?
