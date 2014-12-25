@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   get '/admin/index' => 'admin#index' ###controller not yet created
   get '/admin/market_events' => 'admin#market_events'
+  #post '/admin/market_events' => 'admin#market_events'
 
   get '/admin/company_events' => 'admin#company_events'
   get '/admin/bank_rates' => 'admin#bank_rates'

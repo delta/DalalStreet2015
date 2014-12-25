@@ -1,12 +1,13 @@
 class AdminController < ApplicationController
-	layout "../admin/layout/layout.html.erb"
+    layout "../admin/layout/layout.html.erb"
 
-	def index
+    def index
         if !user_signed_in?
             render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
               
         end
             
+<<<<<<< Updated upstream
 	end
 	
 	def user_details
@@ -53,21 +54,55 @@ class AdminController < ApplicationController
 
 		end
 	end 
+=======
+    end
+>>>>>>> Stashed changes
     
     def market_events
         if !user_signed_in?
             render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
         else
             @market_event=MarketEvent.new
-            # creating new event
+            # for deleting market records
+            if params[:stk]
+                @del_eve=MarketEvent.find_by_stock_id(params[:stk])
+                @del_eve.destroy
+            end
+
             if params[:market_event] 
-                @market_event=MarketEvent.new(stock_id:params[:market_event][:stock_id],eventname:params[:market_event][:eventname],event_type:params[:market_event][:event_type],event:params[:market_event][:event],event_turn:params[:market_event][:event_turn],event_done:params[:market_event][:event_done])
-                if @market_event.save
-                    flash[:queryStatus] = "Saved Successfully"
+                 @check=Stock.where("id = ?", params[:market_event][:stock_id]).exists?
+                if @check
+                    if params[:market_event][:token]=='1' 
+                        ## ERROR
+                        # the above shit is always evaluating to false. Possibly type-mismatch
+                        # and so else stament is being executed. First line of else looks for stock_id which was still not
+                        # created. hence returns a nill class.
+                        @market_event=MarketEvent.new(stock_id:params[:market_event][:stock_id],eventname:params[:market_event][:eventname],event_type:params[:market_event][:event_type],event:params[:market_event][:event],event_turn:params[:market_event][:event_turn],event_done:params[:market_event][:event_done])
+                    else
+                        @market_event=MarketEvent.find_by_stock_id(params[:market_event][:stock_id])
+                        @market_event.eventname=params[:market_event][:eventname]
+                        @market_event.event_turn=params[:market_event][:event_turn]
+                        @market_event.event_type=params[:market_event][:event_type]
+                        @market_event.event_done=params[:market_event][:event_done]
+                        @market_event.event=params[:market_event][:event]
+
+                    end
+                    @destroyed =false
+                else
+                    @market_event.destroy
+                    @destroyed =true
+                    flash[:Error]="The requested operation has failed,Possibly,the Stock ID doesn't exits yet"
                     redirect_to action:'market_events'
                 end
+
+                if not @destroyed
+                    if @market_event.save
+                        flash[:queryStatus] = "Saved Successfully"
+                        redirect_to action:'market_events'
+                    end
+                end
             end
-            # showing all events
+           
             if !MarketEvent.all.empty?
                 @stock= Stock.paginate(:page => params[:page], :per_page => 5)
                 @allEvent = MarketEvent.paginate(:page => params[:page], :per_page => 5)
