@@ -167,12 +167,12 @@
                     <% end %>
                     </li>
                     <li>
-                    <%= link_to :controller=>'admin', :action=>'user_details' do %>
+                    <%= link_to :controller=>'admin', :action=>'index' do %>
                         <span id="span"><i class="fa fa-fw fa-table"></i> User Details</span>
                     <% end %>
                     </li>
                     <li>
-                    <%= link_to :controller=>'admin', :action=>'stockmanipulator' do %>
+                    <%= link_to :controller=>'admin', :action=>'index' do %>
                         <span id="span"><i class="fa fa-fw fa-money"></i> Stock Manipulator</span>
                     <% end %>   
                     </li>

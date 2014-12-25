@@ -25,17 +25,9 @@ Rails.application.routes.draw do
 
   get '/admin/index' => 'admin#index' ###controller not yet created
   get '/admin/market_events' => 'admin#market_events'
-  #post '/admin/market_events' => 'admin#market_events'
 
   get '/admin/company_events' => 'admin#company_events'
   get '/admin/bank_rates' => 'admin#bank_rates'
-
-  resources :users
-  get '/admin/user_details' => 'admin#user_details'   
-  post '/admin/user_details' => 'admin#user_details'  
-  patch '/admin/stockmanipulator' => 'admin#stockmanipulator' ###not defined yet  
-  get '/admin/stockmanipulator' => 'admin#stockmanipulator'  
-
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
