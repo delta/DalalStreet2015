@@ -7,7 +7,7 @@ class AdminController < ApplicationController
               
         end
             
-    end
+    end 
 	
 	def user_details
         	if !user_signed_in?
