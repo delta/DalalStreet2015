@@ -66,16 +66,14 @@ class AdminController < ApplicationController
             if params[:stk]
                 @del_eve=MarketEvent.find_by_stock_id(params[:stk])
                 @del_eve.destroy
+                redirect_to action:'market_events'
             end
 
             if params[:market_event] 
                  @check=Stock.where("id = ?", params[:market_event][:stock_id]).exists?
                 if @check
-                    if params[:market_event][:token]=='1' 
-                        ## ERROR
-                        # the above shit is always evaluating to false. Possibly type-mismatch
-                        # and so else stament is being executed. First line of else looks for stock_id which was still not
-                        # created. hence returns a nill class.
+                    logger.info params[:market_event][:token]
+                    if params[:token]=="1"
                         @market_event=MarketEvent.new(stock_id:params[:market_event][:stock_id],eventname:params[:market_event][:eventname],event_type:params[:market_event][:event_type],event:params[:market_event][:event],event_turn:params[:market_event][:event_turn],event_done:params[:market_event][:event_done])
                     else
                         @market_event=MarketEvent.find_by_stock_id(params[:market_event][:stock_id])
