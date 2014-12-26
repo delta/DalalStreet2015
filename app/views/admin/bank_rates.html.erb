@@ -16,10 +16,23 @@
                         </ol>
                     </div>
                 </div>
+                <!-- /.row -->
 
                 <div class="row">
-                 <div class="col-lg-12">
-                    <div id="ajax_notice">
+ 
+                    <div class="col-lg-12">
+                        <div class="alert alert-info alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-info-circle"></i>  <strong>Like Dalal Street?</strong> Like our FB page <a href="#">Dalal Street</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                
+                <div class="row">
+                  <div class="col-lg-12">
+                  <div id="ajax_notice">
                     </div>
                     <% if flash[:notice] %>
                     <div class="notice"><%= flash[:notice] %></div>
@@ -28,31 +41,107 @@
                     <div class="error"><%= flash[:error] %></div>
                     <% end %>
                   </div>
-                  <div class="col-lg-8">
+                </div> <!-- row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Stocks </h3>
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>Current Stocks</h3>
                             </div>
                             <div class="panel-body">
-                             <%= render partial:"admin/bank_rates_partial" %>  
-                                <div class="text-right">
-                                    <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
+        <div class="table-responsive">
+                                     <table class="table table-bordered table-hover table-striped"  data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                        <thead>
+                                            <tr>
+                                                <th>Stock Id</th>
+                                                <th>Price Rendered</th>
+                                                <th>Number Of stock</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="render_tbody">
+                                            <% @banks_list.each do |stock| %>
+                                                <tr> 
+                                        <td><%= link_to :controller=>'admin', :action=>'bank_rates', :update_id => stock.id do%>
+            <%=stock.stock_id %>
+            <% end %></td>
+                                                    <td><%=stock.pricerendered %></td> 
+                                            <td><%=stock.numofstock %></td>
+                <td><%= link_to :controller=>'admin', :action=>'bank_rates', :delete_id => stock.id, :method => :delete,data: { confirm: 'Are you sure?' } do%>Delete<%end%></td>
+            </tr>
+                                            <% end %>     
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <!-- /.row -->
 
-                    
-                    <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-6">
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Notification Panel</h3>
+                            <div class="panel-heading"><% if !@updatebankrates %>
+                                
+        <% else %>    <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Update Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="text-right">
-                                    <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
+                            
+            <%= form_for(@updatebankrates,:html=>{:class => "form-horizontal",:role=>"form"} , url:{action: "bank_rates"},method: :patch,:up_id => @updatebankrates.id) do |f| %>
+        
+        <div class="form-group">  
+          <%= f.label :id,:class =>"control-label col-sm-4" %>
+          <div class="col-sm-4">
+            <%= f.text_field :id %>
+          </div>
+        </div>
+        <div class="form-group">  
+          <%= f.label :user_id,:class =>"control-label col-sm-4" %>
+          <div class="col-sm-4">
+            <%= f.text_field :user_id %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :stock_id,:class =>"control-label col-sm-4" %>
+          <div class="col-sm-4">
+            <%= f.text_field :stock_id %>
+          </div>
+        </div>
+        <div class="form-group">  
+          <%= f.label :pricerendered,:class =>"control-label col-sm-4" %>
+          <div class="col-sm-4">
+            <%= f.text_field :pricerendered %>
+          </div>
+        </div>
+        <div class="form-group">  
+          <%= f.label :numofstock,:class =>"control-label col-sm-4" %>
+          <div class="col-sm-4">
+            <%= f.text_field :numofstock %>
+          </div>
+        </div>
+        
+        </div>
+        <%= f.hidden_field :stocksinmarket, :value => "0" %>
+        <%= f.submit "Update", class: "btn btn-large btn-primary" %>
+        <% end %>       
+
+        <% end %>
+
+      </div>
+              
                             </div>
+                        
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><% if @updatebankrates %>
+        <% else %>
+        <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Update Panel</h3>
+                            </div>
+                            <div class="panel-body">
+                              <div>Click on the stock from the list to update stocks :)</div>
+        <% end %>       
+        
                         </div>
                     </div>
                 </div>
@@ -65,196 +154,15 @@
         <!-- /#page-wrapper -->
 <% end %>
 
-<% content_for :style do %>
-<style>
-
-.slider{
-    width:100%;
-    overflow:hidden;
-    position:relative;
-    margin:0;
-}
-.edge{
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
-    position:absolute;
-    height:100%;
-    display:block;
-}
-.edge:before{
-    content:'';
-    position:absolute;
-    left:0;
-    /*background:-webkit-linear-gradient(left, white 10%, rgba(0,0,0,0) 100%);*/
-    width:25%;
-    height:100%;
-}
-.edge:after{
-    content:'';
-    position:absolute;
-    right:0;
-    /*background:-webkit-linear-gradient(right, white 10%, rgba(0,0,0,0) 100%);*/
-    width:25%;
-    height:100%;
-}
-.slider ul{
-    background:#fff;
-    overflow:hidden;
-    width:1000%;
-    margin:0;
-}
-
-.slider li{
-    list-style:none;
-    display:inline-block;
-    padding:0 10px;
-}
-</style>
-
-<% end %>
-
-
 <% content_for :script do %>
 
- <script type="text/javascript">
+   <script type="text/javascript">
 
+    // window.onload = function(){
+            //     var ctx = document.getElementById("chart-area").getContext("2d");
+            //     window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
+            // };
 
-     window.requestAnimationFrame = (function(){
-      return  window.requestAnimationFrame       ||
-              window.webkitRequestAnimationFrame ||
-              window.mozRequestAnimationFrame    ||
-              function( callback ){
-                window.setTimeout(callback, 1000 / 60);
-              };
-    })();
-
-    var speed = 1000;
-    (function currencySlide(){
-        var currencyPairWidth = $('.slideItem:first-child').outerWidth();
-        $(".slideContainer").animate({marginLeft:-currencyPairWidth},speed, 'linear', function(){
-                    $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
-            });
-            requestAnimationFrame(currencySlide);
-    })();
-
-
-    var swapper = function(swap_stock_trade){
-     var coin_field_id = "stocktrade_"+swap_stock_trade.split('_')[1];
-     document.getElementById(coin_field_id).value = document.getElementById(swap_stock_trade).value;
-    };
-
-    var isNumber= function(evt) {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
-        }
-        return true;
-    };
-    
-    function round(value, decimals) {
-       return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 
-    }
-
-         var connection = function(){var data = {connected : true}; return data;};
-
-         var dispatcher = new WebSocketRails($('.table').data('uri'), true);
-
-         dispatcher.on_open = function(){
-            console.log('Connection has been established');
-         };
-
-         dispatcher.on_close = function(){
-            console.log('Connection has been closed');
-         };
-         
-         //function not completed
-         var bind_check = 0;
-        //remember to protect this variable later
-         var binder = function(event){switch(event){
-           
-           case 'notification_update' : dispatcher.bind();
-
-           case 'stock_ajax_handler'  : dispatcher.bind();
-
-         }};
-
-         var getnotifications = function(){
-
-                var sent = {
-                  receive: 'true'
-                }
-
-                 var success = function(response) {
-                  console.log("Wow it worked: "+response.message);
-                  dispatcher.unbind('notification_update');
-                  };
-
-                 var failure = function(response) {
-                   console.log("That just totally failed: "+response.message);
-                  };
-
-                 dispatcher.bind('notification_update', getnotifications);
-                 
-                 dispatcher.trigger('notification_update', sent, success, failure); 
-                
-                 function getnotifications(notice) {
-                       
-                       console.log(notice);
-                       console.log(notice.notice[0]);
-
-                        for(var i = 0; i < notice.notice.length; i++) {
-                            var obj = notice.notice[i];
-                            var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+notice.notice[i].updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+notice.notice[i].notification+'</a>';
-                        }
-
-                      $(".list-group").empty().append(notify);
-                      $( "#ajax_notice" ).empty().append("<p>"+notice.notice[0].notification+"</p>");
-
-                    }
-                 
-    };
-         
-         var getvalues = function(value){  
-         
-                 var valuenum = value.split('_')[1];
-                 var data = {identity: valuenum,value: document.getElementById(value).value};
-
-                 var success = function(response) {
-                    console.log("Wow it worked: "+response.message);
-                  };
-
-                 var failure = function(response) {
-                    console.log("That just totally failed: "+response.message);
-                  };
-
-                 var gettable = function (get_stock_value) {
-
-                     // console.log(get_stock_value.sent_stock_data.current_user);
-                     // console.log(get_stock_value.sent_stock_data.stock_update);
-
-                      // for(var i = 0; i < get_stock_value.sent_stock_data.stock_update.length; i++) {
-                      //       var obj = get_stock_value.sent_stock_data.stock_update[i];
-
-                      //       var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.daylow, 2)+'</td><td>'+round(obj.dayhigh, 2)+'</td><td>'+round(obj.currentprice, 2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
-                      //    }
-                      // $("#render_tbody_stock").empty().append(fill_table);
-                      
-                      console.log(get_stock_value);
-                      var rs = new RestfulWebsockets();
-                      rs.refresh(get_stock_value);
-                      getnotifications();
-                
-                  };
-
-                if(!bind_check)
-                    bind_check = dispatcher.bind('stock_ajax_handler', gettable);
-                    dispatcher.trigger('stock_ajax_handler', data, success, failure); 
-               
-    };
-
-</script>
-
-<% end %>
+   </script>
+ 
+<% end %>    

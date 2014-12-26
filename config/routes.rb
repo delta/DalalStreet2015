@@ -28,7 +28,10 @@ Rails.application.routes.draw do
   #post '/admin/market_events' => 'admin#market_events'
 
   get '/admin/company_events' => 'admin#company_events'
+
+
   get '/admin/bank_rates' => 'admin#bank_rates'
+  
 
   resources :users
   get '/admin/user_details' => 'admin#user_details'   

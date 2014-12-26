@@ -123,12 +123,35 @@ class AdminController < ApplicationController
     end
     
     def bank_rates
-         if !user_signed_in?
+        if !user_signed_in?
                 render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-           else
-                @banks_list = Bank.all
-           end    
+        else      
+          @bank= Bank.new
+          @banks_list = Bank.all
+                
+            if params[:update_id]
+                     @updatebankrates=Bank.find(params[:update_id])  
+              end
+
+                if params[:up_id]
+                    @updatebankrates=Bank.find(params[:up_id])
+                    if @updatebankrates.update(stock_params)
+                        @updatebankrates=Bank.delete
+                        redirect_to action:'bank_rates'
+                             
+                    end
+                end
+
+                if params[:delete_id]
+                    @deletestock=Bank.find(params[:delete_id]).delete  
+                end
+
+        end
+        
+    
     end
+
+
 
 	private
 	def stock_params

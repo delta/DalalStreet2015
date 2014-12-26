@@ -9,3 +9,22 @@
 # #
 # two: {}
 # #  column: value
+
+a:
+   user_id: 281110143
+   stock_id: 252678980
+   pricerendered: 43.20
+   numofstock: 12
+
+b:
+   user_id: 281110143
+   stock_id: 292226793
+   pricerendered: 32.00
+   numofstock: 3
+
+c:
+   user_id: 281110143
+   stock_id: 112844655
+   pricerendered: 31.50
+   numofstock: 23
+

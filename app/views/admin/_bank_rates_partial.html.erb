@@ -1,24 +1,24 @@
 <div id="stock_partial">
-   <div class="table-responsive">                            
-     <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
-             <thead>
-                 <tr>
-                   <th>Stock Id</th>
-                   <th>Price Rendered</th>
-                   <th>Number Of stock</th>
-                   
-                 </tr>
-             </thead>
-      <tbody id="render_tbody_stock">
-         <% @banks_list.each do |bank| %>
-            <tr> 
-               <td><%=bank.stock_id %></td>
-               <td><%=bank.pricerendered %></td> 
-               <td><%=bank.numofstock %></td> 
-            </tr> 
-         <% end %>
-      </tbody>
-     </table>
-   </div>
-
-</div>
+                                <div class="table-responsive">                            
+                                  <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                          <thead>
+                                              <tr>
+                                                <th>Stock Id</th>
+                                                <th>Price Rendered</th>
+                                                <th>Number Of stock</th>
+                                                
+                                              </tr>
+                                          </thead>
+                                   <tbody id="render_tbody_stock">
+                                      <% @banks_list.each do |bank| %>
+                                         <tr> 
+                                            <td><%=bank.stock_id %></td>
+                                            <td><%=bank.pricerendered %></td> 
+                                            <td><%=bank.numofstock %></td>
+                                            <td><%= link_to 'Edit', admin_bank_rates_path(bank) %></td>
+                                         </tr> 
+                                      <% end %>
+                                   </tbody>
+                                  </table>
+                                </div>
+                             </div>
