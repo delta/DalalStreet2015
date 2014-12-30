@@ -96,25 +96,6 @@
 
                 <!-- /.row -->
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Notification Panel</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="list-group" id ="notification">
-                                <%= render partial:"dalal_dashboard/partials/notification_partial",locals: { notifications_list: @notifications_list } %>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
-
             </div>
             <!-- /.container-fluid -->
 
@@ -186,9 +167,10 @@
 <% end %>
 
 <% content_for :script do %>
-
-   <script type="text/javascript">
-   $('#myModal').modal('hide')
+ <script src="/assets/bootstrap.min.js"></script>
+ <script type="text/javascript">
+  
+  $('#myModal').modal('hide')
 
     jQuery(function ($) {
         function check_values() {
@@ -198,7 +180,8 @@
             }
         }
     });
-      var dispatcher = new WebSocketRails($('.table').data('uri'), true);
+
+  var dispatcher = new WebSocketRails($('.table').data('uri'), true);
 
   $(function(){
       dispatcher.on_open = function(){

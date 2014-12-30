@@ -92,10 +92,14 @@
                  <!--  <div id="ajax_notice">
                     </div> -->
                     <% if flash[:notice] %>
-                    <div class="notice"><%= flash[:notice] %></div>
+                    <div class="alert alert-success alert-dismissable">
+                    <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+                    <%= flash[:notice] %></div> 
                     <% end %>
                     <% if flash[:error] %>
-                    <div class="error"><%= flash[:error] %></div>
+                    <div class="alert alert-danger alert-dismissable">
+                    <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+                    <%= flash[:error] %></div>
                     <% end %>
                   </div>
 

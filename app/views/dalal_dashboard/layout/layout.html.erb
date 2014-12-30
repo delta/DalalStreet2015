@@ -62,6 +62,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
                     <ul class="dropdown-menu message-dropdown">
+                        <% @notifications_list.each do |notice|%>
                         <li class="message-preview">
                             <a href="#">
                                 <div class="media">
@@ -69,44 +70,15 @@
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
                                     </span>
                                     <div class="media-body">
-                                        <h5 class="media-heading"><strong>John</strong>
+                                        <h5 class="media-heading"><strong><%= current_user.username %></strong>
                                         </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                        <p>You can check our help tab if you cross any problems.</p>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> <%= notice.updated_at%></p>
+                                        <p><%= notice.notification%></p>
                                     </div>
                                 </div>
                             </a>
-                        </li>
-                        <li class="message-preview">
-                            <a href="#">
-                                <div class="media">
-                                    <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                    </span>
-                                    <div class="media-body">
-                                        <h5 class="media-heading"><strong>John</strong>
-                                        </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                        <p>In case of technical difficulties,please contact us through facebook.Or call us directly</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="message-preview">
-                            <a href="#">
-                                <div class="media">
-                                    <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                    </span>
-                                    <div class="media-body">
-                                        <h5 class="media-heading"><strong>John</strong>
-                                        </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                        <p>Check out the all new Dalal Street.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
+                        </li> 
+                        <% end %>
                         <li class="message-footer">
                             <a href="#">Read All New Messages</a>
                         </li>
@@ -230,10 +202,33 @@
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script> -->
     
     <!-- Bootstrap Core JavaScript -->
-    <script src="/assets/bootstrap.min.js"></script>
+   
 
     <!--chart.js javascript -->
     <script src="/assets/Chart.js"></script>
+
+    <script type="text/javascript">
+
+   window.requestAnimationFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            function( callback ){
+              window.setTimeout(callback, 1000 / 60);
+            };
+  })();
+
+  var speed = 1000;
+  (function currencySlide(){
+      var currencyPairWidth = $('.slideItem:first-child').outerWidth();
+      $(".slideContainer").animate({marginLeft:-currencyPairWidth},speed, 'linear', function(){
+                  $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
+          });
+          requestAnimationFrame(currencySlide);
+  })();
+
+
+    </script>
 
    <%= yield :script %>
 

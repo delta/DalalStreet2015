@@ -38,14 +38,16 @@ def show
                 @stock = @stocks[0]
                 @stock_price = Stock.read_current_price(@stock.id)
                 @market_event_list  = MarketEvent.get_events(7,@stocks[0].id)
+                @market_events_paginate = MarketEvent.paginate(:page => params[:page], :per_page => 5)
             else
-                @no_stock_found = "You have not bought any stocks yet"    
+                @no_stock_found = "You have not bought any stocks yet"
 	          end
             @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
             @mortgage = Stock.joins(:banks).select("*,banks.numofstock*stocks.currentprice as netcash").where("banks.user_id" => current_user.id)
-	          if @mortgage.blank?
+            if @mortgage.blank?
                @no_mortgage_found = "You have not mortgaged any stocks yet."
             end
+            @news_feed = MarketEvent.first
          end
 	    else
 	       ##fill up
@@ -197,6 +199,7 @@ def show
           @market_event_list  = MarketEvent.get_events(10,30677878)
           @stock_list = Stock.pluck(:stockname)
           @stock_price = Stock.read_current_price(@stock.id)
+          @notifications_list = Notification.get_notice(current_user.id,10)
 	    else
 	      redirect_to :action => 'index'
 	    end

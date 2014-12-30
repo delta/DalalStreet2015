@@ -3,12 +3,18 @@
    <div class="col-lg-12">
      <div class="panel panel-default">
        <div class="panel-heading">
-         <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Buy Panel</h3>
+         <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Market Event</h3>
        </div>
-	   	<div class="panel">
-         	   
-
-	   </div>
+	   	<div class="panel-body"	>
+        <% if !@no_stock_found %>
+        <%@market_events_paginate.each do |event|%>
+        <a href="#" class="list-group-item">
+        <span class="badge"><%= event.updated_at%></span>
+        <i class="fa fa-fw fa-check"></i> <%= event.eventname%> </a> 
+        <% end %>
+        <% end %>
+        <%= will_paginate @market_events_paginate %>      
+   	    </div>
      </div>
    </div>
   </div>
