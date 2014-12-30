@@ -9,7 +9,7 @@
 			<header class="container" >
 				<button type="button" class="btn btn-info" id="newEveBtn" style="float:left;" >New</button>
 				<button type="button" class="btn btn-info" id="editEveBtn" style="float:right;" >Edit</button>
-			</header>
+			</header> 
 			
 			<% if flash[:queryStatus] %>
 				<div class="alert alert-success"><%= flash[:queryStatus] %></div>
@@ -142,11 +142,12 @@
 										<td><%= f.event_turn %></td>
 										<td><%= f.event %></td>
 										<td><%= f.event_done %></td>
-											<% @stock.each do |s| %>
-												<% if s.id==f.stock_id %>
-													<td><%= s.currentprice.round(2)  %></td>
+										<td>	<% @stock.each do |s| %>
+													<% if s.id == f.stock_id %>
+														<%= s.currentprice  %>
+													<% end %>
 												<% end %>
-											<% end %>
+										</td>	
 										<td>
 										<!--PASTE HERE-->
 								           	<form method="get" >

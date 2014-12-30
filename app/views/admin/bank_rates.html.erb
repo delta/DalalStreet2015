@@ -50,7 +50,7 @@
                                 <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>Current Stocks</h3>
                             </div>
                             <div class="panel-body">
-        <div class="table-responsive">
+                              <div class="table-responsive">
                                      <table class="table table-bordered table-hover table-striped"  data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>
                                             <tr>
@@ -62,13 +62,12 @@
                                         <tbody id="render_tbody">
                                             <% @banks_list.each do |stock| %>
                                                 <tr> 
-                                        <td><%= link_to :controller=>'admin', :action=>'bank_rates', :update_id => stock.id do%>
-            <%=stock.stock_id %>
-            <% end %></td>
-                                                    <td><%=stock.pricerendered %></td> 
-                                            <td><%=stock.numofstock %></td>
-                <td><%= link_to :controller=>'admin', :action=>'bank_rates', :delete_id => stock.id, :method => :delete,data: { confirm: 'Are you sure?' } do%>Delete<%end%></td>
-            </tr>
+                                                      <td><%= link_to :controller=>'admin', :action=>'bank_rates', :update_id => stock.id do%><%=stock.stock_id %>
+                                                      <% end %></td>
+                                                      <td><%=stock.pricerendered %></td> 
+                                                      <td><%=stock.numofstock %></td>
+                                                      <td><%= link_to :controller=>'admin', :action=>'bank_rates', :delete_id => stock.id, data: { confirm: 'Are you sure?' } do%>Delete<%end%></td>
+                                                </tr>
                                             <% end %>     
                                         </tbody>
                                     </table>
@@ -82,65 +81,63 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><% if !@updatebankrates %>
-                                
-        <% else %>    <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Update Panel</h3>
+                            <div class="panel-heading">
+                              <% if !@updatebankrates %>
+                              <% else %>
+                              <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Update Panel</h3>
                             </div>
                             <div class="panel-body">
-                            
-            <%= form_for(@updatebankrates,:html=>{:class => "form-horizontal",:role=>"form"} , url:{action: "bank_rates"},method: :patch,:up_id => @updatebankrates.id) do |f| %>
+                              <%= form_for(@updatebankrates,:html=>{:class => "form-horizontal",:role=>"form"} , url:{action: "bank_rates"},method: :patch,:up_id => @updatebankrates.id) do |f| %>
         
-        <div class="form-group">  
-          <%= f.label :id,:class =>"control-label col-sm-4" %>
-          <div class="col-sm-4">
-            <%= f.text_field :id %>
-          </div>
-        </div>
-        <div class="form-group">  
-          <%= f.label :user_id,:class =>"control-label col-sm-4" %>
-          <div class="col-sm-4">
-            <%= f.text_field :user_id %>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= f.label :stock_id,:class =>"control-label col-sm-4" %>
-          <div class="col-sm-4">
-            <%= f.text_field :stock_id %>
-          </div>
-        </div>
-        <div class="form-group">  
-          <%= f.label :pricerendered,:class =>"control-label col-sm-4" %>
-          <div class="col-sm-4">
-            <%= f.text_field :pricerendered %>
-          </div>
-        </div>
-        <div class="form-group">  
-          <%= f.label :numofstock,:class =>"control-label col-sm-4" %>
-          <div class="col-sm-4">
-            <%= f.text_field :numofstock %>
-          </div>
-        </div>
+                              <div class="form-group">  
+                                <%= f.label :id,:class =>"control-label col-sm-4" %>
+                                <div class="col-sm-4">
+                                  <%= f.text_field :id %>
+                                </div>
+                              </div>
+                              <div class="form-group">  
+                                <%= f.label :user_id,:class =>"control-label col-sm-4" %>
+                                <div class="col-sm-4">
+                                  <%= f.text_field :user_id %>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <%= f.label :stock_id,:class =>"control-label col-sm-4" %>
+                                <div class="col-sm-4">
+                                  <%= f.text_field :stock_id %>
+                                </div>
+                              </div>
+                              <div class="form-group">  
+                                <%= f.label :pricerendered,:class =>"control-label col-sm-4" %>
+                                <div class="col-sm-4">
+                                  <%= f.text_field :pricerendered %>
+                                </div>
+                              </div>
+                              <div class="form-group">  
+                                <%= f.label :numofstock,:class =>"control-label col-sm-4" %>
+                                <div class="col-sm-4">
+                                  <%= f.text_field :numofstock %>
+                                </div>
+                              </div>
         
-        </div>
-        <%= f.hidden_field :stocksinmarket, :value => "0" %>
-        <%= f.submit "Update", class: "btn btn-large btn-primary" %>
-        <% end %>       
-
-        <% end %>
-
-      </div>
-              
                             </div>
+                            <%= f.hidden_field :stocksinmarket, :value => "0" %>
+                            <%= f.submit "Update", class: "btn btn-large btn-primary" %>
+                            <% end %>       
+                            <% end %>
+              </div>
+          </div>
                         
                     <div class="col-lg-6">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><% if @updatebankrates %>
-        <% else %>
-        <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Update Panel</h3>
+                            <div class="panel-heading">
+                            <% if @updatebankrates %>
+                            <% else %>
+                              <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Update Panel</h3>
                             </div>
                             <div class="panel-body">
                               <div>Click on the stock from the list to update stocks :)</div>
-        <% end %>       
+                            <% end %>       
         
                         </div>
                     </div>
