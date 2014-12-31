@@ -38,6 +38,8 @@ gem 'devise'
 
 gem 'will_paginate'
 
+gem 'kaminari'
+
 gem 'nokogiri'
 
 gem 'json'

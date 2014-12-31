@@ -1,8 +1,6 @@
 <% content_for :page_wrapper do %>
         <div id="page-wrapper">
-
             <div class="container-fluid">
-
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -18,11 +16,10 @@
                 </div>
                 <!-- /.row -->
 
-                <div class="row">
+                
                 <%= render partial:"dalal_dashboard/partials/panel_dashboard_partial",locals: { stocks_list: @stocks_list }%>
-                </div>
-                <!-- /.row -->
-
+                
+                
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="panel panel-default">
@@ -74,10 +71,5 @@
 <% end %>
 
 <% content_for :script do %>
- <script src="/assets/bootstrap.min.js"></script>
-
-   <script type="text/javascript">
- 
-   </script>
 
 <% end %>    

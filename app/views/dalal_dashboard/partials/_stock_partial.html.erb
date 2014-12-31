@@ -30,7 +30,7 @@
                <td><%=stock.stocksinmarket%></td> 
                <td><%=stock.stocksinexchange %></td> 
                <td><input type="text" maxlength="2" style="width:75px;"<%="id=#{current_user.id}_#{stock.id}"%> onchange="swapper(this.id);" onkeypress="return isNumber(event)"/></td> 
-               <td> <%= hidden_field_tag "stocktrade_#{stock.id}"%> <%= hidden_field_tag "identity","stocktrade_#{stock.id}"%> <%= tag "input", { "type" => "button", "value" => "Trade","name" => "Trade", "onclick" => "getvalues('stocktrade_#{stock.id}');" } %> </td> 
+               <td> <%= hidden_field_tag "stocktrade_#{stock.id}"%> <%= hidden_field_tag "identity","stocktrade_#{stock.id}"%> <%= tag "input", { "type" => "button", "value" => "Trade","name" => "Trade", "class"=>"btn btn-success btn-xs", "onclick" => "getvalues('stocktrade_#{stock.id}');" } %> </td> 
             </tr> 
          <% end %>
       </tbody>

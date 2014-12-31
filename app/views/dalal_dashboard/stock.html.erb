@@ -1,4 +1,5 @@
 <% content_for :page_wrapper do %>
+
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -18,20 +19,8 @@
                 </div>
                 <!-- /.row -->
 
-                <div class="row">
-                <%= render partial:"dalal_dashboard/partials/stock_marquee_partial",locals: { stocks_list: @stocks_list }%>
-                    <div class="col-lg-12">
-                        <div class="alert alert-info alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <i class="fa fa-info-circle"></i>  <strong>Like Dalal Street?</strong> Like our FB page <a href="#">Dalal Street</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
-
-               <div class="row">
                 <%= render partial:"dalal_dashboard/partials/panel_dashboard_partial",locals: { stocks_list: @stocks_list }%>
-                </div>
+               
                 <!-- /.row -->
 
                 <div class="row">
@@ -77,58 +66,10 @@
 <% end %>
 
 <% content_for :style do %>
-<style>
-
-.slider{
-    width:100%;
-    overflow:hidden;
-    position:relative;
-    margin:0;
-}
-.edge{
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
-    position:absolute;
-    height:100%;
-    display:block;
-}
-.edge:before{
-    content:'';
-    position:absolute;
-    left:0;
-    /*background:-webkit-linear-gradient(left, white 10%, rgba(0,0,0,0) 100%);*/
-    width:25%;
-    height:100%;
-}
-.edge:after{
-    content:'';
-    position:absolute;
-    right:0;
-    /*background:-webkit-linear-gradient(right, white 10%, rgba(0,0,0,0) 100%);*/
-    width:25%;
-    height:100%;
-}
-.slider ul{
-    background:#fff;
-    overflow:hidden;
-    width:1000%;
-    margin:0;
-}
-
-.slider li{
-    list-style:none;
-    display:inline-block;
-    padding:0 10px;
-}
-</style>
 
 <% end %>
 
-
 <% content_for :script do %>
- <script src="/assets/bootstrap.min.js"></script>
  <script type="text/javascript">
 
     var swapper = function(swap_stock_trade){

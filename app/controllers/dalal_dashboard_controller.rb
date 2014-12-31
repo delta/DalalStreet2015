@@ -2,6 +2,7 @@ class DalalDashboardController < ApplicationController
 before_filter :authenticate_user!, :set_cache_buster #devise filters#
 protect_from_forgery with: :null_session
 
+include RemoteLinkRenderer
 require "json"
 
   def set_cache_buster
@@ -33,12 +34,13 @@ def show
 	       else
             @stocks_list = Stock.all
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(5).reverse
-	       	  @stocks = Stock.return_bought_stocks(current_user.id)
+            @notifications_paginate = Notification.page(params[:page]).per(10)
+            @stocks = Stock.return_bought_stocks(current_user.id)
            if !@stocks.blank?
                 @stock = @stocks[0]
                 @stock_price = Stock.read_current_price(@stock.id)
                 @market_event_list  = MarketEvent.get_events(7,@stocks[0].id)
-                @market_events_paginate = MarketEvent.paginate(:page => params[:page], :per_page => 5)
+                @market_events_paginate = MarketEvent.page(params[:page]).per(10)
             else
                 @no_stock_found = "You have not bought any stocks yet"
 	          end
@@ -48,6 +50,7 @@ def show
                @no_mortgage_found = "You have not mortgaged any stocks yet."
             end
             @news_feed = MarketEvent.first
+            @class_show_active = "class=active"
          end
 	    else
 	       ##fill up
@@ -61,7 +64,10 @@ def show
 	        	@stocks_list = Stock.all
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-	       else
+            @notifications_paginate = Notification.page(params[:page]).per(10)
+            @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+            @class_stock_active = "class=active"
+         else
 	          redirect_to :action => 'index'
 	       end	   
     end #stock def
@@ -73,8 +79,11 @@ def show
 	           @stocks_list = Stock.all
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
              @no_stock_found = nil
-	           @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-	    else
+             @notifications_paginate = Notification.page(params[:page]).per(10)
+             @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+             @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+             @class_buy_sell_active = "class=active"
+      else
 	       redirect_to :action => 'index'
 	    end
     end ####end of buy def
@@ -143,11 +152,15 @@ def show
     
     def bank_mortgage
     	 if user_signed_in?
-	       	   @stocks_list = Stock.return_bought_stocks(current_user.id)
+	       	   @stocks_list = Stock.all
+             @stocks = Stock.return_bought_stocks(current_user.id)
              @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id").first
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	           @notifications_list = Notification.get_notice(current_user.id,10)
-	     else
+             @notifications_paginate = Notification.page(params[:page]).per(10)
+             @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+             @class_bank_active = "class=active"
+       else
 	       redirect_to :action => 'index'
 	     end
     end ###bank_mortgage
@@ -187,6 +200,10 @@ def show
         	@sell_history = Sell.select("stock_id,numofstock,updated_at,priceexpected").where('user_id' => current_user.id).last(10).reverse
 	        @notifications_list = Notification.get_notice(current_user.id,10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+          @notifications_paginate = Notification.page(params[:page]).per(10)
+          @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+          @stocks_list = Stock.all
+          @class_history_active = "class=active"
         else
         	redirect_to :action => 'index'
         end
@@ -194,25 +211,26 @@ def show
 
     def company
     	if user_signed_in?
-	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-          @stock = Stock.select("*").first
-          @market_event_list  = MarketEvent.get_events(10,30677878)
-          @stock_list = Stock.pluck(:stockname)
-          @stock_price = Stock.read_current_price(@stock.id)
-          @notifications_list = Notification.get_notice(current_user.id,10)
-	    else
+        
+	      @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+        @stock = Stock.select("*").first
+        @market_event_list = MarketEvent.get_events(10)
+        @stock_list = Stock.pluck(:stockname)
+        @stock_price = Stock.read_current_price(@stock.id)
+        @notifications_list = Notification.get_notice(current_user.id,10)
+        @notifications_paginate = Notification.page(params[:page]).per(10)
+        @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+        @class_company_active = "class=active"
+        @stocks_list = Stock.all
+        
+        respond_to do |format|
+         format.js
+         format.html
+        end
+
+      else
 	      redirect_to :action => 'index'
 	    end
     end
-
-    def market_events
-        if user_signed_in?
-            @stocks_list = Stock.return_bought_stocks(current_user.id)
-	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-	          @notifications_list = Notification.get_notice(current_user.id,10)
-        else
-            redirect_to :action => 'show'
-        end
-    end 
 
 end  #class def  

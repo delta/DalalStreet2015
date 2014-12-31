@@ -1,15 +1,19 @@
 class MarketEvent < ActiveRecord::Base
   MarketEvent.connection.clear_query_cache
   
-
   def self.new_event(id,eventname,event_type,event,event_turn,event_done)
     if !id.blank?
      @create_new_market = MarketEvent.create(:stock_id => id, :eventname => eventname, :event_type => event_type, :event => event,:event_turn => event_turn, :event_done => event_done)
     end
   end 
 
-  def self.get_events(num,id)
-	@get_market_event = MarketEvent.select("eventname,updated_at").where(:stock_id => id).last(num).reverse
+  def self.get_events(num,id = nil)
+    if id.blank?
+      id = Stock.select('id').first.id
+    else
+      id = id
+    end   
+	  @get_market_event = MarketEvent.select("eventname,updated_at").where(:stock_id => id).last(num).reverse
   end
 
   def self.distil
@@ -43,13 +47,16 @@ class MarketEvent < ActiveRecord::Base
 	    @acquired_stock =  Stock.where(:id => @market_stock.stock_id).first
 	    eventname1 = "#{@stock.stockname} acquires #{@acquired_stock.stockname}"
 	    eventname2 = "#{@acquired_stock.stockname} acquired by #{@stock.stockname}"
-		@create_event = MarketEvent.new_event(@stock.id,eventname1,0,event,0,0)
-		@create_event = MarketEvent.new_event(@acquired_stock.id,eventname2,1,event,0,0)   	
+  		@create_event = MarketEvent.new_event(@stock.id,eventname1,0,event,0,0)
+	  	@create_event = MarketEvent.new_event(@acquired_stock.id,eventname2,1,event,0,0)   	
     else
         @log = Company.custom_logger("No acquire company found")
     end
   end ##acquire def end
 
+
+
+############### modify event runner for all events ###################################################################################
   def self.event_runner
     @running_events = MarketEvent.where("event_done" => 0).all
     if !@running_events.blank?

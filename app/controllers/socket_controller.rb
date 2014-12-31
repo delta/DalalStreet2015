@@ -180,5 +180,21 @@ require "json"
           redirect_to :action => 'index'
         end
      end 
+
+     def update_modal_partials
+      if user_signed_in?
+        page = data[:page]
+        # @notifications_paginate = Notification.page(page).per(10)
+        @market_events_paginate = MarketEvent.page(page).per(10)
+        update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@market_events_paginate, @market_events_paginate)
+
+        data = {}
+        data = load_data_with_partials(data)
+        send_message :update_modal_partials, data
+        else
+          flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+          redirect_to :action => 'index'
+        end
+     end 
 end ## end of socket controller
  
