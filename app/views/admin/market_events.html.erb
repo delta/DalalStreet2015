@@ -3,7 +3,8 @@
 <style>
 	.well{background-color:#241010;color:white;}
 	.alert{text-align: center;margin: 3%; font-family: monospace;}
-	input{background-color:#222;color:white; }
+	input{background-color:rgba(239, 234, 180, 0.63); }
+
 </style>
 	<div class="jumbotron" >
 			<header class="container" >
@@ -26,44 +27,46 @@
 				<%= render 'shared/error_messages', object: @market_event %>
 				
 				<div class="form-group">	
-					<%= f.label :stock_ID %>
 					<div class="col-sm-4">
+						<span class="input-group-addon">Stock ID</span>
 						<%= f.text_field :stock_id %>
 					</div>
 				</div>
 				<div class="form-group">	
-					<%= f.label :eventname %>
 					<div class="col-sm-4">
+						<span class="input-group-addon">EventName</span>
 						<%= f.text_field :eventname %>
 					</div>
 				</div>
 				<div class="form-group">
-					<%= f.label :event_type %>
 					<div class="col-sm-4">
+						<span class="input-group-addon">EventType</span>
 						<%= f.text_field :event_type %>
 					</div>
 				</div>
 				<div class="form-group">	
-					<%= f.label :event_turn %>
+					
 					<div class="col-sm-4">
+						<span class="input-group-addon">EventTurn</span>
 						<%= f.text_field :event_turn %>
 					</div>
 				</div>
 				<div class="form-group">	
-					<%= f.label :event %>
 					<div class="col-sm-4">
+						<span class="input-group-addon">Event</span>
 						<%= f.text_field :event %>
 					</div>
 				</div>
 				<div class="form-group">	
-					<%= f.label :event_done %>
+					
 					<div class="col-sm-4">
+						<span class="input-group-addon">EventDone</span>
 						<%= f.text_field :event_done %>
 					</div>
 				</div>
 					<%=	hidden_field_tag :token, '1' %>
 				
-				<%= f.submit "Go", class: "btn btn-large btn-primary" %>
+				<%= f.submit "Go", class: "btn btn-medium btn-success center-block",style:"position:relative;top:15px;" %>
 				<% end %>
 
 			</div>
@@ -76,44 +79,47 @@
 				<%= render 'shared/error_messages', object: @market_event %>
 				
 				<div class="form-group">	
-					<%= f.label :stock_ID %>
 					<div class="col-sm-4">
+						<span class="input-group-addon">StockID</span>
 						<%= f.text_field :stock_id %>
 					</div>
 				</div>
 				<div class="form-group">	
-					<%= f.label :eventname %>
 					<div class="col-sm-4">
+						<span class="input-group-addon">EventName</span>
 						<%= f.text_field :eventname %>
 					</div>
 				</div>
 				<div class="form-group">
-					<%= f.label :event_type %>
+					
 					<div class="col-sm-4">
+						<span class="input-group-addon">EventType</span>
 						<%= f.text_field :event_type %>
 					</div>
 				</div>
 				<div class="form-group">	
-					<%= f.label :event_turn %>
+					
 					<div class="col-sm-4">
+						<span class="input-group-addon">EventTurn</span>
 						<%= f.text_field :event_turn %>
 					</div>
 				</div>
 				<div class="form-group">	
-					<%= f.label :event %>
 					<div class="col-sm-4">
+						<span class="input-group-addon">Event</span>
 						<%= f.text_field :event %>
 					</div>
 				</div>
 				<div class="form-group">	
-					<%= f.label :event_done %>
+					
 					<div class="col-sm-4">
+						<span class="input-group-addon">EventDone</span>
 						<%= f.text_field :event_done %>
 					</div>
 				</div>
 				
 					<%=	hidden_field_tag :token, '0' %>
-				<%= f.submit "Go", class: "btn btn-large btn-primary" %>
+				<%= f.submit "Go", class: "btn btn-medium btn-success center-block",style:"position:relative;top:15px;" %>
 				<% end %>
 
 			</div>
@@ -124,7 +130,7 @@
 					<% else %>
 						<%= will_paginate @allEvent %>
 
-						<% eventList=["Stock ID","Event Name","Event Type","Event turn","Event","Event Done","Current Price"] %>	
+						<% eventList=["Stock ID","Event Name","Event Type","Event turn","Event","Event Done","Current Price",] %>	
 						<table class="table table-hover table-condensed table-bordered" > 
 							<thead>
 								<tr>
@@ -149,13 +155,13 @@
 												<% end %>
 										</td>	
 										<td>
-										<!--PASTE HERE-->
-								           	<form method="get" >
+										<form method="get" >
 								           	<%=	hidden_field_tag :stk, f.stock_id %>
-											<%= submit_tag "Remove", class: "btn btn-sm btn-warning",data: { confirm: "Are you sure?"} %>
-								           	</form>
-
+											<%= submit_tag "Remove", class: "btn btn-sm btn-danger",data: { confirm: "Are you sure?"},style:"width:100%;background-color:rgb(249, 53, 53);" %>
+											</form>
 										</td>
+
+										
 									</tr>
 								<% end %>
 							</tbody>
