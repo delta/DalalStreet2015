@@ -97,7 +97,7 @@
                                         <i class="fa fa-support fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%= @price_of_tot_stock.round(2)+current_user.cash.round(2) %></div>
+                                        <div class="huge"><%= (@price_of_tot_stock+current_user.cash).round(2) %></div>
                                         <div>Net Wealth</div>
                                     </div>
                                 </div>

@@ -6,7 +6,7 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <br>         
             <div class="modal-body">
-            <%= render partial:"dalal_dashboard/partials/buy_sell_partial",locals: { stock: @stock, no_stock_found: @no_stock_found } %>
+            <%= render partial:"dalal_dashboard/partials/buy_sell_partial",locals: { stock: @stock, no_stock_found: @no_stock_found, buy_history: @buy_history, sell_history: @sell_history } %>
             </div>
           </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

@@ -83,6 +83,8 @@ def show
              @market_events_paginate = MarketEvent.page(params[:page]).per(10)
              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
              @class_buy_sell_active = "class=active"
+             @buy_history = Buy.select("stock_id,numofstock,price").where('stock_id' => @stock.id).last(3).reverse
+             @sell_history = Sell.select("stock_id,numofstock,priceexpected").where('stock_id' => @stock.id).last(3).reverse
       else
 	       redirect_to :action => 'index'
 	    end

@@ -1,15 +1,5 @@
   <div id = "buy_sell_partial">
      <div class="row">
-                  <div class="col-lg-12">
-                    <div id="ajax_notice">
-                    </div>
-                    <% if flash[:notice] %>
-                    <div class="notice"><%= flash[:notice] %></div>
-                    <% end %>
-                    <% if flash[:error] %>
-                    <div class="error"><%= flash[:error] %></div>
-                    <% end %>
-                  </div>
 
                   <div class="col-lg-12">
                         <div class="panel panel-default">
@@ -97,6 +87,60 @@
                         </div>
                     </div>
                  </div> <!-- row -->
+
+                  <div class="row">
+
+                    <div class="col-lg-6">
+                       <div class="panel-heading">
+                         <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Buy</h3>
+                       </div>
+                       <div class="panel-body">
+                         <div class="table-responsive">
+                          <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                  <tr>
+                                   <th>Bid</th>
+                                   <th>numofstock</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% @buy_history.each do |buy|%>
+                                  <tr>
+                                   <td>$<%= buy.price%></td>
+                                   <td><%= buy.numofstock%></td>
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                          </table>
+                        </div>
+                       </div>
+                    </div>
+                    <div class="col-lg-6">
+                       <div class="panel-heading">
+                         <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Sell</h3>
+                       </div>
+                       <div class="panel-body">
+                         <div class="table-responsive">
+                          <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                  <tr>
+                                   <th>Ask</th>
+                                   <th>numofstock</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <% @sell_history.each do |sell|%>
+                                  <tr>
+                                   <td>$<%= sell.pricerendered%></td>
+                                   <td> <%= sell.numofstock%></td>
+                                  </tr>
+                                  <% end %>
+                                </tbody>
+                          </table>
+                        </div>
+                     </div>
+                   </div>
+                  </div>
 
                   <div class="row">
                   <div class="col-lg-12">

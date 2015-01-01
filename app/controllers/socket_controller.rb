@@ -152,14 +152,21 @@ require "json"
        logger.info id
        @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stock_useds.stock_id' => id).group("stock_id").first
        @no_stock_found = nil
+       
        if !@stock
          @stock = Stock.select("*").where('stocks.id' => id).first
          @no_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
        end   
+      
+      @buy_history = Buy.select("stock_id,numofstock,price").where('stock_id' => id).last(3).reverse
+      @sell_history = Sell.select("stock_id,numofstock,priceexpected").where('stock_id' => id).last(3).reverse
+     
       @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@stock, @stock);
+      update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@stock, @stock)
       update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@no_stock_found , @no_stock_found)
-      update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
+      update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@buy_history, @buy_history)
+      update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@sell_history, @sell_history)
+  
       data = {}
       data = load_data_with_partials(data)
       send_message :buy_sell_partial_render, data
@@ -175,7 +182,6 @@ require "json"
         @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stock_useds.stock_id' => id).group("stock_id").first
         @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
         update_partial_input('dalal_dashboard/partials/bank_mortgage_partial', :@stock, @stock)
-        update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
 
         data = {}
         data = load_data_with_partials(data)
