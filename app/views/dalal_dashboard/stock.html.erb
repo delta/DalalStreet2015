@@ -114,7 +114,7 @@
          }};
 
          var getnotifications = function(){
-
+          
                 var sent = {
                   receive: 'true'
                 }
@@ -177,6 +177,7 @@
                       console.log(get_stock_value);
                       var rs = new RestfulWebsockets();
                       rs.refresh(get_stock_value);
+                      $("#news1,#news2").newsticker();
                       getnotifications();
                 
                   };

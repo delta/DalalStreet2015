@@ -37,11 +37,11 @@
                                 </div>
                             </div>
                             <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
+                                <!-- <div class="panel-footer" -->
+                                    <!-- <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
+                                    <div class="clearfix"></div> -->
+                                <!-- </div> -->
                             </a>
                         </div>
                     </div>
@@ -59,11 +59,11 @@
                                 </div>
                             </div>
                             <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
+                                <!-- <div class="panel-footer" -->
+                                    <!-- <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
+                                    <div class="clearfix"></div> -->
+                                <!-- </div> -->
                             </a>
                         </div>
                     </div>
@@ -81,11 +81,11 @@
                                 </div>
                             </div>
                             <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
+                                <!-- <div class="panel-footer" -->
+                                    <!-- <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
+                                    <div class="clearfix"></div> -->
+                                <!-- </div> -->
                             </a>
                         </div>
                     </div>
@@ -97,17 +97,17 @@
                                         <i class="fa fa-support fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">13</div>
-                                        <div>Support Tickets!</div>
+                                        <div class="huge"><%= @price_of_tot_stock.round(2)+current_user.cash.round(2) %></div>
+                                        <div>Net Wealth</div>
                                     </div>
                                 </div>
                             </div>
                             <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
+                                <!-- <div class="panel-footer" -->
+                                    <!-- <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
+                                    <div class="clearfix"></div> -->
+                                <!-- </div> -->
                             </a>
                         </div>
                     </div>
@@ -125,9 +125,12 @@
                       </div>
                      </div>
                     </div>
+                    </div>
                   
                     <!--  <div id="ajax_notice">
                     </div> -->
+                    <div class="row">
+                    <div class="col-lg-12">
                     <% if flash[:notice] %>
                     <div class="alert alert-success alert-dismissable">
                     <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
@@ -138,5 +141,7 @@
                     <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
                     <%= flash[:error] %></div>
                     <% end %>
+                    </div>
+                    </div>
 
 </div>

@@ -59,9 +59,12 @@ module SocketHelper
    def stock_ajax_handler_helper(stocks)
       if user_signed_in?
         @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-        update_partial_input('dalal_dashboard/partials/stock_partial', :@stocks_list, stocks)
-        update_partial_input('dalal_dashboard/partials/stock_marquee_partial', :@stocks_list , stocks)
+        @market_events_paginate = MarketEvent.page(1).per(10)
         update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
+        update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@stocks_list, stocks )
+        update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@market_events_paginate , @market_events_paginate)
+        update_partial_input('dalal_dashboard/partials/stock_partial', :@stocks_list, stocks)
+
         data = {}
         data = load_data_with_partials(data)
         WebsocketRails[:show].trigger(:show_channel, "true")

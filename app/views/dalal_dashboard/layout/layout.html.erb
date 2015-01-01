@@ -33,7 +33,7 @@
     <script src="/assets/jquery_ujs.js" type="text/javascript"></script>
     <script src="/assets/bootstrap.min.js" type="text/javascript"></script>
     -->
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>  
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true%>
   <%= csrf_meta_tags %>
 
@@ -224,17 +224,20 @@
 
    <%= yield :style %>
 
-   <!-- jQuery -->
-    <script src="/assets/jquery.js"></script>
-    <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script> -->
+   <script type="text/javascript">
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/assets/bootstrap.min.js"></script>
-    <script src="/assets/jquery.newsticker.1.0.min.js"></script>
-    <!--chart.js javascript -->
-    <!--<script src="/assets/Chart.js"></script>-->
+  $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
+      var $target = $( event.currentTarget );
+      $target.closest( '.btn-group' )
+         .find( '[data-bind="label"]' ).text( $target.text() )
+            .end()
+         .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+      
+      console.log("executed");
+         
+      return false;
 
-    <script type="text/javascript">
+   });
 
    $('#notification_modal').modal('hide')
     jQuery(function ($) {
@@ -263,35 +266,19 @@
   (function currencySlide(){
       var currencyPairWidth = $('.slideItem:first-child').outerWidth();
       $(".modal-backdrop").remove();
+      $("#news1,#news2").newsticker();
       $(".slideContainer").animate({marginLeft:-currencyPairWidth},speed, 'linear', function(){
                   $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
           });
           requestAnimationFrame(currencySlide);
   })();
 
-   $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
-      var $target = $( event.currentTarget );
-
-      $target.closest( '.btn-group' )
-         .find( '[data-bind="label"]' ).text( $target.text() )
-            .end()
-         .children( '.dropdown-toggle' ).dropdown( 'toggle' );
-
-      return false;
-
-   });
-
-
    // $(".pagination a").click(function() {
    //       var url = event.target+'';
    //       var num = url.split('=')[1];
    //       update_modal_partials(num);
    //  });
-     $(document).ready(function () {
-            $("#news1,#news2").newsticker();
-        });
-        
-  
+    
     var update_modal_partials = function(num){
 
          var data = {page: num};

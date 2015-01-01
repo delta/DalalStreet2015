@@ -1,5 +1,5 @@
 class DalalDashboardController < ApplicationController
-before_filter :authenticate_user!, :set_cache_buster #devise filters#
+before_filter :authenticate_user!,:set_cache_buster #devise filters#
 protect_from_forgery with: :null_session
 
 include RemoteLinkRenderer
