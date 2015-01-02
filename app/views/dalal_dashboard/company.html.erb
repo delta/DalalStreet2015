@@ -139,6 +139,11 @@
 <% content_for :script do %>
  <script type="text/javascript">
 
+    var current_price_list_array = function(pricelist){
+     var price_list_array = pricelist.split(",")
+     return price_list_array
+    };
+
    var dispatcher = new WebSocketRails($('#market_event_list').data('uri'), true);
 
    $(function(){
@@ -193,11 +198,6 @@
     
     var get_company_name = function(name){
        get_company_info(name,dispatcher);
-    };
-
-    var current_price_list_array = function(pricelist){
-     var price_list_array = pricelist.split(",")
-     return price_list_array
     };
 
     var get_company_info  = function(company_name,dispatcher){

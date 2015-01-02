@@ -13,10 +13,10 @@ require "json"
 	    if user_signed_in?
 	        @receive = params[:receive] 
 	        @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
-            send_message :notification_update, :notice => @notifications_list
+          send_message :notification_update, :notice => @notifications_list
         else
 	        @not_signed_in = "You are not signed in.Please sign in first."
-            send_message :notification_update, :notice =>  @not_signed_in
+          send_message :notification_update, :notice =>  @not_signed_in
         end
     end  ##end of #notification updates   
 
@@ -47,8 +47,8 @@ require "json"
                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
                        @success = 1
                     else
-                        flash[:error] = "Not Enough Cash to trade #{@numofstock} stocks of #{@stock_bought.stockname}.You can get cash by mortgaging stocks at the Bank."
-                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                       flash[:error] = "Not Enough Cash to trade #{@numofstock} stocks of #{@stock_bought.stockname}.You can get cash by mortgaging stocks at the Bank."
+                       @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                     end
                else
                   flash[:error] = "Invalid trade parameters.Please check and try again."
@@ -62,16 +62,11 @@ require "json"
 
                @stockall = Stock.all
                if @success == 1
-                    stock_ajax_handler_helper(@stockall)
-                      # WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
-                    # broadcast_message :stock_ajax_handler, :sent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}  
+                  stock_ajax_handler_helper(@stockall)
                else
-                    stock_ajax_handler_helper(@stockall)
-                    # WebsocketRails[:stocks].trigger(:channel_update_stock_user, "true")
-                    # broadcast_message :stock_ajax_handler, :ent_stock_data => { :current_user => current_user.id,:stock_update => @stockall}
-               end
-                ## end update block send response to client
-           
+                  stock_ajax_handler_helper(@stockall)
+               end ## end update block send response to client
+               
            else
               send_message :stock_ajax_handler, flash[:error]
               redirect_to :action => 'index'
@@ -196,9 +191,23 @@ require "json"
      def update_modal_partials
       if user_signed_in?
         page = data[:page]
-        # @notifications_paginate = Notification.page(page).per(10)
-        @market_events_paginate = MarketEvent.page(page).per(10)
-        update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@market_events_paginate, @market_events_paginate)
+        
+       if data[:type] == "market"
+         skip = page.to_f*7
+         @market_events_count = MarketEvent.count/7
+         MarketEvent.connection.clear_query_cache
+         @market_events_paginate = MarketEvent.limit(7).offset(skip)
+         update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@market_events_paginate, @market_events_paginate)
+         update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@market_events_count, @market_events_count)
+       end
+
+       if data[:type] == "notice"
+        skip = page.to_f*7
+        @notifications_count = Notification.count/7
+        @notifications_paginate = Notification.limit(7).offset(skip)
+        update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_paginate, @notifications_paginate)
+        update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_count, @notifications_count)
+       end      
 
         data = {}
         data = load_data_with_partials(data)

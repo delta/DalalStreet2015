@@ -19,7 +19,9 @@ layout "../dalal_dashboard/layout/layout.html.erb"
        #######.................redirect to main page if user not valid ..............instead it is redirecting now to /user/sign_in...which is not correct
   		 #######....Wats the limit of stocks user can buy from stocksinmarket,,how much he can bid for etc.........###########################
   		 #######....wat to do if sum of total stock is zero in stock_useds ..........................#########################
-  		 @user = User.find(current_user)
+  		 ########....................... current user cash doesnt get rendered all the time ............................##################
+       ####### .................... add market capital to dalal and company page .....................#####################
+       @user = User.find(current_user)
   		 redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
   		else
   		 redirect_to :action => 'index'	
@@ -34,14 +36,18 @@ def show
 	       else
             @stocks_list = Stock.all
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(5).reverse
-            @notifications_paginate = Notification.page(params[:page]).per(10)
+            
+            @notifications_paginate = Notification.limit(7).offset(0) 
+            @notifications_count = Notification.count/7       
+            @market_events_paginate = MarketEvent.limit(7).offset(0)
+            @market_events_count = MarketEvent.count/7
+            
             @stocks = Stock.return_bought_stocks(current_user.id)
            if !@stocks.blank?
-                @stock = @stocks[0]
-                @stock_price = Stock.read_current_price(@stock.id)
-                @market_event_list  = MarketEvent.get_events(7,@stocks[0].id)
-                @market_events_paginate = MarketEvent.page(params[:page]).per(10)
-            else
+              @stock = @stocks[0]
+              @stock_price = Stock.read_current_price(@stock.id)
+              @market_event_list  = MarketEvent.get_events(7,@stocks[0].id)
+              else
                 @no_stock_found = "You have not bought any stocks yet"
 	          end
             @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
@@ -49,6 +55,7 @@ def show
             if @mortgage.blank?
                @no_mortgage_found = "You have not mortgaged any stocks yet."
             end
+            
             @news_feed = MarketEvent.first
             @class_show_active = "class=active"
          end
@@ -64,8 +71,10 @@ def show
 	        	@stocks_list = Stock.all
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-            @notifications_paginate = Notification.page(params[:page]).per(10)
-            @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+            @notifications_paginate = Notification.limit(7).offset(0) 
+            @notifications_count = Notification.count/7       
+            @market_events_paginate = MarketEvent.limit(7).offset(0)
+            @market_events_count = MarketEvent.count/7
             @class_stock_active = "class=active"
          else
 	          redirect_to :action => 'index'
@@ -79,8 +88,10 @@ def show
 	           @stocks_list = Stock.all
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
              @no_stock_found = nil
-             @notifications_paginate = Notification.page(params[:page]).per(10)
-             @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+             @notifications_paginate = Notification.limit(7).offset(0) 
+             @notifications_count = Notification.count/7     
+             @market_events_paginate = MarketEvent.limit(7).offset(0)
+             @market_events_count = MarketEvent.count/7
              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
              @class_buy_sell_active = "class=active"
              @buy_history = Buy.select("stock_id,numofstock,price").where('stock_id' => @stock.id).last(3).reverse
@@ -108,23 +119,23 @@ def show
 	                if @user_cash_inhand.cash.to_f >= @numofstock_buy_for.to_f*@bid_price.to_f 
 		                @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
 		                flash[:notice] = "Successful Bid."
-                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
                         ## call comparator ##can be made efficient
-                        @comparator = User.comparator(params[:identity_buy].split("_")[0])
+                    @comparator = User.comparator(params[:identity_buy].split("_")[0])
 		                redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
 	                else
 	                	flash[:error] = "Buy request failed.You only have $ #{@user_cash_inhand.cash}."
-                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
-                        redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
+                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                    redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
 	                end
 	            else
 	            	flash[:error] = "Buy request failed.There are only #{@stock.stocksinmarket} stocks in the market."
-                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
-	                redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
+                @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+	               redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
 	            end
 
 	  		 elsif params[:identity_sell]
-	  		    @stockid = params[:identity_sell].split("_")[1]
+	  		        @stockid = params[:identity_sell].split("_")[1]
                 @numofstock_sell_for = params[:num_of_stock]
                 @ask_price = params[:sell]
                 @user_stock_inhand = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.id' => @stockid ).group("stock_id")
@@ -138,7 +149,7 @@ def show
                 	redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
                 else
                 	flash[:error] = "Sell request failed.You only have #{@user_stock_inhand[0].totalstock} stocks of #{@user_stock_inhand[0].stockname}."
-                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                  @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
               		redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'buy_sell_page'
                 end
              else
@@ -159,8 +170,10 @@ def show
              @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id").first
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	           @notifications_list = Notification.get_notice(current_user.id,10)
-             @notifications_paginate = Notification.page(params[:page]).per(10)
-             @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+             @notifications_paginate = Notification.limit(7).offset(0) 
+             @notifications_count = Notification.count/7      
+             @market_events_paginate = MarketEvent.limit(7).offset(0)
+             @market_events_count = MarketEvent.count/7
              @class_bank_active = "class=active"
        else
 	       redirect_to :action => 'index'
@@ -202,8 +215,10 @@ def show
         	@sell_history = Sell.select("stock_id,numofstock,updated_at,priceexpected").where('user_id' => current_user.id).last(10).reverse
 	        @notifications_list = Notification.get_notice(current_user.id,10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-          @notifications_paginate = Notification.page(params[:page]).per(10)
-          @market_events_paginate = MarketEvent.page(params[:page]).per(10)
+          @notifications_paginate = Notification.limit(7).offset(0) 
+          @notifications_count = Notification.count/7       
+          @market_events_paginate = MarketEvent.limit(7).offset(0)
+          @market_events_count = MarketEvent.count/7
           @stocks_list = Stock.all
           @class_history_active = "class=active"
         else
@@ -220,17 +235,14 @@ def show
         @stock_list = Stock.pluck(:stockname)
         @stock_price = Stock.read_current_price(@stock.id)
         @notifications_list = Notification.get_notice(current_user.id,10)
-        @notifications_paginate = Notification.page(params[:page]).per(10)
-        @market_events_paginate = MarketEvent.page(params[:page]).per(10)
         @class_company_active = "class=active"
-        @stocks_list = Stock.all
         
-        respond_to do |format|
-         format.js
-         format.html
-        end
-
-      else
+        @stocks_list = Stock.all
+        @notifications_paginate = Notification.limit(7).offset(0) 
+        @notifications_count = Notification.count/7       
+        @market_events_paginate = MarketEvent.limit(7).offset(0)
+        @market_events_count = MarketEvent.count/7
+     else
 	      redirect_to :action => 'index'
 	    end
     end

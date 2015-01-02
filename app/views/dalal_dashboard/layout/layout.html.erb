@@ -171,8 +171,8 @@
           <div class="modal-content contcustom">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <br>         
-                <div class="modal-body" id="marketevent_modal_partial">
-                <%= render partial:"dalal_dashboard/partials/marketevent_modal_partial",locals: { market_events_paginate: @market_events_paginate } %>
+                <div class="modal-body">
+                <%= render partial:"dalal_dashboard/partials/marketevent_modal_partial",locals: { market_events_paginate: @market_events_paginate,market_events_count: @market_events_count } %>
                 </div>
               </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
@@ -185,7 +185,7 @@
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <br>         
                 <div class="modal-body">
-                <%= render partial:"dalal_dashboard/partials/notification_modal_partial",locals: {notifications_paginate: @notifications_paginate} %>
+                <%= render partial:"dalal_dashboard/partials/notification_modal_partial",locals: {notifications_paginate: @notifications_paginate, notifications_count: @notifications_count} %>
                 </div>
               </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
@@ -236,16 +236,12 @@
           });
           requestAnimationFrame(currencySlide);
   })();
-
-   // $(".pagination a").click(function() {
-   //       var url = event.target+'';
-   //       var num = url.split('=')[1];
-   //       update_modal_partials(num);
-   //  });
     
-    var update_modal_partials = function(num){
+    var update_modal_partials = function(num,type){
 
-         var data = {page: num};
+         var data = {page: num,
+                     type: type
+                    };
 
          var success = function(response) {
                   console.log("Wow it worked: "+response.message);
@@ -256,12 +252,12 @@
                    console.log("That just totally failed: "+response.message);
                   };
 
-         dispatcher.bind('update_modal_partials', function(company_value) {
-                      console.log(company_value);
+         dispatcher.bind('update_modal_partials', function(modal_value) {
+                      console.log(modal_value);
                       var rs = new RestfulWebsockets();
-                      rs.refresh(show_value);
+                      rs.refresh(modal_value);
                          
-      });
+          });
      
          dispatcher.trigger('update_modal_partials', data, success, failure);   
 
