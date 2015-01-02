@@ -42,7 +42,7 @@
                     <ul class="dropdown-menu message-dropdown">
                         <% @notifications_list.each do |notice|%>
                         <li class="message-preview">
-                            <a href="#">
+                            <a href="#" class="dropdown-toggle disabled">
                                 <div class="media">
                                     <span class="pull-left">
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
@@ -67,21 +67,21 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
                     <ul class="dropdown-menu alert-dropdown">
                         <li>
-                            <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
+                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-default">Alert Badge</span></a>
                         </li>
                         <li>
-                            <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
+                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-primary">Alert Badge</span></a>
                         </li>
                         <li>
-                            <a href="#">Alert Name <span class="label label-success">Alert Badge</span><Bank Loan                      </li>
+                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-success">Alert Badge</span><Bank Loan                      </li>
                         <li>
-                            <a href="#">Alert Name <span class="label label-info">Alert Badge</Company Profile</a>
+                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-info">Alert Badge</Company Profile</a>
                         </li>
                         <li>
-                            <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
+                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-warning">Alert Badge</span></a>
                         </li>
                         <li>
-                            <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
+                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-danger">Alert Badge</span></a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -93,13 +93,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><%= current_user.username %><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                            <a href="#" class="dropdown-toggle disabled"><i class="fa fa-fw fa-user"></i> Profile</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                            <a href="#" class="dropdown-toggle disabled"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                            <a href="#" class="dropdown-toggle disabled"><i class="fa fa-fw fa-gear"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -168,7 +168,7 @@
 
         <div class="modal" id="marketevent_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" <% {:is_active => true} %> > 
         <div class="modal-dialog">
-          <div class="modal-content contcustom">
+          <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <br>         
                 <div class="modal-body">
@@ -181,7 +181,7 @@
 
         <div class="modal" id="notification_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" <% {:is_active => true} %>> 
         <div class="modal-dialog">
-          <div class="modal-content contcustom">
+          <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <br>         
                 <div class="modal-body">
@@ -200,19 +200,6 @@
    <%= yield :style %>
 
    <script type="text/javascript">
-
-   $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
-      var $target = $( event.currentTarget );
-      $target.closest( '.btn-group' )
-         .find( '[data-bind="label"]' ).text( $target.text() )
-            .end()
-         .children( '.dropdown-toggle' ).dropdown( 'toggle' );
-      
-      console.log("executed");
-         
-      return false;
-
-   });
 
    $('#notification_modal').modal('hide');
    $('#marketevent_modal').modal('hide');
