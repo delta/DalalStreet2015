@@ -1,0 +1,45 @@
+<%= form_for @market_event,:html=>{:class => "form-vertical",:role=>"form",:method=>"get"} , url:{action: "market_events"} do |f| %>
+				<%= render 'shared/error_messages', object: @market_event %>
+				
+				<div class="form-group">	
+					<div class="col-sm-4">
+						<span class="input-group-addon">Stock ID</span>
+						<%= f.text_field :stock_id %>
+					</div>
+				</div>
+				<div class="form-group">	
+					<div class="col-sm-4">
+						<span class="input-group-addon">EventName</span>
+						<%= f.text_field :eventname %>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-4">
+						<span class="input-group-addon">EventType</span>
+						<%= f.text_field :event_type %>
+					</div>
+				</div>
+				<div class="form-group">	
+					
+					<div class="col-sm-4">
+						<span class="input-group-addon">EventTurn</span>
+						<%= f.text_field :event_turn %>
+					</div>
+				</div>
+				<div class="form-group">	
+					<div class="col-sm-4">
+						<span class="input-group-addon">Event</span>
+						<%= f.text_field :event %>
+					</div>
+				</div>
+				<div class="form-group">	
+					
+					<div class="col-sm-4">
+						<span class="input-group-addon">EventDone</span>
+						<%= f.text_field :event_done %>
+					</div>
+				</div>
+					<%=	hidden_field_tag :token, code %>
+				
+				<%= f.submit "Go", class: "btn btn-medium btn-success center-block",style:"position:relative;top:15px;" %>
+<% end %>

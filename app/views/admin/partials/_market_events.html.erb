@@ -1,0 +1,39 @@
+<%= will_paginate @allEvent %>
+
+						<% eventList=["Stock ID","Event Name","Event Type","Event turn","Event","Event Done","Current Price",] %>	
+						<table class="table table-hover table-condensed table-bordered" > 
+							<thead>
+								<tr>
+									<% (0..6).each do |i| %>
+										<th> <%= eventList[i] %> </th>
+									<% end %>
+								</tr>
+							</thead>
+							<tbody> 
+								<% @allEvent.each do |f| %>
+									<tr>	
+										<td><%= f.stock_id %></td>
+										<td><%= f.eventname %></td>
+										<td><%= f.event_type %></td>
+										<td><%= f.event_turn %></td>
+										<td><%= f.event %></td>
+										<td><%= f.event_done %></td>
+										<td>	<% @stock.each do |s| %>
+													<% if s.id == f.stock_id %>
+														<%= s.currentprice  %>
+													<% end %>
+												<% end %>
+										</td>	
+										<td>
+											<form method="get" >
+									           	<%=	hidden_field_tag :stk, f.stock_id %>
+												<%= submit_tag "Remove", class: "btn btn-sm btn-danger",data: { confirm: "Are you sure?"},style:"width:100%;background-color:rgb(249, 53, 53);" %>
+											</form>
+										</td>
+
+										
+									</tr>
+								<% end %>
+							</tbody>
+						</table>
+<%= will_paginate @allEvent %>

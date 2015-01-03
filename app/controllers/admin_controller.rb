@@ -61,6 +61,8 @@ class AdminController < ApplicationController
         if !user_signed_in?
             render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
         else
+
+
             @market_event=MarketEvent.new
             # for deleting market records
             if params[:stk]
@@ -106,7 +108,8 @@ class AdminController < ApplicationController
                 
             else
                 @allEvent="Event Empty. Please add new Events"    
-            end    
+            end  
+            
         end
         
     end
