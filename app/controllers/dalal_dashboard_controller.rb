@@ -21,6 +21,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
   		 #######....wat to do if sum of total stock is zero in stock_useds ..........................#########################
   		 ########....................... current user cash doesnt get rendered all the time ............................##################
        ####### .................... add market capital to dalal and company page .....................#####################
+       ###### ....... some webscokets dont run without the show page being loaded ...................##############
        @user = User.find(current_user)
   		 redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
   		else
@@ -37,9 +38,9 @@ def show
             @stocks_list = Stock.all
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(5).reverse
             
-            @notifications_paginate = Notification.limit(7).offset(0) 
+            @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
             @notifications_count = Notification.count/7       
-            @market_events_paginate = MarketEvent.limit(7).offset(0)
+            @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
             @market_events_count = MarketEvent.count/7
             
             @stocks = Stock.return_bought_stocks(current_user.id)
@@ -71,9 +72,9 @@ def show
 	        	@stocks_list = Stock.all
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-            @notifications_paginate = Notification.limit(7).offset(0) 
+            @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
             @notifications_count = Notification.count/7       
-            @market_events_paginate = MarketEvent.limit(7).offset(0)
+            @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
             @market_events_count = MarketEvent.count/7
             @class_stock_active = "class=active"
          else
@@ -170,9 +171,9 @@ def show
              @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id").first
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
 	           @notifications_list = Notification.get_notice(current_user.id,10)
-             @notifications_paginate = Notification.limit(7).offset(0) 
+             @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
              @notifications_count = Notification.count/7      
-             @market_events_paginate = MarketEvent.limit(7).offset(0)
+             @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
              @market_events_count = MarketEvent.count/7
              @class_bank_active = "class=active"
        else
@@ -215,9 +216,9 @@ def show
         	@sell_history = Sell.select("stock_id,numofstock,updated_at,priceexpected").where('user_id' => current_user.id).last(10).reverse
 	        @notifications_list = Notification.get_notice(current_user.id,10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-          @notifications_paginate = Notification.limit(7).offset(0) 
+          @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
           @notifications_count = Notification.count/7       
-          @market_events_paginate = MarketEvent.limit(7).offset(0)
+          @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
           @market_events_count = MarketEvent.count/7
           @stocks_list = Stock.all
           @class_history_active = "class=active"
@@ -238,9 +239,9 @@ def show
         @class_company_active = "class=active"
         
         @stocks_list = Stock.all
-        @notifications_paginate = Notification.limit(7).offset(0) 
+        @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
         @notifications_count = Notification.count/7       
-        @market_events_paginate = MarketEvent.limit(7).offset(0)
+        @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
         @market_events_count = MarketEvent.count/7
      else
 	      redirect_to :action => 'index'

@@ -184,7 +184,7 @@
           <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <br>         
-                <div class="modal-body">
+                <div class="modal-body" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                 <%= render partial:"dalal_dashboard/partials/notification_modal_partial",locals: {notifications_paginate: @notifications_paginate, notifications_count: @notifications_count} %>
                 </div>
               </div><!-- /.modal-content -->
@@ -224,6 +224,8 @@
           requestAnimationFrame(currencySlide);
   })();
     
+    // var dispatcher = new WebSocketRails($('.table').data('uri'), true);
+
     var update_modal_partials = function(num,type){
 
          var data = {page: num,
