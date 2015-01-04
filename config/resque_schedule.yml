@@ -1,5 +1,12 @@
+load_company_events:
+  every: 40s
+  class: CompanyEvent
+  args:
+  description: Runs the perform method in CompanyEvent
+
 load_company:
   every: 10s
   class: Company
   args:
   description: Runs the perform method in Company
+

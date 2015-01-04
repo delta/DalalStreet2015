@@ -22,6 +22,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
   		 ########....................... current user cash doesnt get rendered all the time ............................##################
        ####### .................... add market capital to dalal and company page .....................#####################
        ###### ....... some webscokets dont run without the show page being loaded ...................##############
+       ###### ...............remember to change active record gem sqlite file in server gem....................................#############
        @user = User.find(current_user)
   		 redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
   		else
@@ -209,6 +210,12 @@ def show
 	    	  redirect_to :action => 'index'
 	    	end ##end of user_signed_in
     end##end of bank_mortgage
+
+    def bank_return_stock
+        if user_signed_in?
+            
+        end 
+    end
 
 	  def buy_sell_history
         if user_signed_in?

@@ -54,13 +54,10 @@ class MarketEvent < ActiveRecord::Base
     end
   end ##acquire def end
 
-
-
-############### modify event runner for all events ###################################################################################
   def self.event_runner
     @running_events = MarketEvent.where("event_done" => 0).all
     if !@running_events.blank?
-  	   @running_events.each do |market_event|
+  	    @running_events.each do |market_event|
   	       if market_event.event_type == 0 ##negative event
   	          @stockname = Stock.select("*").where(:id => market_event.stock_id).first     
   	          @stockname.currentprice = @stockname.currentprice.to_f - @stockname.currentprice.to_f*[0.01,0.02,0.025,0.013,0.032].sample
@@ -81,7 +78,7 @@ class MarketEvent < ActiveRecord::Base
   	       if market_event.save
   	        @log = Company.custom_logger("save success")
   	       end
-         end
+        end
     else
       @log = Company.custom_logger("No event companies found");
     end           
