@@ -21,7 +21,6 @@ require "json"
     end  ##end of #notification updates   
 
    def stock_ajax_handler
-       
            if user_signed_in?
               @success = 0
               @numofstock = data[:value]
@@ -33,7 +32,7 @@ require "json"
             if @stockidbought && @numofstock ##main if block 1 enters only if ajax variables are recieved
                @stock_bought = Stock.find(@stockidbought)
 
-               if @stock_bought.stocksinexchange > @numofstock and @numofstock > 0
+               if @stock_bought.stocksinexchange > @numofstock and @numofstock > 0 and @numofstock <= 10
                   @total_price_of_bought_stock = @numofstock*@stock_bought.currentprice
                   @user_cash_inhand = User.find(current_user.id)
                     if @user_cash_inhand.cash - @total_price_of_bought_stock > 0
@@ -51,10 +50,14 @@ require "json"
                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                     end
                else
-                  flash[:error] = "Invalid trade parameters.Please check and try again."
-                  @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
+                  if @numofstock > 10
+                    flash[:error] = "You cannot trade more than 10 stocks at a time.Trade failed."
+                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
+                  else
+                    flash[:error] = "Invalid trade parameters.Please check and try again."
+                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
+                  end
                end      
-
             else
                flash[:error] = "Did not receive request #{@numofstock} stocks of #{@stock_bought.stockname}.TRADE FAILED"
                @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3) 
@@ -175,9 +178,17 @@ require "json"
       if user_signed_in?
         id = data[:id]
         @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stock_useds.stock_id' => id).group("stock_id").first
-        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+        @mortgage = Stock.joins(:banks).select("*,banks.numofstock*stocks.currentprice as netcash").where("banks.user_id" => current_user.id,"banks.stock_id" => id)
+        @no_mortgage = nil
+        
+        if @mortgage.blank?
+         @no_mortgage = "You have not mortgaged any stocks of #{@stock.stockname} yet."
+        end
+          
         update_partial_input('dalal_dashboard/partials/bank_mortgage_partial', :@stock, @stock)
-
+        update_partial_input('dalal_dashboard/partials/bank_mortgage_partial', :@mortgage, @mortgage)
+        update_partial_input('dalal_dashboard/partials/bank_mortgage_partial', :@no_mortgage, @no_mortgage)
+        
         data = {}
         data = load_data_with_partials(data)
         send_message :bank_mortgage_partial_render, data
@@ -190,7 +201,7 @@ require "json"
 
      def update_modal_partials
       if user_signed_in?
-        page = data[:page]
+         page = data[:page]
         
        if data[:type] == "market"
          skip = page.to_f*7
@@ -202,20 +213,20 @@ require "json"
        end
 
        if data[:type] == "notice"
-        skip = page.to_f*7
-        @notifications_count = Notification.count/7
-        @notifications_paginate = Notification.limit(7).offset(skip)
-        update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_paginate, @notifications_paginate)
-        update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_count, @notifications_count)
+         skip = page.to_f*7
+         @notifications_count = Notification.count/7
+         @notifications_paginate = Notification.limit(7).offset(skip)
+         update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_paginate, @notifications_paginate)
+         update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_count, @notifications_count)
        end      
 
-        data = {}
-        data = load_data_with_partials(data)
-        send_message :update_modal_partials, data
-        else
-          flash[:error] = "You have encountered an unexpected error.Please login and Try again."
-          redirect_to :action => 'index'
-        end
+       data = {}
+       data = load_data_with_partials(data)
+       send_message :update_modal_partials, data
+      else
+       flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+       redirect_to :action => 'index'
+      end
      end 
 end ## end of socket controller
  

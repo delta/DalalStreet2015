@@ -1,16 +1,5 @@
-        <div id ="bank_mortgage_partial">
+    <div id ="bank_mortgage_partial">
          <div class="row">
-                  <div class="col-lg-12">
-                    <div id="ajax_notice">
-                    </div>
-                    <% if flash[:notice] %>
-                    <div class="notice"><%= flash[:notice] %></div>
-                    <% end %>
-                    <% if flash[:error] %>
-                    <div class="error"><%= flash[:error] %></div>
-                    <% end %>
-                  </div>
-
                   <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -33,10 +22,10 @@
                                         </thead>
                                         <tbody id="render_tbody">
                                              <tr>
-                                              <% if @stock.updown == 1%>
+                                                <%if @stock.updown == 1%>
                                                     <% @color="style=color:green"%> 
                                                     <% @image="src=/assets/up-arrow.jpg"%> 
-                                                <% else %> 
+                                                <%else%> 
                                                     <% @color="style=color:red" %>
                                                     <% @image="src=/assets/stock_down.gif"%> 
                                                 <%end%>
@@ -67,9 +56,7 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Mortgage Panel</h3>
                             </div>
                             <div class="panel-body">
-                            
-                            <div class="panel-body">    
-                   <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'bank_mortgage_stock'},{:id => "form_bank", :class => 'bank_mort', :method => 'post', :name=>"form_bank", :role=>"form"}) do |f|%>
+                                      <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'bank_mortgage_stock'},{:id => "form_bank", :class => 'bank_mort', :method => 'post', :name=>"form_bank", :role=>"form"}) do |f|%>
                                       <div class="form-group">
                                       <%= label_tag "num_of_stock","Stocks to Mortgage"%>
                                       <%= text_field_tag "num_of_stock","",{:onkeypress =>"return isNumber(event);"}%>
@@ -77,13 +64,45 @@
                                       <%= hidden_field_tag "identity_bank","bank_#{@stock.id}"%><br>
                                       <%= submit_tag "Mortgage" %>
                                      <% end %>
-                           </div>    
-                            
-                                <div class="text-right">
-                                    <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
                             </div>
                         </div>
                   </div>
+                  <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Returns</h3>
+                            </div>
+                              <div class="panel-body">
+                                <% if !@no_mortgage.blank? %>
+                                  <%= @no_mortgage %>
+                                <% else %>
+                                <div class="table-responsive">
+                                     <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>MortgagedPrice</th>
+                                                <th>StockMortgaged</th>
+                                                <th>Return</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody id="render_tbody_show">
+                                            <% @mortgage.each do |stock| %>
+                                                <tr>
+                                                    <td><%=stock.pricerendered.round(2) %></td>
+                                                    <td><%=stock.numofstock %></td>
+                              <td><%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'bank_return_stock'},{:class => 'bank_return_table', :method => 'post', :role=> "form"}) do |f|%>
+                              <%= hidden_field_tag "identity_bankreturn","bank_#{stock.id}"%><%= submit_tag "Return" %></td>
+                                                 <% end %>
+                                                </tr>
+                                            <% end %>
+                                        </tbody>
+                                     </table>
+                                    </div>
+                                <% end %>
+
+                              </div>
+                        </div> 
+                  </div>
               </div> <!--row -->
-              </div>
+       </div>

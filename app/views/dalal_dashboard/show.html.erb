@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Dalal Panel <small>Statistics Overview</small>
+                            Dalal Street <small>Statistics Overview</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
@@ -18,7 +18,6 @@
                 <!-- /.row -->
 
                 <%= render partial:"dalal_dashboard/partials/panel_dashboard_partial",locals: { stocks_list: @stocks_list }%>
-               
                
                 <!-- /.row -->
                 <div class="row">
@@ -172,7 +171,6 @@
                                                 <th>Current (USD)</th>
                                                 <th>MortgagedPrice</th>
                                                 <th>StockMortgaged</th>
-                                                <th>StockWorth</th>
                                             </tr>
                                         </thead>
                                         
@@ -192,7 +190,6 @@
                                                     <td <%=@color%> ><%=stock.currentprice.round(2) %><span><img <%=@image%> style="width:7px;height:7px;"></img></span></td>
                                                     <td><%=stock.pricerendered.round(2) %></td>
                                                     <td><%=stock.numofstock %></td>
-                                                    <td><%=stock.netcash.round(2) %></td>
                                                 </tr>
                                             <% end %>     
                                         </tbody>
@@ -240,270 +237,17 @@
 
 <% content_for :script do %>
  <script type="text/javascript">
-
-    var dispatcher = new WebSocketRails($('.table').data('uri'), true);
-
-     $(function(){
-
-      var canvas = document.getElementById("canvas_line");
-      var ctx1 = document.getElementById("canvas_line").getContext("2d");
-      ctx1.clearRect(0, 0, canvas.width, canvas.height);
-
-      var pricelist = current_price_list_array('<%=@stock_price%>');
-      var label = [];
-      pricelist.splice(pricelist.length-1, 1);
-      
-         for(var i = 0; i<pricelist.length; i++)
-             label.push(i);
-      
-       var lineChartData = {
-            labels : label,
-            datasets : [
-                {
-                    label: "My First dataset",
-                    fillColor : "rgba(255,0,0,0.1)",
-                    strokeColor : "rgba(220,0,0,0.3)",
-                    pointColor : "rgba(220,0,0,0.3)",
-                    pointStrokeColor : "#fff",
-                    pointHighlightFill : "#fff",
-                    pointHighlightStroke : "rgba(220,0,0,0.3)",
-                    data : pricelist
-                }]
-        };
-
-            window.myLine = new Chart(ctx1).Line(lineChartData, {
-                    responsive: true,
-                });
-
-            myLine.destroy();
-
-
-      var channel = dispatcher.subscribe('show');
-
-      dispatcher.on_open = function(){
-        console.log("Connection established");
-      };
-
-      channel.bind('show_channel', function(get_value) {
-        get_userstock_info(get_value,dispatcher);
-      });
-    });
-
-     function round(value, decimals) {
-       return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 
-    }
-
-    var get_userstock_info  = function(bool,dispatcher){
-
-         var sent = {receive: bool};
-
-         var success = function(response) {
-                  console.log("Wow it worked: "+response.message);
-                  //dispatcher.unbind('notification_update');
-                  };
-
-         var failure = function(response) {
-                   console.log("That just totally failed: "+response.message);
-                  };
-
-             dispatcher.bind('update_stock_user', function(show_value) {
-
-                      console.log(show_value);
-                      var rs = new RestfulWebsockets();
-                      rs.refresh(show_value);
-                         
-      });
-     
-         dispatcher.trigger('update_stock_user', sent, success, failure); 
-
-    }; 
-            
-   var get_company_name = function(name){
-       get_company_info(name,dispatcher);
-    };
-
-    var current_price_list_array = function(pricelist){
-     var price_list_array = pricelist.split(",")
-     return price_list_array
-    };
-
-    var get_company_info  = function(company_name,dispatcher){
-
-         var data = {name: company_name};
-
-         var success = function(response) {
-                  console.log("Wow it worked: "+response.message);
-                  //dispatcher.unbind('notification_update');
-                  };
-
-         var failure = function(response) {
-                   console.log("That just totally failed: "+response.message);
-                  };
-
-             dispatcher.bind('company_handler', function(get_value) {
-                  console.log(get_value);
-                  console.log(get_value.sent_data.price_list);
-                  console.log(get_value.sent_data.stock_details);
-                  chart_loader(current_price_list_array(get_value.sent_data.price_list));
-                        
-             if (get_value.sent_data.market_list.length >= 7)
-                var length = 7;
-             else
-                var length = get_value.sent_data.market_list.length;
-
-             for(var i = 0; i < length; i++) {
-                           
-                           var obj = get_value.sent_data.market_list[i];
-                 
-                           var fill_table = fill_table+'<a href="#" class=\"list-group-item\"><span class=\"badge\">'+obj.updated_at+'</span><i class=\"fa fa-fw fa-check\"></i>'+obj.eventname+'</a>';
-                            }
-             
-             var stock = get_value.sent_data.stock_details;
-
-             if (stock.updown == 1){
-                 var color = 'green'; 
-                 var img = 'src=/assets/up-arrow.jpg';}                  
-             else
-                {var color = 'red';
-                 var img = 'src=/assets/stock_down.gif';}
-                  
-             var stock_table = stock_table+'<tr><td>'+stock.stockname+'</td><td>'+round(stock.alltimelow,2)+'</td><td>'+round(stock.alltimehigh,2)+'</td><td>'+round(stock.daylow,2)+'</td><td>'+round(stock.dayhigh,2)+'</td><td style="color:'+color+'">'+round(stock.currentprice,2)+'<span><img '+img+' style="width:7px;height:7px;"></img></span></td><td>'+stock.stocksinmarket+'</td></tr>';
-                            
-                    $("#market_event_list").empty().append(fill_table);
-                    $("#stock_details").empty().append(stock_table);
-
-      });
-     
-         dispatcher.trigger('company_handler', data, success, failure); 
-
-    }; 
-
-     $('#myTab a').click(function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-    });
-
-    var tab_selector = function(id){
-      
-      var pricelist = current_price_list_array('<%=@stock_price%>');
-      var label = [];
-      pricelist.splice(pricelist.length-1, 1);
-      
-         for(var i = 0; i<pricelist.length; i++)
-             label.push(i);
-      
-    if (id == 'mark_cap')
-        {console.log( id );
-        chart_loader2(pricelist);
-        }
-    else
-        chart_loader(pricelist);
-        
-    };
-
-
-    var chart_loader = function(pricelist){
-
-    var canvas = document.getElementById("canvas_line");
-    var ctx1 = document.getElementById("canvas_line").getContext("2d");
-    ctx1.clearRect(0, 0, canvas.width, canvas.height);
-
-    var min,step,width_div=[],label=[];   
-        
-    var manipulator = function(pricelist){
-
-        pricelist.splice(pricelist.length-1, 1);
-        
-        Array.min = function(pricelist){
-                      return Math.min.apply( Math, pricelist );
-                    };
-        Array.max = function(pricelist){
-                      return Math.max.apply( Math, pricelist );
-                    };              
-         // min = Array.min(pricelist);
-         // var max = Array.max(pricelist);
-         // step = round((max - min)/10,1);
-         
-         for(var i = 0; i<pricelist.length; i++)
-             label.push(i);
-    
-    //      width_div.push(min-step);
-    //      for(var i = 1; i <11; i++)
-    //          width_div.push(width_div[i-1]+step);
-         };  
-       //process raw - data
-       manipulator(pricelist);
-
-       var lineChartData = {
-            labels : label,
-            datasets : [
-                {
-                    label: "My First dataset",
-                    fillColor : "rgba(255,0,0,0.1)",
-                    strokeColor : "rgba(220,0,0,0.3)",
-                    pointColor : "rgba(220,0,0,0.3)",
-                    pointStrokeColor : "#fff",
-                    pointHighlightFill : "#fff",
-                    pointHighlightStroke : "rgba(220,0,0,0.3)",
-                    data : pricelist
-                }]
-        };  
-            
-            window.myLine = new Chart(ctx1).Line(lineChartData, {
-                    responsive: true,
-                });
-
-            myLine.destroy();
-
-    };         
-
- 
-    var chart_loader2 = function(pricelist){
-
-    var canvas2 = document.getElementById("canvas_line2");
-    var ctx2 = document.getElementById("canvas_line2").getContext("2d");
-    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-
-    var label=[];   
-        
-    var manipulator = function(pricelist){
-        pricelist.splice(pricelist.length-1, 1);
-
-        Array.min = function(pricelist){
-                      return Math.min.apply( Math, pricelist );
-                    };
-        Array.max = function(pricelist){
-                      return Math.max.apply( Math, pricelist );
-                    };              
-    
-         for(var i = 0; i<pricelist.length; i++)
-             label.push(i);
-    };  
-       //process raw - data
-       manipulator(pricelist);
-
-    var lineChartData2 = {
-            labels : label,
-            datasets : [
-                {
-                    label: "My second dataset",
-                    fillColor : "rgba(255,0,0,0.1)",
-                    strokeColor : "rgba(220,0,0,0.3)",
-                    pointColor : "rgba(220,0,0,0.3)",
-                    pointStrokeColor : "#fff",
-                    pointHighlightFill : "#fff",
-                    pointHighlightStroke : "rgba(220,0,0,0.3)",
-                    data : pricelist
-                }]
-        };
-           window.myLine2 = new Chart(ctx2).Line(lineChartData2,  {
-                    responsive: true,
-                });
-
-            myLine2.destroy();
-
-    };         
-
+var dispatcher=new WebSocketRails($(".table").data("uri"),!0);
+$(function(){var b=document.getElementById("canvas_line"),c=document.getElementById("canvas_line").getContext("2d");c.clearRect(0,0,b.width,b.height);var b=current_price_list_array("<%=@stock_price%>"),d=[];b.splice(b.length-1,1);for(var a=0;a<b.length;a++)d.push(a);b={labels:d,datasets:[{label:"My First dataset",fillColor:"rgba(255,0,0,0.1)",strokeColor:"rgba(220,0,0,0.3)",pointColor:"rgba(220,0,0,0.3)",pointStrokeColor:"#fff",pointHighlightFill:"#fff",pointHighlightStroke:"rgba(220,0,0,0.3)",data:b}]};
+window.myLine=(new Chart(c)).Line(b,{responsive:!0});myLine.destroy();c=dispatcher.subscribe("show");dispatcher.on_open=function(){console.log("Connection established")};c.bind("show_channel",function(a){get_userstock_info(a,dispatcher)})});function round(b,c){return Number(Math.round(b+"e"+c)+"e-"+c)}
+var get_userstock_info=function(b,c){var d={receive:b};c.bind("update_stock_user",function(a){console.log(a);(new RestfulWebsockets).refresh(a)});c.trigger("update_stock_user",d,function(a){console.log("Wow it worked: "+a.message)},function(a){console.log("That just totally failed: "+a.message)})},get_company_name=function(b){get_company_info(b,dispatcher)},current_price_list_array=function(b){return b.split(",")},get_company_info=function(b,c){var d={name:b};c.bind("company_handler",function(a){console.log(a);
+console.log(a.sent_data.price_list);console.log(a.sent_data.stock_details);chart_loader(current_price_list_array(a.sent_data.price_list));for(var b=7<=a.sent_data.market_list.length?7:a.sent_data.market_list.length,c=0;c<b;c++)var d=a.sent_data.market_list[c],e=e+'<a href="#" class="list-group-item"><span class="badge">'+d.updated_at+'</span><i class="fa fa-fw fa-check"></i>'+d.eventname+"</a>";a=a.sent_data.stock_details;1==a.updown?(b="green",c="src=/assets/up-arrow.jpg"):(b="red",c="src=/assets/stock_down.gif");
+var f=f+"<tr><td>"+a.stockname+"</td><td>"+round(a.alltimelow,2)+"</td><td>"+round(a.alltimehigh,2)+"</td><td>"+round(a.daylow,2)+"</td><td>"+round(a.dayhigh,2)+'</td><td style="color:'+b+'">'+round(a.currentprice,2)+"<span><img "+c+' style="width:7px;height:7px;"></img></span></td><td>'+a.stocksinmarket+"</td></tr>";$("#market_event_list").empty().append(e);$("#stock_details").empty().append(f)});c.trigger("company_handler",d,function(a){console.log("Wow it worked: "+a.message)},function(a){console.log("That just totally failed: "+
+a.message)})};$("#myTab a").click(function(b){b.preventDefault();$(this).tab("show")});
+var tab_selector=function(b){var c=current_price_list_array("<%=@stock_price%>"),d=[];c.splice(c.length-1,1);for(var a=0;a<c.length;a++)d.push(a);"mark_cap"==b?(console.log(b),chart_loader2(c)):chart_loader(c)},chart_loader=function(b){var c=document.getElementById("canvas_line"),d=document.getElementById("canvas_line").getContext("2d");d.clearRect(0,0,c.width,c.height);var a=[];(function(b){b.splice(b.length-1,1);Array.min=function(a){return Math.min.apply(Math,a)};Array.max=function(a){return Math.max.apply(Math,
+a)};for(var c=0;c<b.length;c++)a.push(c)})(b);b={labels:a,datasets:[{label:"My First dataset",fillColor:"rgba(255,0,0,0.1)",strokeColor:"rgba(220,0,0,0.3)",pointColor:"rgba(220,0,0,0.3)",pointStrokeColor:"#fff",pointHighlightFill:"#fff",pointHighlightStroke:"rgba(220,0,0,0.3)",data:b}]};window.myLine=(new Chart(d)).Line(b,{responsive:!0});myLine.destroy()},chart_loader2=function(b){var c=document.getElementById("canvas_line2"),d=document.getElementById("canvas_line2").getContext("2d");d.clearRect(0,
+0,c.width,c.height);var a=[];(function(b){b.splice(b.length-1,1);Array.min=function(a){return Math.min.apply(Math,a)};Array.max=function(a){return Math.max.apply(Math,a)};for(var c=0;c<b.length;c++)a.push(c)})(b);b={labels:a,datasets:[{label:"My second dataset",fillColor:"rgba(255,0,0,0.1)",strokeColor:"rgba(220,0,0,0.3)",pointColor:"rgba(220,0,0,0.3)",pointStrokeColor:"#fff",pointHighlightFill:"#fff",pointHighlightStroke:"rgba(220,0,0,0.3)",data:b}]};window.myLine2=(new Chart(d)).Line(b,{responsive:!0});
+myLine2.destroy()};
 </script>
 
 <% end %>    
