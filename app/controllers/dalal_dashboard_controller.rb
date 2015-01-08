@@ -25,6 +25,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
        ###### ...............remember to change active record gem sqlite file in server gem....................................#############
        ##### ................. cache important pages and minify assets ..................######################
        ####### localhost tester ..............find a plugin.............#####################################
+       ######### check for null values and rows .......................##############################
        @user = User.find(current_user)
   		 redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
   		else
@@ -257,8 +258,8 @@ def show
                    @stock = Stock.select("currentprice").where('stocks.id' => @mortgage.stock_id).first
                    #### u can just modifify that that record #####
                    @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @mortgage.stock_id,:numofstock => @mortgage.numofstock)
-                   @user.cash = @user.cash - @mortgage.numofstock*@stock.currentprice.to_f
-                   @deducted = (@mortgage.numofstock*@stock.currentprice).round(2);
+                   @user.cash = @user.cash - @mortgage.numofstock.to_f*@stock.currentprice.to_f
+                   @deducted = (@mortgage.numofstock.to_f*@stock.currentprice).round(2);
 
                    if @user.save
                       @mortgage.destroy

@@ -13,9 +13,7 @@
         <% end %>
 
          <div id="paginator">
-         <% @notifications_count.to_i.times do |i| %>
-         <a href="#paginator" <%= "onclick=update_modal_partials('#{i}','notice');" %> ><%="#{i}"%></a>
-         <% end %>  
+         <%= mojo_paginator(@notifications_count,'notice',@active) %>
         </div> 
 
    	    </div>

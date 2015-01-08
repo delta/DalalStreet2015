@@ -202,7 +202,8 @@ require "json"
      def update_modal_partials
       if user_signed_in?
          page = data[:page]
-        
+         @active = page
+         
        if data[:type] == "market"
          skip = page.to_f*7
          @market_events_count = MarketEvent.count/7
@@ -210,6 +211,7 @@ require "json"
          @market_events_paginate = MarketEvent.limit(7).offset(skip)
          update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@market_events_paginate, @market_events_paginate)
          update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@market_events_count, @market_events_count)
+         update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@active, @active)
        end
 
        if data[:type] == "notice"
@@ -218,6 +220,7 @@ require "json"
          @notifications_paginate = Notification.limit(7).offset(skip)
          update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_paginate, @notifications_paginate)
          update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_count, @notifications_count)
+         update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@active, @active)
        end      
 
        data = {}
