@@ -9,7 +9,7 @@
 	   	  <div class="panel-body">
         <%@market_events_paginate.each do |event|%>
         <a class="list-group-item">
-        <span class="badge"><%= event.updated_at%></span>
+        <span class="badge"><%= event.updated_at.strftime("%d%h%r")%></span>
         <i class="fa fa-fw fa-check"></i> <%= event.eventname%> </a> 
         <% end %>
         <div id="paginator">
