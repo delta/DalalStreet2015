@@ -237,17 +237,163 @@
 
 <% content_for :script do %>
  <script type="text/javascript">
-var dispatcher=new WebSocketRails($(".table").data("uri"),!0);
-$(function(){var b=document.getElementById("canvas_line"),c=document.getElementById("canvas_line").getContext("2d");c.clearRect(0,0,b.width,b.height);var b=current_price_list_array("<%=@stock_price%>"),d=[];b.splice(b.length-1,1);for(var a=0;a<b.length;a++)d.push(a);b={labels:d,datasets:[{label:"My First dataset",fillColor:"rgba(255,0,0,0.1)",strokeColor:"rgba(220,0,0,0.3)",pointColor:"rgba(220,0,0,0.3)",pointStrokeColor:"#fff",pointHighlightFill:"#fff",pointHighlightStroke:"rgba(220,0,0,0.3)",data:b}]};
-window.myLine=(new Chart(c)).Line(b,{responsive:!0});myLine.destroy();c=dispatcher.subscribe("show");dispatcher.on_open=function(){console.log("Connection established")};c.bind("show_channel",function(a){get_userstock_info(a,dispatcher)})});function round(b,c){return Number(Math.round(b+"e"+c)+"e-"+c)}
-var get_userstock_info=function(b,c){var d={receive:b};c.bind("update_stock_user",function(a){console.log(a);(new RestfulWebsockets).refresh(a)});c.trigger("update_stock_user",d,function(a){console.log("Wow it worked: "+a.message)},function(a){console.log("That just totally failed: "+a.message)})},get_company_name=function(b){get_company_info(b,dispatcher)},current_price_list_array=function(b){return b.split(",")},get_company_info=function(b,c){var d={name:b};c.bind("company_handler",function(a){console.log(a);
-console.log(a.sent_data.price_list);console.log(a.sent_data.stock_details);chart_loader(current_price_list_array(a.sent_data.price_list));for(var b=7<=a.sent_data.market_list.length?7:a.sent_data.market_list.length,c=0;c<b;c++)var d=a.sent_data.market_list[c],e=e+'<a href="#" class="list-group-item"><span class="badge">'+d.updated_at+'</span><i class="fa fa-fw fa-check"></i>'+d.eventname+"</a>";a=a.sent_data.stock_details;1==a.updown?(b="green",c="src=/assets/up-arrow.jpg"):(b="red",c="src=/assets/stock_down.gif");
-var f=f+"<tr><td>"+a.stockname+"</td><td>"+round(a.alltimelow,2)+"</td><td>"+round(a.alltimehigh,2)+"</td><td>"+round(a.daylow,2)+"</td><td>"+round(a.dayhigh,2)+'</td><td style="color:'+b+'">'+round(a.currentprice,2)+"<span><img "+c+' style="width:7px;height:7px;"></img></span></td><td>'+a.stocksinmarket+"</td></tr>";$("#market_event_list").empty().append(e);$("#stock_details").empty().append(f)});c.trigger("company_handler",d,function(a){console.log("Wow it worked: "+a.message)},function(a){console.log("That just totally failed: "+
-a.message)})};$("#myTab a").click(function(b){b.preventDefault();$(this).tab("show")});
-var tab_selector=function(b){var c=current_price_list_array("<%=@stock_price%>"),d=[];c.splice(c.length-1,1);for(var a=0;a<c.length;a++)d.push(a);"mark_cap"==b?(console.log(b),chart_loader2(c)):chart_loader(c)},chart_loader=function(b){var c=document.getElementById("canvas_line"),d=document.getElementById("canvas_line").getContext("2d");d.clearRect(0,0,c.width,c.height);var a=[];(function(b){b.splice(b.length-1,1);Array.min=function(a){return Math.min.apply(Math,a)};Array.max=function(a){return Math.max.apply(Math,
-a)};for(var c=0;c<b.length;c++)a.push(c)})(b);b={labels:a,datasets:[{label:"My First dataset",fillColor:"rgba(255,0,0,0.1)",strokeColor:"rgba(220,0,0,0.3)",pointColor:"rgba(220,0,0,0.3)",pointStrokeColor:"#fff",pointHighlightFill:"#fff",pointHighlightStroke:"rgba(220,0,0,0.3)",data:b}]};window.myLine=(new Chart(d)).Line(b,{responsive:!0});myLine.destroy()},chart_loader2=function(b){var c=document.getElementById("canvas_line2"),d=document.getElementById("canvas_line2").getContext("2d");d.clearRect(0,
-0,c.width,c.height);var a=[];(function(b){b.splice(b.length-1,1);Array.min=function(a){return Math.min.apply(Math,a)};Array.max=function(a){return Math.max.apply(Math,a)};for(var c=0;c<b.length;c++)a.push(c)})(b);b={labels:a,datasets:[{label:"My second dataset",fillColor:"rgba(255,0,0,0.1)",strokeColor:"rgba(220,0,0,0.3)",pointColor:"rgba(220,0,0,0.3)",pointStrokeColor:"#fff",pointHighlightFill:"#fff",pointHighlightStroke:"rgba(220,0,0,0.3)",data:b}]};window.myLine2=(new Chart(d)).Line(b,{responsive:!0});
-myLine2.destroy()};
+var dispatcher = new WebSocketRails($(".table").data("uri"), !0);
+$(function() {
+    var b = document.getElementById("canvas_line"),
+        c = document.getElementById("canvas_line").getContext("2d");
+    c.clearRect(0, 0, b.width, b.height);
+    var b = current_price_list_array("<%=@stock_price%>"),
+        d = [];
+    b.splice(b.length - 1, 1);
+    for (var a = 0; a < b.length; a++) d.push(a);
+    b = {
+        labels: d,
+        datasets: [{
+            label: "My First dataset",
+            fillColor: "rgba(255,0,0,0.1)",
+            strokeColor: "rgba(220,0,0,0.3)",
+            pointColor: "rgba(220,0,0,0.3)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,0,0,0.3)",
+            data: b
+        }]
+    };
+    window.myLine = (new Chart(c)).Line(b, {
+        responsive: !0
+    });
+    myLine.destroy();
+    c = dispatcher.subscribe("show");
+    dispatcher.on_open = function() {
+        console.log("Connection established")
+    };
+    c.bind("show_channel", function(a) {
+        get_userstock_info(a, dispatcher)
+    })
+});
+
+function round(b, c) {
+    return Number(Math.round(b + "e" + c) + "e-" + c)
+}
+var get_userstock_info = function(b, c) {
+    var d = {
+        receive: b
+    };
+    c.bind("update_stock_user", function(a) {
+        console.log(a);
+        (new RestfulWebsockets).refresh(a)
+    });
+    c.trigger("update_stock_user", d, function(a) {
+        console.log("Wow it worked: " + a.message)
+    }, function(a) {
+        console.log("That just totally failed: " + a.message)
+    })
+}, get_company_name = function(b) {
+        get_company_info(b, dispatcher)
+    }, current_price_list_array = function(b) {
+        return b.split(",")
+    }, get_company_info = function(b, c) {
+        var d = {
+            name: b
+        };
+        c.bind("company_handler", function(a) {
+            console.log(a);
+            console.log(a.sent_data.price_list);
+            console.log(a.sent_data.stock_details);
+            chart_loader(current_price_list_array(a.sent_data.price_list));
+            for (var b = 7 <= a.sent_data.market_list.length ? 7 : a.sent_data.market_list.length, c = 0; c < b; c++) var d = a.sent_data.market_list[c],
+            e = e + '<a href="#" class="list-group-item"><span class="badge">' + d.updated_at + '</span><i class="fa fa-fw fa-check"></i>' + d.eventname + "</a>";
+            a = a.sent_data.stock_details;
+            1 == a.updown ? (b = "green", c = "src=/assets/up-arrow.jpg") : (b = "red", c = "src=/assets/stock_down.gif");
+            var f = f + "<tr><td>" + a.stockname + "</td><td>" + round(a.alltimelow, 2) + "</td><td>" + round(a.alltimehigh, 2) + "</td><td>" + round(a.daylow, 2) + "</td><td>" + round(a.dayhigh, 2) + '</td><td style="color:' + b + '">' + round(a.currentprice, 2) + "<span><img " + c + ' style="width:7px;height:7px;"></img></span></td><td>' + a.stocksinmarket + "</td></tr>";
+            $("#market_event_list").empty().append(e);
+            $("#stock_details").empty().append(f)
+        });
+        c.trigger("company_handler", d, function(a) {
+            console.log("Wow it worked: " + a.message)
+        }, function(a) {
+            console.log("That just totally failed: " +
+                a.message)
+        })
+    };
+$("#myTab a").click(function(b) {
+    b.preventDefault();
+    $(this).tab("show")
+});
+var tab_selector = function(b) {
+    var c = current_price_list_array("<%=@stock_price%>"),
+        d = [];
+    c.splice(c.length - 1, 1);
+    for (var a = 0; a < c.length; a++) d.push(a);
+    "mark_cap" == b ? (console.log(b), chart_loader2(c)) : chart_loader(c)
+}, chart_loader = function(b) {
+        var c = document.getElementById("canvas_line"),
+            d = document.getElementById("canvas_line").getContext("2d");
+        d.clearRect(0, 0, c.width, c.height);
+        var a = [];
+        (function(b) {
+            b.splice(b.length - 1, 1);
+            Array.min = function(a) {
+                return Math.min.apply(Math, a)
+            };
+            Array.max = function(a) {
+                return Math.max.apply(Math,
+                    a)
+            };
+            for (var c = 0; c < b.length; c++) a.push(c)
+        })(b);
+        b = {
+            labels: a,
+            datasets: [{
+                label: "My First dataset",
+                fillColor: "rgba(255,0,0,0.1)",
+                strokeColor: "rgba(220,0,0,0.3)",
+                pointColor: "rgba(220,0,0,0.3)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,0,0,0.3)",
+                data: b
+            }]
+        };
+        window.myLine = (new Chart(d)).Line(b, {
+            responsive: !0
+        });
+        myLine.destroy()
+    }, chart_loader2 = function(b) {
+        var c = document.getElementById("canvas_line2"),
+            d = document.getElementById("canvas_line2").getContext("2d");
+        d.clearRect(0,
+            0, c.width, c.height);
+        var a = [];
+        (function(b) {
+            b.splice(b.length - 1, 1);
+            Array.min = function(a) {
+                return Math.min.apply(Math, a)
+            };
+            Array.max = function(a) {
+                return Math.max.apply(Math, a)
+            };
+            for (var c = 0; c < b.length; c++) a.push(c)
+        })(b);
+        b = {
+            labels: a,
+            datasets: [{
+                label: "My second dataset",
+                fillColor: "rgba(255,0,0,0.1)",
+                strokeColor: "rgba(220,0,0,0.3)",
+                pointColor: "rgba(220,0,0,0.3)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,0,0,0.3)",
+                data: b
+            }]
+        };
+        window.myLine2 = (new Chart(d)).Line(b, {
+            responsive: !0
+        });
+        myLine2.destroy()
+    };
+    
 </script>
 
 <% end %>    

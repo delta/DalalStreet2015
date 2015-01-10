@@ -128,11 +128,11 @@
                    console.log("That just totally failed: "+response.message);
                   };
 
-                 dispatcher.bind('notification_update', getnotifications);
+                 dispatcher.bind('notification_update', get_notifications);
                  
                  dispatcher.trigger('notification_update', sent, success, failure); 
                 
-                 function getnotifications(notice) {
+                 function get_notifications(notice) {
                        
                        console.log(notice);
                        console.log(notice.notice[0]);

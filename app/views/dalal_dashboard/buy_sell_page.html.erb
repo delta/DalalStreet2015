@@ -6,7 +6,7 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <br>         
             <div class="modal-body">
-            <%= render partial:"dalal_dashboard/partials/buy_sell_partial",locals: { stock: @stock, no_stock_found: @no_stock_found, buy_history: @buy_history, sell_history: @sell_history } %>
+            <%= render partial:"dalal_dashboard/partials/buy_sell_partial_socket",locals: { stock: @stock, no_stock_found: @no_stock_found, buy_history: @buy_history, sell_history: @sell_history } %>
             </div>
           </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -181,7 +181,7 @@
 
     }; 
 
-     var isNumber= function(evt) {
+     var isNumber = function(evt) {
         evt = (evt) ? evt : window.event;
         var charCode = (evt.which) ? evt.which : evt.keyCode;
         if (charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -189,6 +189,52 @@
         }
         return true;
     };
-</script>
+    
+    var sort_data = function(value){
+      var type = value.split("_")[0];
 
+      if (type == "buy")
+      { var price = document.getElementById("buy").value;
+        var num = document.getElementById("buy_num_of_stock").value;
+      }
+      else if (type == "sell")
+      { var price = document.getElementById("sell").value;
+        var num = document.getElementById("sell_num_of_stock").value;
+      }
+      else
+        alert("Invalid.Please try again.");
+
+      var data = {type_stock: value,
+                  num_of_stock: num,
+                  price: price
+                 };
+
+      return data;
+    };
+
+    var sendvalues = function(value){
+            
+             var data = sort_data(value);        
+
+             var success = function(response) {
+                      console.log("success : "+response.message);
+                      //dispatcher.unbind('notification_update');
+                      };
+
+             var failure = function(response) {
+                       console.log("failure: "+response.message);
+                      };
+
+                 dispatcher.bind('buy_sell_stock_socket', getdata);
+                 dispatcher.trigger('buy_sell_stock_socket', data, success, failure); 
+                
+                 function getdata(get_data) {
+                          var rs = new RestfulWebsockets();
+                          console.log(get_data);
+                          rs.refresh(get_data);
+                    }
+
+    };
+
+</script>
 <% end %>    

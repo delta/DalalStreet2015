@@ -16,7 +16,7 @@
     <%= csrf_meta_tags %>
 
 <script>
-        var limit="0:45"
+        var limit="1:20"
 
         if (document.images){
         var parselimit=limit.split(":")
@@ -33,10 +33,15 @@
         curmin=Math.floor(parselimit/60)
         cursec=parselimit%60
         if (curmin!=0)
-        curtime=curmin+" minutes and "+cursec+" seconds left until page refresh!"
+        {curtime=curmin+":"+cursec
+          if (cursec <= 9)
+           curtime=curmin+":0"+cursec
+        }
         else
-        curtime=cursec+" seconds left until page refresh!"
+        curtime="0:"+cursec
         window.status=curtime
+
+        $("#timer").html( curtime );
         setTimeout("beginrefresh()",1000)
         }
         }
@@ -68,6 +73,10 @@
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
+                <a id="timer"> </a>
+                </li>
+
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
                     <ul class="dropdown-menu message-dropdown">
                         <% @notifications_list.each do |notice|%>
@@ -98,20 +107,6 @@
                     <ul class="dropdown-menu alert-dropdown">
                         <li>
                             <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-default">Alert Badge</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-primary">Alert Badge</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-success">Alert Badge</span><Bank Loan                      </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-info">Alert Badge</Company Profile</a>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-warning">Alert Badge</span></a>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle disabled">Alert Name <span class="label label-danger">Alert Badge</span></a>
                         </li>
                         <li class="divider"></li>
                         <li>

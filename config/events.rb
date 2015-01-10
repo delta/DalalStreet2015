@@ -11,7 +11,7 @@ WebsocketRails::EventMap.describe do
     subscribe :buy_sell_partial_render, to: SocketController, with_method: :buy_sell_partial_render
     subscribe :bank_mortgage_partial_render, to: SocketController, with_method: :bank_mortgage_partial_render
     subscribe :update_modal_partials, to: SocketController, with_method: :update_modal_partials
-
+    subscribe :buy_sell_stock_socket, to: SocketController, with_method: :buy_sell_stock_socket
   
   # Uncomment and edit the next line to handle the client connected event:
   #   subscribe :client_connected, :to => Controller, :with_method => :method_name

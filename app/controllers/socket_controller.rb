@@ -160,10 +160,10 @@ require "json"
       @sell_history = Sell.select("stock_id,numofstock,priceexpected").where('stock_id' => id).last(3).reverse
      
       @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@stock, @stock)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@no_stock_found , @no_stock_found)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@buy_history, @buy_history)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial', :@sell_history, @sell_history)
+      update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@stock, @stock)
+      update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@no_stock_found , @no_stock_found)
+      update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@buy_history, @buy_history)
+      update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@sell_history, @sell_history)
   
       data = {}
       data = load_data_with_partials(data)
@@ -231,5 +231,72 @@ require "json"
        redirect_to :action => 'index'
       end
      end 
+
+     def buy_sell_stock_socket
+        if user_signed_in?
+           @type = data[:type_stock].split("_")[0]
+
+          if @type == 'buy' && !data[:num_of_stock].blank? && !data[:price].blank?
+                @stockid = data[:type_stock].split("_")[1]
+                @numofstock_buy_for = data[:num_of_stock]
+                @bid_price = data[:price]
+                @stock = Stock.find(@stockid) 
+                @user_cash_inhand = User.find(current_user.id)
+             
+              if @stock.stocksinmarket.to_f >= @numofstock_buy_for.to_f
+                 if @bid_price.to_f <= (0.1*@stock.currentprice.to_f+@stock.currentprice.to_f)
+                   if @user_cash_inhand.cash.to_f >= @numofstock_buy_for.to_f*@bid_price.to_f 
+                      @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
+                      flash[:notice] = "Successful Bid."
+                      @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                        ## call comparator ##can be made efficient
+                      @comparator = User.comparator("buy")
+                      buy_sell_stock_socket_helper
+                   else
+                      flash[:error] = "Buy request failed.You only have $ #{@user_cash_inhand.cash}."
+                      @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                      buy_sell_stock_socket_helper
+                   end
+                 else
+                  @max_bid_price = (0.1*@stock.currentprice.to_f+@stock.currentprice.to_f).round(2)
+                  flash[:error] = "You cannot bid for more than 10% of the current price the max buy price for #{@stock.stockname} is #{@max_bid_price}."
+                  @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                  buy_sell_stock_socket_helper   
+                 end  
+              else
+                 flash[:error] = "Buy request failed.There are only #{@stock.stocksinmarket} stocks in the market."
+                 @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                 buy_sell_stock_socket_helper
+              end
+
+         elsif @type == 'sell' && !data[:num_of_stock].blank? && !data[:price].blank?
+                @stockid = data[:type_stock].split("_")[1]
+                @numofstock_sell_for = data[:num_of_stock]
+                @ask_price = data[:price]
+                @user_stock_inhand = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.id' => @stockid ).group("stock_id")
+                 
+                if @user_stock_inhand[0].totalstock.to_f >= @numofstock_sell_for.to_f
+                  @sell_ask  = Sell.create(:user_id=>current_user.id, :stock_id=>@stockid, :priceexpected=>@ask_price, :numofstock=>@numofstock_sell_for)
+                  flash[:notice] = "Sell request made."
+                  @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                    ## call comparator ##can be made efficient
+                  @comparator = User.comparator("sell")
+                  buy_sell_stock_socket_helper
+                else
+                  flash[:error] = "Sell request failed.You only have #{@user_stock_inhand[0].totalstock} stocks of #{@user_stock_inhand[0].stockname}."
+                  @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                  buy_sell_stock_socket_helper
+                end
+         else
+            flash[:error] = "Did Not receive request.Please try again."
+            @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
+            buy_sell_stock_socket_helper
+         end
+        else
+          flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+          redirect_to :action => 'index'
+        end
+     end
+
 end ## end of socket controller
  
