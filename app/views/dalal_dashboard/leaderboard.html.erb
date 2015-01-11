@@ -1,0 +1,67 @@
+<% content_for :page_wrapper do %>
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Dalal Street <small>Mortgage</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                             <i class="fa fa-dashboard"></i> Dashboard
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+                
+                <%= render partial:"dalal_dashboard/partials/panel_dashboard_partial",locals: { stocks_list: @stocks_list }%>
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Leaderboard</h3>
+                            </div>
+                            <div class="panel-body">
+                              <div class="table-responsive">
+                                     <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Cash</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="stock_details">
+                                             <% @user_leader.each do |user| %>
+                                                <tr>
+                                                    <td><%=user.username %></td>
+                                                    <td><%=user.cash.round(2) %></td>
+                                                </tr>
+                                             <% end -%>   
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+<% end %>
+
+<% content_for :script do %>
+      <script type="text/javascript">
+
+         $('#notification_modal').modal('hide')
+
+      </script>
+
+<% end %>    

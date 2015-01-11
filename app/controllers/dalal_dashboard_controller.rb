@@ -310,9 +310,24 @@ def show
         @notifications_count = Notification.count/7       
         @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
         @market_events_count = MarketEvent.count/7
-     else
+      else
 	      redirect_to :action => 'index'
 	    end
     end
 
+    def leaderboard
+      if user_signed_in?
+        @user_leader = User.order('cash DESC').all
+        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+        @stocks_list = Stock.all
+        @notifications_list = Notification.get_notice(current_user.id,10)
+        @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
+        @notifications_count = Notification.count/7    
+        @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
+        @market_events_count = MarketEvent.count/7
+        @class_leader_active = "class=active"
+      else
+        redirect_to :action => 'index'
+      end  
+    end
 end  #class def  

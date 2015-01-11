@@ -1,2 +1,0 @@
-$(".modal-body #marketevent_modal_partial").html("<%= escape_javascript render( partial:'dalal_dashboard/partials/marketevent_modal_partial',locals: { market_events_paginate: @market_events_paginate }) %>");
-$('#paginator').html('<%= escape_javascript(paginate(@market_events_paginate, :remote => true).to_s) %>');

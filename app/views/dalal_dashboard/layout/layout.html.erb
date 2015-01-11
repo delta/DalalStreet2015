@@ -67,7 +67,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'show' do %>
-                <span class="navbar-brand" >Dalal Street</span>
+                <span class="navbar-brand" style="color:#fff;"><b>DALAL STREET</b></span>
                 <% end %>
             </div>
             <!-- Top Menu Items -->
@@ -169,20 +169,14 @@
                         <span id="span"><i class="fa fa-fw fa-wrench"></i> Market Events</span>
                     <% end %>
                     </li> -->
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo" class="collapse">
-                            <li>
-                                <a href="#">Dropdown Item</a>
-                            </li>
-                            <li>
-                                <a href="#">Dropdown Item</a>
-                            </li>
-                        </ul>
-                    </li>
                     <li <% if !@class_history_active.blank? %><%= @class_history_active %><% end %> >
                     <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'buy_sell_history' do %>
                         <span id="span"><i class="fa fa-fw fa-file"></i> Buy Sell History</span>
+                    <% end %>
+                    </li>
+                    <li <% if !@class_leader_active.blank? %><%= @class_leader_active %><% end %> >
+                    <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'leaderboard' do %>
+                        <span id="span"><i class="fa fa-fw fa-file"></i> Leaderboard</span>
                     <% end %>
                     </li>
                 </ul>
