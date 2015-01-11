@@ -27,6 +27,10 @@ class AdminController < ApplicationController
   	else      
       @stock= Stock.new
       @stocks_list = Stock.all
+		if params[:order]
+		    @stocks_list = Stock.order(params[:order] + " " + sort_direction)
+		end
+	
 	       if params[:stock] 
 	           @stock=Stock.new(id:params[:stock][:stock_id],stockname:params[:stock][:stockname],currentprice:params[:stock][:currentprice], stocksinexchange:params[:stock][:stocksinexchange],daylow:params[:stock][:daylow],dayhigh:params[:stock][:dayhigh],alltimelow:params[:stock][:alltimelow],alltimehigh:params[:stock][:alltimehigh],stocksinmarket:params[:stock][:stocksinmarket])
               if @stock.save
@@ -158,5 +162,8 @@ class AdminController < ApplicationController
 	def stock_params
  		params.require(:updatestock).permit(:stock_id, :stockname, :currentprice, :stocksinexchange, :daylow, :dayhigh, :alltimelow, :alltimehigh , :stocksinmarket)
 	end
+	def sort_direction
+	    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+        end
 
 end
