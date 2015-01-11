@@ -317,7 +317,12 @@ def show
 
     def leaderboard
       if user_signed_in?
-        @user_leader = User.order('cash DESC').all
+        @user_leader = User.all
+        @user_leader.each do |user|
+          user.cash = user.cash + Stock.get_total_stock_price(user.id)
+        end
+        @user_leader =  @user_leader.sort_by { |user| user[:cash] }.reverse
+
         @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
         @stocks_list = Stock.all
         @notifications_list = Notification.get_notice(current_user.id,10)
