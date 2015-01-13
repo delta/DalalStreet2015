@@ -16,11 +16,11 @@
     <%= csrf_meta_tags %>
 
 <script>
-        var limit="1:20"
+        var limit="1:20";
 
         if (document.images){
-        var parselimit=limit.split(":")
-        parselimit=parselimit[0]*60+parselimit[1]*1
+        var parselimit=limit.split(":");
+        parselimit=parselimit[0]*60+parselimit[1]*1;
         }
         
         function beginrefresh(){
@@ -29,16 +29,20 @@
         if (parselimit==1)
         window.location.reload()
         else{ 
-        parselimit-=1
-        curmin=Math.floor(parselimit/60)
-        cursec=parselimit%60
+        parselimit-=1;
+        curmin=Math.floor(parselimit/60);
+        cursec=parselimit%60;
         if (curmin!=0)
-        {curtime=curmin+":"+cursec
+        {curtime=curmin+":"+cursec;
           if (cursec <= 9)
-           curtime=curmin+":0"+cursec
+           curtime=curmin+":0"+cursec;
         }
         else
-        curtime="0:"+cursec
+          {if(cursec >= 10)  
+           curtime="0:"+cursec;
+           else
+           curtime="0:0"+cursec;
+         }
         window.status=curtime
 
         $("#timer").html( curtime );

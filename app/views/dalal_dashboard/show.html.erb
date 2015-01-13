@@ -10,7 +10,10 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                             <i class="fa fa-dashboard"></i> Dashboard
+                             <i class="fa fa-dashboard"></i> Dalal Street
+                            </li>
+                            <li class="active">
+                             <i class="fa fa-dashboard"></i> Statistics
                             </li>
                         </ol>
                     </div>
@@ -30,9 +33,7 @@
                             <div class="panel-body">
                              <%= render partial:"dalal_dashboard/partials/show_partial",locals: { stocks: @stocks }%>  
                             </div>
-                              <div class="text-right">
-                                    <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
+                             
                             </div>
                         </div>
                     </div>
@@ -198,9 +199,7 @@
                                       <div><%= "#{@no_mortgage_found}" %></div>
                                     <% end %>
                                     </div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>

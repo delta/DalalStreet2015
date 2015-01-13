@@ -26,6 +26,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
        ##### ................. cache important pages and minify assets ..................######################
        ####### localhost tester ..............find a plugin.............#####################################
        ######### check for null values and rows .......................##############################
+       ####### the top menu notification doesnot get updated ...............#######################
        @user = User.find(current_user)
   		 redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
   		else
@@ -322,7 +323,6 @@ def show
           user.cash = user.cash + Stock.get_total_stock_price(user.id)
         end
         @user_leader =  @user_leader.sort_by { |user| user[:cash] }.reverse
-
         @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
         @stocks_list = Stock.all
         @notifications_list = Notification.get_notice(current_user.id,10)

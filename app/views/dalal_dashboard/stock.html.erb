@@ -12,7 +12,10 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                             <i class="fa fa-dashboard"></i> Dashboard
+                             <i class="fa fa-dashboard"></i> Dalal Street
+                            </li>
+                            <li class="active">
+                             <i class="fa fa-dashboard"></i> Market
                             </li>
                         </ol>
                     </div>
@@ -32,9 +35,7 @@
                             </div>
                             <div class="panel-body">
                              <%= render partial:"dalal_dashboard/partials/stock_partial",locals: { stocks: @stocks }%>  
-                                <div class="text-right">
-                                    <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
