@@ -11,5 +11,7 @@
  * file per style scope.
  *
  *= require_self
+ *= require ./index/bootstrap
+ *= require ./index/land-mod
  *= require_tree ./index
  */

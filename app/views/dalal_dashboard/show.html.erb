@@ -199,7 +199,6 @@
                                       <div><%= "#{@no_mortgage_found}" %></div>
                                     <% end %>
                                     </div>
-                               
                             </div>
                         </div>
                     </div>
@@ -315,17 +314,20 @@ var get_userstock_info = function(b, c) {
                 a.message)
         })
     };
+
 $("#myTab a").click(function(b) {
     b.preventDefault();
     $(this).tab("show")
 });
-var tab_selector = function(b) {
-    var c = current_price_list_array("<%=@stock_price%>"),
-        d = [];
-    c.splice(c.length - 1, 1);
-    for (var a = 0; a < c.length; a++) d.push(a);
-    "mark_cap" == b ? (console.log(b), chart_loader2(c)) : chart_loader(c)
-}, chart_loader = function(b) {
+    var tab_selector = function(b) {
+        var c = current_price_list_array("<%=@stock_price%>"),
+            d = [];
+        c.splice(c.length - 1, 1);
+        for (var a = 0; a < c.length; a++) d.push(a);
+        "mark_cap" == b ? (console.log(b), chart_loader2(c)) : chart_loader(c)
+    } 
+
+    var chart_loader = function(b) {
         var c = document.getElementById("canvas_line"),
             d = document.getElementById("canvas_line").getContext("2d");
         d.clearRect(0, 0, c.width, c.height);
@@ -354,11 +356,14 @@ var tab_selector = function(b) {
                 data: b
             }]
         };
+        
         window.myLine = (new Chart(d)).Line(b, {
             responsive: !0
         });
         myLine.destroy()
-    }, chart_loader2 = function(b) {
+    };
+
+    var chart_loader2 = function(b) {
         var c = document.getElementById("canvas_line2"),
             d = document.getElementById("canvas_line2").getContext("2d");
         d.clearRect(0,
