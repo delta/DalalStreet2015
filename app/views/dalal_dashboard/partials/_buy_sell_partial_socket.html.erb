@@ -97,6 +97,7 @@
                          <div class="table-responsive">
                           <table class="table table-bordered table-hover table-striped">
                                 <thead>
+                                <% if !@buy_history.blank? %>
                                   <tr>
                                    <th>Bid</th>
                                    <th>numofstock</th>
@@ -108,6 +109,9 @@
                                    <td>$<%= buy.price%></td>
                                    <td><%= buy.numofstock%></td>
                                   </tr>
+                                  <% end %>
+                                  <% else %>
+                                    <%= "No bids for this stock yet"%>
                                   <% end %>
                                 </tbody>
                           </table>
@@ -124,6 +128,7 @@
                          <div class="table-responsive">
                           <table class="table table-bordered table-hover table-striped">
                                 <thead>
+                                  <% if !@sell_history.blank? %>
                                   <tr>
                                    <th>Ask</th>
                                    <th>numofstock</th>
@@ -135,6 +140,9 @@
                                    <td>$<%= sell.priceexpected%></td>
                                    <td> <%= sell.numofstock%></td>
                                   </tr>
+                                  <% end %>
+                                   <% else %>
+                                    <%= "No sales for this stock yet"%>
                                   <% end %>
                                 </tbody>
                           </table>

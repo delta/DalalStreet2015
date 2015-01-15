@@ -21,7 +21,7 @@ layout "../dalal_dashboard/layout/layout.html.erb"
   		 #######....wat to do if sum of total stock is zero in stock_useds ..........................#########################
   		 ########....................... current user cash doesnt get rendered all the time ............................##################
        ####### .................... add market capital to dalal and company page .....................#####################
-       ###### ....... some webscokets dont run without the show page being loaded ...................##############
+       ###### ....... some websockets dont run without the show page being loaded ...................##############
        ###### ...............remember to change active record gem sqlite file in server gem....................................#############
        ##### ................. cache important pages and minify assets ..................######################
        ####### localhost tester ..............find a plugin.............#####################################
@@ -90,18 +90,24 @@ def show
     def buy_sell_page
 	    if user_signed_in?
              Stock.connection.clear_query_cache
-	    	     @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock,sum(stock_useds.numofstock)*stocks.currentprice as netcash").where('stock_useds.user_id' => current_user.id).group("stock_id").first
+             @stock = Stock.return_stock_user_first(current_user.id)
 	           @stocks_list = Stock.all
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
              @no_stock_found = nil
+             if !@stock
+              @stock = Stock.select("*").first
+              @no_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
+             end  
              @notifications_paginate = Notification.limit(7).offset(0) 
              @notifications_count = Notification.count/7     
              @market_events_paginate = MarketEvent.limit(7).offset(0)
              @market_events_count = MarketEvent.count/7
              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
              @class_buy_sell_active = "class=active"
-             @buy_history = Buy.select("stock_id,numofstock,price").where('stock_id' => @stock.id).last(3).reverse
-             @sell_history = Sell.select("stock_id,numofstock,priceexpected").where('stock_id' => @stock.id).last(3).reverse
+             
+             @buy_history = Buy.get_buy_history(@stock.id,3)
+             @sell_history = Sell.get_sell_history(@stock.id,3)
+
       else
 	       redirect_to :action => 'index'
 	    end
@@ -175,13 +181,17 @@ def show
     	 if user_signed_in?
 	       	   @stocks_list = Stock.all
              @stocks = Stock.return_bought_stocks(current_user.id)
-             @stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id).group("stock_id").first
+             @stock = Stock.return_stock_user_first(current_user.id)
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-             @mortgage = Bank.where("banks.user_id" => current_user.id,"banks.stock_id" => @stock.id)
-             
-              @no_mortgage = nil
+
+             if !@stock.blank?
+               @mortgage = Bank.where("banks.user_id" => current_user.id,"banks.stock_id" => @stock.id)
+             else  
+               @no_mortgage = nil
+             end  
+
               if @mortgage.blank?
-               @no_mortgage = "You have not mortgaged any stocks of #{@stock.stockname} yet."
+               @no_mortgage = "You have not mortgaged any stocks yet."
               end
              
              @notifications_list = Notification.get_notice(current_user.id,10)
@@ -282,8 +292,18 @@ def show
 	  def buy_sell_history
         if user_signed_in?
         	@buy_history = Buy.select("stock_id,numofstock,updated_at,price").where('user_id' => current_user.id).last(10).reverse
-        	@sell_history = Sell.select("stock_id,numofstock,updated_at,priceexpected").where('user_id' => current_user.id).last(10).reverse
-	        @notifications_list = Notification.get_notice(current_user.id,10)
+        	  if @buy_history.blank?
+               @no_buy_history = nil
+            else
+               @no_buy_history = 1
+            end
+          @sell_history = Sell.select("stock_id,numofstock,updated_at,priceexpected").where('user_id' => current_user.id).last(10).reverse
+	          if @sell_history.blank?
+               @no_sell_history = nil
+            else
+               @no_sell_history = 1
+            end
+          @notifications_list = Notification.get_notice(current_user.id,10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
           @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
           @notifications_count = Notification.count/7  

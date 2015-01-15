@@ -156,9 +156,9 @@ require "json"
          @no_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
        end   
       
-      @buy_history = Buy.select("stock_id,numofstock,price").where('stock_id' => id).last(3).reverse
-      @sell_history = Sell.select("stock_id,numofstock,priceexpected").where('stock_id' => id).last(3).reverse
-     
+      @buy_history = Buy.get_buy_history(id,3)
+      @sell_history = Sell.get_sell_history(id,3)
+
       @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
       update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@stock, @stock)
       update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@no_stock_found , @no_stock_found)

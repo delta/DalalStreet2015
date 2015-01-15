@@ -117,9 +117,15 @@
                      <div class="col-lg-12">
                       <div class="panel-body">
                         <ul id="news1">
-                        <%@market_events_paginate.each do |event|%>
-                            <li> <%= event.eventname%> </li>
-                         <% end %>   
+                        <% if @market_events_paginate.blank? %>
+                           <li>No occuring events.</li>
+                           <li>Stand by for stock info</li>
+                           <li>New events will start soon.</li>
+                        <% else %>
+                          <%@market_events_paginate.each do |event|%>
+                             <li> <%= event.eventname%> </li>
+                          <% end %>
+                        <% end -%> 
                         </ul>
                      </div>
                     </div>
@@ -127,7 +133,7 @@
 
                     </div>
                     </div>
-                    </div>
+                    </div>  
                   
                     <!--  <div id="ajax_notice">
                     </div> -->

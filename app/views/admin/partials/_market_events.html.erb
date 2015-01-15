@@ -20,7 +20,7 @@
 										<td><%= f.event_done %></td>
 										<td>	<% @stock.each do |s| %>
 													<% if s.id == f.stock_id %>
-														<%= s.currentprice  %>
+														<%= s.currentprice %>
 													<% end %>
 												<% end %>
 										</td>	

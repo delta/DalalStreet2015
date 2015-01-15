@@ -22,6 +22,7 @@
                                         </thead>
                                         <tbody id="render_tbody">
                                              <tr>
+                                                <% if !@stock.blank? %>
                                                 <%if @stock.updown == 1%>
                                                     <% @color="style=color:green"%> 
                                                     <% @image="src=/assets/up-arrow.jpg"%> 
@@ -37,6 +38,9 @@
                                                     <td <%=@color%> ><%=@stock.currentprice.round(2) %><span><img <%=@image%> style="width:7px;height:7px;"></img></span></td>
                                                     <td><%=@stock.stocksinmarket%></td>
                                                     <td><%=@stock.totalstock %></td>
+                                                <%else%>
+                                                   <%= "You have not traded stocks yet."%>
+                                                <%end-%>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -56,6 +60,7 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Mortgage Panel</h3>
                             </div>
                             <div class="panel-body">
+                                     <% if !@stock.blank? %>
                                       <%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'bank_mortgage_stock'},{:id => "form_bank", :class => 'bank_mort', :method => 'post', :name=>"form_bank", :role=>"form"}) do |f|%>
                                       <div class="form-group">
                                       <%= label_tag "num_of_stock","Stocks to Mortgage"%>
@@ -64,6 +69,9 @@
                                       <%= hidden_field_tag "identity_bank","bank_#{@stock.id}"%><br>
                                       <%= submit_tag "Mortgage" %>
                                      <% end %>
+                                    <%else%>
+                                       <%= "You have not traded stocks yet."%>
+                                    <%end-%>
                             </div>
                         </div>
                   </div>
