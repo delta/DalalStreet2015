@@ -13,5 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require bootstrap.min
 //= require websocket_rails/main
+//= require websocket_class.js
+//= require jquery.newsticker.1.0.min
+//= require Chart.js
+//= require index.js
 //= require_tree .

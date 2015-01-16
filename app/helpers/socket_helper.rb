@@ -55,15 +55,18 @@ module SocketHelper
       return name = file_path.split('/').last.to_sym;
    end
    
-
+   
    def stock_ajax_handler_helper(stocks)
       if user_signed_in?
         @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
         @market_events_paginate = MarketEvent.page(1).per(10)
+        @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+
         update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
         update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@stocks_list, stocks )
         update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@market_events_paginate , @market_events_paginate)
         update_partial_input('dalal_dashboard/partials/stock_partial', :@stocks_list, stocks)
+        update_partial_input('dalal_dashboard/partials/notification_partial', :@notifications_list , @notifications_list)
 
         data = {}
         data = load_data_with_partials(data)
@@ -75,13 +78,13 @@ module SocketHelper
    def buy_sell_stock_socket_helper
        if user_signed_in?
               Stock.connection.clear_query_cache
-              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+              # @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               @stocks_list = Stock.all
               @market_events_paginate = MarketEvent.page(1).per(10)
 
               @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
               update_partial_input('dalal_dashboard/partials/main_buy_sell_partial', :@stocks_list, @stocks_list)
-              update_partial_input('dalal_dashboard/partials/notification_partial', :@notifications_list , @notifications_list)
+              # update_partial_input('dalal_dashboard/partials/notification_partial', :@notifications_list , @notifications_list)
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@stocks_list, @stocks_list )
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@market_events_paginate , @market_events_paginate)

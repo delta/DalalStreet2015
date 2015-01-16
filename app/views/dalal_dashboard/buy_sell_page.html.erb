@@ -92,18 +92,23 @@
         }
     });
 
-  var dispatcher = new WebSocketRails($('.table').data('uri'), true);
+ // var dispatcher = new WebSocketRails($('.table').data('uri'), true);
 
   $(function(){
       
-      dispatcher.on_open = function(){
-        console.log("Connection established");
-      };
+      // dispatcher.on_open = function(){
+      //   console.log("Connection established");
+      // };
 
-      var channel = dispatcher.subscribe('buy_sell');
-      channel.bind('buy_sell_channel', function(get_value) {  
-                    get_completestock_info(get_value,dispatcher);
-      });
+      // var channel = dispatcher.subscribe('buy_sell');
+      // channel.bind('buy_sell_channel', function(get_value) {  
+      //               get_completestock_info(get_value,dispatcher);
+      // });
+
+        var buy_sell_channel = new WebsocketClass(".table");
+        var buy_sell_subscribe = buy_sell_channel.channel_subscribe("buy_sell");
+        var buy_sell_binder = buy_sell_channel.channel_binder("buy_sell_channel", get_completestock_info);
+
     });
 
 
@@ -113,72 +118,67 @@
 
     var get_single_stock_id = function(stock_id){
 
-        get_single_stock_modal(stock_id,dispatcher);
+        get_single_stock_modal(stock_id);
         
     };
 
-    var get_single_stock_modal = function(stock_id,dispatcher){
-             var data = {id: stock_id};
+    var get_single_stock_modal = function(stock_id){     
+             // var data = {id: stock_id};
 
-             var success = function(response) {
-                      console.log("success : "+response.message);
-                      //dispatcher.unbind('notification_update');
-                      };
+             // var success = function(response) {
+             //          console.log("success : "+response.message);
+             //          //dispatcher.unbind('notification_update');
+             //          };
 
-             var failure = function(response) {
-                       console.log("failure: "+response.message);
-                      };
+             // var failure = function(response) {
+             //           console.log("failure: "+response.message);
+             //          };
 
-                 dispatcher.bind('buy_sell_partial_render', getdata);
-                 dispatcher.trigger('buy_sell_partial_render', data, success, failure); 
+             //     dispatcher.bind('buy_sell_partial_render', getdata);
+             //     dispatcher.trigger('buy_sell_partial_render', data, success, failure); 
                 
-                 function getdata(get_data) {
-                          var rs = new RestfulWebsockets();
-                          console.log(get_data)
-                          rs.refresh(get_data); 
-                    }
+             //     function getdata(get_data) {
+             //              var rs = new RestfulWebsockets();
+             //              console.log(get_data)
+             //              rs.refresh(get_data); 
+             //        }
+
+        var data = {id: stock_id};
+        var buy_sell_render_socket = new WebsocketClass(".table");
+        var buy_sell_render_socket_binder = buy_sell_render_socket.evt_binder("buy_sell_partial_render");
+        var buy_sell_render_socket_trigger = buy_sell_render_socket.evt_trigger("buy_sell_partial_render",data);
+        var buy_sell_render_socket_unbind = buy_sell_render_socket.evt_unbinder();
+
     };
 
 /////////////  websocket for notifications and table ////////////////////////////////
-    var get_completestock_info  = function(bool,dispatcher){
+    var get_completestock_info  = function(){
+         // var sent = {receive: bool};
 
-         var sent = {receive: bool};
+         // var success = function(response) {
+         //          console.log("success : "+response.message);
+         //          //dispatcher.unbind('notification_update');
+         //          };
 
-         var success = function(response) {
-                  console.log("success : "+response.message);
-                  //dispatcher.unbind('notification_update');
-                  };
+         // var failure = function(response) {
+         //           console.log("failure: "+response.message);
+         //          };
 
-         var failure = function(response) {
-                   console.log("failure: "+response.message);
-                  };
-
-             dispatcher.bind('update_stock_all', function(get_value) {
+         //     dispatcher.bind('update_stock_all', function(get_value) {
                     
-                      console.log(get_value);
-                      var rs = new RestfulWebsockets();
-                      rs.refresh(get_value);
-                      
-             //      for(var i = 0; i < get_value.sent_data.notice.length; i++) {
-             //                    var obj = get_value.sent_data.notice[i];
-             //                    var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+obj.updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+obj.notification+'</a>';
-             //                }
-             
-             // $("#ajax_notice").empty().append("<p>"+get_value.sent_data.notice[0].notification+"</p>");
-             // $("#notification").empty().append(notify);
-
-             // for(var i = 0; i < get_value.sent_data.stock_update.length; i++) {
-             //                    var obj = get_value.sent_data.stock_update[i];
-
-             //                    var fill_table = fill_table+'<tr><td><a class="stock_name" href="/dalal_dashboard/partials/298486374/buy_sell_stock?stockname='+obj.stockname+'" id="'+obj.stockname+'"_"'+obj.id+'">'+obj.stockname+'</a></td><td>'+round(obj.alltimelow,2)+'</td><td>'+round(obj.alltimehigh,2)+'</td><td>'+round(obj.daylow,2)+'</td><td>'+round(obj.dayhigh,2)+'</td><td>'+round(obj.currentprice,2)+'</td><td>'+obj.stocksinmarket+'</td></tr>';
-             //                }
-
-             //             $("#render_tbody").empty().append(fill_table);
+         //              console.log(get_value);
+         //              var rs = new RestfulWebsockets();
+         //              rs.refresh(get_value);
                          
-      });
+         //     });
      
-         dispatcher.trigger('update_stock_all', sent, success, failure); 
+         // dispatcher.trigger('update_stock_all', sent, success, failure);
 
+        var data = {bool:true};
+        var buy_sell_socket = new WebsocketClass(".table");
+        var buy_sell_socket_binder = buy_sell_socket.evt_binder("update_stock_all");
+        var buy_sell_socket_trigger = buy_sell_socket.evt_trigger("update_stock_all",data);
+        var buy_sell_socket_unbind = buy_sell_socket.evt_unbinder(); 
     }; 
 
      var isNumber = function(evt) {
@@ -214,26 +214,31 @@
 
     var sendvalues = function(value){
             
-             var data = sort_data(value);        
+             // var data = sort_data(value);        
 
-             var success = function(response) {
-                      console.log("success : "+response.message);
-                      //dispatcher.unbind('notification_update');
-                      };
+             // var success = function(response) {
+             //          console.log("success : "+response.message);
+             //          //dispatcher.unbind('notification_update');
+             //          };
 
-             var failure = function(response) {
-                       console.log("failure: "+response.message);
-                      };
+             // var failure = function(response) {
+             //           console.log("failure: "+response.message);
+             //          };
 
-                 dispatcher.bind('buy_sell_stock_socket', getdata);
-                 dispatcher.trigger('buy_sell_stock_socket', data, success, failure); 
+             //     dispatcher.bind('buy_sell_stock_socket', getdata);
+             //     dispatcher.trigger('buy_sell_stock_socket', data, success, failure); 
                 
-                 function getdata(get_data) {
-                          var rs = new RestfulWebsockets();
-                          console.log(get_data);
-                          rs.refresh(get_data);
-                    }
+             // function getdata(get_data) {
+             //              var rs = new RestfulWebsockets();
+             //              console.log(get_data);
+             //              rs.refresh(get_data);
+             //        }
 
+        var data = sort_data(value);
+        var buy_sell_send_socket = new WebsocketClass(".table");
+        var buy_sell_send_socket_binder = buy_sell_send_socket.evt_binder("buy_sell_stock_socket");
+        var buy_sell_send_socket_trigger = buy_sell_send_socket.evt_trigger("buy_sell_stock_socket",data);
+        var buy_sell_send_socket_unbind = buy_sell_send_socket.evt_unbinder();
     };
 
 </script>

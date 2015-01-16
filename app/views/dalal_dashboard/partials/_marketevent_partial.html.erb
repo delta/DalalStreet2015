@@ -1,0 +1,7 @@
+<div id="marketevent_partial">
+<%@market_event_list.each do |event|%>
+      <a href="#" class="list-group-item">
+      <span class="badge"><%= event.updated_at%></span>
+      <i class="fa fa-fw fa-check"></i> <%= event.eventname%> </a> 
+<% end %>
+</div>

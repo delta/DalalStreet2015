@@ -1,0 +1,42 @@
+<div id="chart_partial">
+ <script type="text/javascript">
+   
+      var current_price_list_array = function(pricelist){
+      var price_list_array = pricelist.split(",")
+         return price_list_array
+      };
+
+      var canvas = document.getElementById("canvas_line");
+      var ctx1 = document.getElementById("canvas_line").getContext("2d");
+      ctx1.clearRect(0, 0, canvas.width, canvas.height);
+
+      var pricelist = current_price_list_array('<%=@price_list%>');
+      var label = [];
+      pricelist.splice(pricelist.length-1, 1);
+      
+      for(var i = 0; i<pricelist.length; i++)
+             label.push(i);
+      
+      var lineChartData = {
+            labels : label,
+            datasets : [
+                {
+                    label: "My First dataset",
+                    fillColor : "rgba(255,0,0,0.1)",
+                    strokeColor : "rgba(220,0,0,0.3)",
+                    pointColor : "rgba(220,0,0,0.3)",
+                    pointStrokeColor : "#fff",
+                    pointHighlightFill : "#fff",
+                    pointHighlightStroke : "rgba(220,0,0,0.3)",
+                    data : pricelist
+                }]
+        };  
+            
+      window.myLine = new Chart(ctx1).Line(lineChartData, {
+                    responsive: true,
+                });
+
+      myLine.destroy();
+
+ </script>
+</div>

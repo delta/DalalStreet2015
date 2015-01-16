@@ -87,107 +87,62 @@
         return true;
     };
     
-    function round(value, decimals) {
+    var round = function(value, decimals) {
        return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 
     }
 
-         var connection = function(){var data = {connected : true}; return data;};
+    var getvalues = function(value){
+        var valuenum = value.split('_')[1];
+        var data = {identity: valuenum,value: document.getElementById(value).value};
 
-         var dispatcher = new WebSocketRails($('.table').data('uri'), true);
-
-         dispatcher.on_open = function(){
-            console.log('Connection has been established');
-         };
-
-         dispatcher.on_close = function(){
-            console.log('Connection has been closed');
-         };
+        var stock_socket = new WebsocketClass('.table');
+        var stock_socket_binder = stock_socket.evt_binder("stock_ajax_handler");
+        var stock_socket_trigger = stock_socket.evt_trigger("stock_ajax_handler",data);
+            // getnotifications();
+        var stock_socket_unbind = stock_socket.evt_unbinder();
+        $("#news1,#news2").newsticker();
+   };
+    
+    // var dispatcher = new WebSocketRails($('.table').data('uri'), true);
          
-         //function not completed
-         var bind_check = 0;
-        //remember to protect this variable later
-         var binder = function(event){switch(event){
-           
-           case 'notification_update' : dispatcher.bind();
-
-           case 'stock_ajax_handler'  : dispatcher.bind();
-
-         }};
-
-         var getnotifications = function(){
-          
-                var sent = {
-                  receive: 'true'
-                }
-
-                 var success = function(response) {
-                  console.log("Wow it worked: "+response.message);
-                  dispatcher.unbind('notification_update');
-                  };
-
-                 var failure = function(response) {
-                   console.log("That just totally failed: "+response.message);
-                  };
-
-                 dispatcher.bind('notification_update', get_notifications);
-                 
-                 dispatcher.trigger('notification_update', sent, success, failure); 
-                
-                 function get_notifications(notice) {
-                       
-                       console.log(notice);
-                       console.log(notice.notice[0]);
-
-                        for(var i = 0; i < notice.notice.length; i++) {
-                            var obj = notice.notice[i];
-                            var notify = notify+'<a href="#" class="list-group-item"><span class="badge">'+notice.notice[i].updated_at+'</span> <i class="fa fa-fw fa-check"></i> '+notice.notice[i].notification+'</a>';
-                        }
-
-                      $(".list-group").empty().append(notify);
-                      $( "#ajax_notice" ).empty().append("<p>"+notice.notice[0].notification+"</p>");
-
-                    }
-                 
-    };
+    //      var getvalues = function(value){  
          
-         var getvalues = function(value){  
-         
-                 var valuenum = value.split('_')[1];
-                 var data = {identity: valuenum,value: document.getElementById(value).value};
+    //              var valuenum = value.split('_')[1];
+    //              var data = {identity: valuenum,value: document.getElementById(value).value};
 
-                 var success = function(response) {
-                    console.log("Wow it worked: "+response.message);
-                  };
+    //              var success = function(response) {
+    //                 console.log("Wow it worked: "+response.message);
+    //               };
 
-                 var failure = function(response) {
-                    console.log("That just totally failed: "+response.message);
-                  };
+    //              var failure = function(response) {
+    //                 console.log("That just totally failed: "+response.message);
+    //               };
 
-                 var gettable = function (get_stock_value) {
+    //              var gettable = function (get_stock_value) {
 
-                     // console.log(get_stock_value.sent_stock_data.current_user);
-                     // console.log(get_stock_value.sent_stock_data.stock_update);
+    //                  // console.log(get_stock_value.sent_stock_data.current_user);
+    //                  // console.log(get_stock_value.sent_stock_data.stock_update);
 
-                      // for(var i = 0; i < get_stock_value.sent_stock_data.stock_update.length; i++) {
-                      //       var obj = get_stock_value.sent_stock_data.stock_update[i];
+    //                   // for(var i = 0; i < get_stock_value.sent_stock_data.stock_update.length; i++) {
+    //                   //       var obj = get_stock_value.sent_stock_data.stock_update[i];
 
-                      //       var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.daylow, 2)+'</td><td>'+round(obj.dayhigh, 2)+'</td><td>'+round(obj.currentprice, 2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
-                      //    }
-                      // $("#render_tbody_stock").empty().append(fill_table);
+    //                   //       var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.daylow, 2)+'</td><td>'+round(obj.dayhigh, 2)+'</td><td>'+round(obj.currentprice, 2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
+    //                   //    }
+    //                   // $("#render_tbody_stock").empty().append(fill_table);
                       
-                      console.log(get_stock_value);
-                      var rs = new RestfulWebsockets();
-                      rs.refresh(get_stock_value);
-                      $("#news1,#news2").newsticker();
-                      getnotifications();
+    //                   console.log(get_stock_value);
+    //                   var rs = new RestfulWebsockets();
+    //                   rs.refresh(get_stock_value);
+    //                   $("#news1,#news2").newsticker();
+    //                   getnotifications();
                 
-                  };
+    //               };
 
-                if(!bind_check)
-                    bind_check = dispatcher.bind('stock_ajax_handler', gettable);
-                    dispatcher.trigger('stock_ajax_handler', data, success, failure); 
+    //             if(!bind_check)
+    //                 bind_check = dispatcher.bind('stock_ajax_handler', gettable);
+    //                 dispatcher.trigger('stock_ajax_handler', data, success, failure);      
                
-    };
+    // };
 
 </script>
 

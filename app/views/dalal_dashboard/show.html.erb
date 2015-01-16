@@ -66,51 +66,19 @@
                              </div>  
                         
                                 <div class="panel-body">
-                                <div class="table-responsive">
                                     <% if !@no_stock_found %>
-                                     <table class="table table-bordered table-hover table-striped" data-uri="<%= request.host %>:<%= request.port %>/websocket">
-                                        <thead>
-                                            <tr>
-                                                <th>Stock</th>
-                                                <th>AllTimeLow</th>
-                                                <th>AllTimeHigh</th>
-                                                <th>DayLow</th>
-                                                <th>DayHigh</th>
-                                                <th>Current (USD)</th>
-                                                <th>StockInMarket</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="stock_details">
-                                                <tr>
-                                                    <% if @stock.updown == 1%>
-                                                        <% @color="style=color:green"%> 
-                                                        <% @image="src=/assets/up-arrow.jpg"%> 
-                                                    <% else %> 
-                                                        <% @color="style=color:red" %>
-                                                        <% @image="src=/assets/stock_down.gif"%> 
-                                                    <%end%>
-                                                    <td><%=@stock.stockname %></td>
-                                                    <td><%=@stock.alltimelow.round(2) %></td>
-                                                    <td><%=@stock.alltimehigh.round(2) %></td>
-                                                    <td><%=@stock.daylow.round(2) %></td>
-                                                    <td><%=@stock.dayhigh.round(2) %></td>
-                                                    <td <%=@color%> ><%=@stock.currentprice.round(2) %><span><img <%=@image%> style="width:7px;height:7px;"></img></span></td>
-                                                    <td><%=@stock.stocksinmarket%></td>
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                                     <% else %>
-                                        <div><%= "#{@no_stock_found}" %></div>
-                                     <% end %>
-                                </div>
+                   <%= render partial:"dalal_dashboard/partials/company_partial",locals: { stock: @stock }%>
+                                    <% else %>
+                                            <div><%= "#{@no_stock_found}" %></div>
+                                    <% end %>
                                 </div>
 
                             <div class="panel-body">
 
                             <div role="tabpanel">
                               <ul id="myTab" class="nav nav-tabs" role="tablist">
-                                <li role="presentation"  class="active"><a href="#cur_price" aria-controls="home" role="tab" data-toggle="tab" onclick="tab_selector('cur_price');">Current Price</a></li>
-                                <li role="presentation"><a href="#mark_cap" aria-controls="profile" role="tab" data-toggle="tab" onclick="tab_selector('mark_cap');">Market capital</a></li>
+                                <li role="presentation"  class="active"><a href="#cur_price" aria-controls="home" role="tab" data-toggle="tab">Current Price</a></li>
+                                <li role="presentation"><a href="#mark_cap" aria-controls="profile" role="tab" data-toggle="tab">Market capital</a></li>
                               </ul>
                               <!-- Tab panes -->
                               <div class="tab-content">
@@ -137,11 +105,7 @@
                             <div class="panel-body">
                                 <div class="list-group" id="market_event_list" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                  <% if !@no_stock_found %>
-                                    <%@market_event_list.each do |event|%>
-                                     <a href="#" class="list-group-item">
-                                     <span class="badge"><%= event.updated_at%></span>
-                                     <i class="fa fa-fw fa-check"></i> <%= event.eventname%> </a> 
-                                    <% end %>
+                  <%= render partial:"dalal_dashboard/partials/marketevent_partial",locals: { market_event_list: @market_event_list }%> 
                                  <% end %>   
                                  </div>
                                   <a href="#marketevent_modal" data-toggle="modal" data-target="#marketevent_modal">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
@@ -234,170 +198,43 @@
 <% end %>
 
 <% content_for :script do %>
+ 
+ <%= render partial:"dalal_dashboard/partials/chart_partial.html.erb",locals: {price_list: @price_list}%>
+ <%= render partial:"dalal_dashboard/partials/chart_partial_2.html.erb",locals: {price_list: @price_list}%>
+
+ 
  <script type="text/javascript">
-var dispatcher = new WebSocketRails($(".table").data("uri"), !0);
-$(function() {
-    var b = document.getElementById("canvas_line"),
-        c = document.getElementById("canvas_line").getContext("2d");
-    c.clearRect(0, 0, b.width, b.height);
-    var b = current_price_list_array("<%=@stock_price%>"),
-        d = [];
-    b.splice(b.length - 1, 1);
-    for (var a = 0; a < b.length; a++) d.push(a);
-    b = {
-        labels: d,
-        datasets: [{
-            label: "My First dataset",
-            fillColor: "rgba(255,0,0,0.1)",
-            strokeColor: "rgba(220,0,0,0.3)",
-            pointColor: "rgba(220,0,0,0.3)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,0,0,0.3)",
-            data: b
-        }]
-    };
-    window.myLine = (new Chart(c)).Line(b, {
-        responsive: !0
-    });
-    myLine.destroy();
-    c = dispatcher.subscribe("show");
-    dispatcher.on_open = function() {
-        console.log("Connection established")
-    };
-    c.bind("show_channel", function(a) {
-        get_userstock_info(a, dispatcher)
-    })
-});
+ 
+              $(function(){
+                    var show_channel = new WebsocketClass(".table");
+                    var show_subscribe = show_channel.channel_subscribe("show");
+                    var show_binder = show_channel.channel_binder("show_channel",get_userstock_info);
+               });
 
-function round(b, c) {
-    return Number(Math.round(b + "e" + c) + "e-" + c)
-}
-var get_userstock_info = function(b, c) {
-    var d = {
-        receive: b
-    };
-    c.bind("update_stock_user", function(a) {
-        console.log(a);
-        (new RestfulWebsockets).refresh(a)
-    });
-    c.trigger("update_stock_user", d, function(a) {
-        console.log("Wow it worked: " + a.message)
-    }, function(a) {
-        console.log("That just totally failed: " + a.message)
-    })
-}, get_company_name = function(b) {
-        get_company_info(b, dispatcher)
-    }, current_price_list_array = function(b) {
-        return b.split(",")
-    }, get_company_info = function(b, c) {
-        var d = {
-            name: b
-        };
-        c.bind("company_handler", function(a) {
-            console.log(a);
-            console.log(a.sent_data.price_list);
-            console.log(a.sent_data.stock_details);
-            chart_loader(current_price_list_array(a.sent_data.price_list));
-            for (var b = 7 <= a.sent_data.market_list.length ? 7 : a.sent_data.market_list.length, c = 0; c < b; c++) var d = a.sent_data.market_list[c],
-            e = e + '<a href="#" class="list-group-item"><span class="badge">' + d.updated_at + '</span><i class="fa fa-fw fa-check"></i>' + d.eventname + "</a>";
-            a = a.sent_data.stock_details;
-            1 == a.updown ? (b = "green", c = "src=/assets/up-arrow.jpg") : (b = "red", c = "src=/assets/stock_down.gif");
-            var f = f + "<tr><td>" + a.stockname + "</td><td>" + round(a.alltimelow, 2) + "</td><td>" + round(a.alltimehigh, 2) + "</td><td>" + round(a.daylow, 2) + "</td><td>" + round(a.dayhigh, 2) + '</td><td style="color:' + b + '">' + round(a.currentprice, 2) + "<span><img " + c + ' style="width:7px;height:7px;"></img></span></td><td>' + a.stocksinmarket + "</td></tr>";
-            $("#market_event_list").empty().append(e);
-            $("#stock_details").empty().append(f)
-        });
-        c.trigger("company_handler", d, function(a) {
-            console.log("Wow it worked: " + a.message)
-        }, function(a) {
-            console.log("That just totally failed: " +
-                a.message)
-        })
-    };
+               var get_userstock_info = function(data){
+                    var data = {bool:true};
+                    var show_update_socket = new WebsocketClass(".table");
+                    var show_update_socket_binder = show_update_socket.evt_binder("index_updater");
+                    var show_update_socket_trigger = show_update_socket.evt_trigger("index_updater",data);
+                    var show_update_socket_unbind = show_update_socket.evt_unbinder();
+               };
 
-$("#myTab a").click(function(b) {
-    b.preventDefault();
-    $(this).tab("show")
-});
-    var tab_selector = function(b) {
-        var c = current_price_list_array("<%=@stock_price%>"),
-            d = [];
-        c.splice(c.length - 1, 1);
-        for (var a = 0; a < c.length; a++) d.push(a);
-        "mark_cap" == b ? (console.log(b), chart_loader2(c)) : chart_loader(c)
-    } 
-
-    var chart_loader = function(b) {
-        var c = document.getElementById("canvas_line"),
-            d = document.getElementById("canvas_line").getContext("2d");
-        d.clearRect(0, 0, c.width, c.height);
-        var a = [];
-        (function(b) {
-            b.splice(b.length - 1, 1);
-            Array.min = function(a) {
-                return Math.min.apply(Math, a)
-            };
-            Array.max = function(a) {
-                return Math.max.apply(Math,
-                    a)
-            };
-            for (var c = 0; c < b.length; c++) a.push(c)
-        })(b);
-        b = {
-            labels: a,
-            datasets: [{
-                label: "My First dataset",
-                fillColor: "rgba(255,0,0,0.1)",
-                strokeColor: "rgba(220,0,0,0.3)",
-                pointColor: "rgba(220,0,0,0.3)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,0,0,0.3)",
-                data: b
-            }]
-        };
-        
-        window.myLine = (new Chart(d)).Line(b, {
-            responsive: !0
-        });
-        myLine.destroy()
-    };
-
-    var chart_loader2 = function(b) {
-        var c = document.getElementById("canvas_line2"),
-            d = document.getElementById("canvas_line2").getContext("2d");
-        d.clearRect(0,
-            0, c.width, c.height);
-        var a = [];
-        (function(b) {
-            b.splice(b.length - 1, 1);
-            Array.min = function(a) {
-                return Math.min.apply(Math, a)
-            };
-            Array.max = function(a) {
-                return Math.max.apply(Math, a)
-            };
-            for (var c = 0; c < b.length; c++) a.push(c)
-        })(b);
-        b = {
-            labels: a,
-            datasets: [{
-                label: "My second dataset",
-                fillColor: "rgba(255,0,0,0.1)",
-                strokeColor: "rgba(220,0,0,0.3)",
-                pointColor: "rgba(220,0,0,0.3)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,0,0,0.3)",
-                data: b
-            }]
-        };
-        window.myLine2 = (new Chart(d)).Line(b, {
-            responsive: !0
-        });
-        myLine2.destroy()
-    };
-    
+                var get_company_name = function(name){
+                   get_company_info(name);
+                };
+                
+                var get_company_info = function(company_name){
+                    var data = {name: company_name};
+                    var company_socket = new WebsocketClass("#market_event_list");
+                    var company_socket_binder = company_socket.evt_binder("company_handler");
+                    var company_socket_trigger = company_socket.evt_trigger("company_handler",data);
+                    var company_socket_unbind = company_socket.evt_unbinder();
+                };
+  
+                $("#myTab a").click(function(b) {
+                  b.preventDefault();
+                  $(this).tab("show") 
+                });
 </script>
 
 <% end %>    

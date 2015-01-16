@@ -1,5 +1,5 @@
 class IndexController < ApplicationController
- protect_from_forgery with: :null_session
+protect_from_forgery with: :null_session
 # before_filter :authenticate_user!
 
   def index
@@ -14,7 +14,7 @@ class IndexController < ApplicationController
     @stocks_list = Stock.all
     @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
     @market_events_count = MarketEvent.count/7
-            
+        
   	if user_signed_in?
        @user = User.find(current_user)
        redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id

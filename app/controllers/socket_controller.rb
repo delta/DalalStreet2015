@@ -129,15 +129,26 @@ require "json"
     def self.call_update_stock_user
        WebsocketRails[:show].trigger(:show_channel, "true")
        WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
+       WebsocketRails[:index].trigger(:index_channel, "true");
     end
 
     def company_handler
        if user_signed_in?
            company_name = data[:name]
-           stock = Stock.select("*").where("stockname" => company_name).first
-           stock_price = Stock.read_current_price(stock.id)
-           @get_market_event = MarketEvent.select("eventname,updated_at").where("stock_id" => stock.id).last(10).reverse
-           send_message :company_handler, :sent_data => {:market_list => @get_market_event,:price_list => stock_price,:stock_details => stock}
+           @stock = Stock.select("*").where("stockname" => company_name).first
+           @price_list = Stock.read_current_price(@stock.id)
+           @market_event_list = MarketEvent.select("eventname,updated_at").where("stock_id" => @stock.id).last(10).reverse
+
+           update_partial_input('dalal_dashboard/partials/company_partial', :@stock , @stock)
+           update_partial_input('dalal_dashboard/partials/marketevent_partial', :@market_event_list , @market_event_list)
+           update_partial_input('dalal_dashboard/partials/chart_partial', :@price_list , @price_list)
+           update_partial_input('dalal_dashboard/partials/chart_partial_2', :@price_list , @price_list)
+
+           data = {}
+           data = load_data_with_partials(data)
+           send_message :company_handler, data
+           
+           # send_message :company_handler, :sent_data => {:market_list => @get_market_event,:price_list => stock_price,:stock_details => stock}
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            redirect_to :action => 'index'
@@ -295,6 +306,23 @@ require "json"
         else
           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
           redirect_to :action => 'index'
+        end
+     end
+
+     def index_updater
+      if user_signed_in?
+              Stock.connection.clear_query_cache
+              @stocks_list = Stock.all
+              @market_events_paginate = MarketEvent.page(1).per(10)
+
+              update_partial_input('dalal_dashboard/partials/stock_marquee_partial', :@stocks_list, @stocks_list )
+
+              data = {}
+              data = load_data_with_partials(data)
+              send_message :index_updater, data
+        else
+           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+           redirect_to :action => 'index'
         end
      end
 

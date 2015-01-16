@@ -51,7 +51,7 @@ def show
             @stocks = Stock.return_bought_stocks(current_user.id)
            if !@stocks.blank?
               @stock = @stocks[0]
-              @stock_price = Stock.read_current_price(@stock.id)
+              @price_list = Stock.read_current_price(@stock.id)
               @market_event_list  = MarketEvent.get_events(7,@stocks[0].id)
               else
                 @no_stock_found = "You have not bought any stocks yet"
@@ -322,7 +322,7 @@ def show
         @stock = Stock.select("*").first
         @market_event_list = MarketEvent.get_events(10)
         @stock_list = Stock.pluck(:stockname)
-        @stock_price = Stock.read_current_price(@stock.id)
+        @price_list = Stock.read_current_price(@stock.id)
         @notifications_list = Notification.get_notice(current_user.id,10)
         @class_company_active = "class=active"
         

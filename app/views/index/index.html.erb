@@ -143,7 +143,7 @@
 		       <div class="panel-heading">
 		         <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Market Event</h3>
 		       </div>
-			   	  <div class="panel-body">
+			   	<div class="panel-body" id="socket_link" data-uri="<%= request.host %>:<%= request.port %>/websocket">
 		        <%@market_events_paginate.each do |event|%>
 		        <a class="list-group-item">
 		        <span class="badge"><%= event.updated_at.strftime("%d%h%r")%></span>
@@ -257,89 +257,20 @@
 </body>
 
 <script type="text/javascript">
-  
-  $('#myModal').modal('hide')
+	
+   $(function(){
+        var index_channel = new WebsocketClass("#socket_link");
+        var index_subscribe = index_channel.channel_subscribe("index");
+        var index_binder = index_channel.channel_binder("index_channel",update_index_page);
+   });
 
-    jQuery(function ($) {
-        function check_values() {
-            if ($("#username").val().length != 0 && $("#password").val().length != 0) {
-                $("#button1").removeClass("hidden").animate({ left: '250px' });
-                $("#lock1").addClass("hidden").animate({ left: '250px' });
-            }
-        }
-    });
-
-   // var ctx = document.getElementById("canvas_line").getContext("2d");
-   
-   var data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-        {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
-        },
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90]
-        }
-    ]
-};
-    var option = {
-        responsive: !0
-    };
-
-    // var myLine = new Chart(ctx).Line(data,option);
-
- 
-   window.requestAnimationFrame = (function(){
-    return  window.requestAnimationFrame       ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            function( callback ){
-              window.setTimeout(callback, 1000 / 60);
-            };
-  })();
-
-  var speed = 1000;
-  (function currencySlide(){
-      var currencyPairWidth = $('.slideItem:first-child').outerWidth();
-      $(".modal-backdrop").remove();
-      $("#news1,#news2").newsticker();
-      $(".slideContainer").animate({marginLeft:-currencyPairWidth},speed, 'linear', function(){
-                  $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
-          });
-          requestAnimationFrame(currencySlide);
-  })();
-
-//     $('[placeholder]').focus(function() {
-//   var input = $(this);
-//   if (input.val() == input.attr('placeholder')) {
-//     input.val('');
-//     input.removeClass('placeholder');
-//   }
-// }).blur(function() {
-//   var input = $(this);
-//   if (input.val() == '' || input.val() == input.attr('placeholder')) {
-//     input.addClass('placeholder');
-//     input.val(input.attr('placeholder'));
-//   }
-// }).blur();
-  
-  $('.carousel').carousel({
-        interval: 3000
-    })
+   var update_index_page = function(){
+        var data = {bool:true};
+        var index_update_socket = new WebsocketClass("#socket_link");
+        var index_update_socket_binder = index_update_socket.evt_binder("index_updater");
+        var index_update_socket_trigger = index_update_socket.evt_trigger("index_updater",data);
+        var index_update_socket_unbind = index_update_socket.evt_unbinder();
+   };
 
 </script>
 
