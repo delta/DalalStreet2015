@@ -3,7 +3,8 @@
         padding-top:70px; 
         /*background-image: url('../../../../assets/index_bg2.jpg');*/
         /*background-repeat: repeat;*/
-        background-color:#303030;
+        background-color:#000000;
+        /*#303030*/
         font-size: 12px;
         /*#303030*/
     }
@@ -114,136 +115,37 @@
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
         }
 
-     bootswatch.com/media="screen"
     .navbar-default {
         background-color: #252525;
         border-color: #2b2e32;
      }
 
-     bootswatch.com/media="screen"
-    .navbar-fixed-top {
-        top: 0;
-        border-width: 0 0 1px;
-     }
-     
-     media="screen"
-    .navbar-fixed-top {
-    top: 0;
-    border-width: 0 0 1px;
-    }
-
-    bootswatch.com/media="screen"
-    @media (min-width: 768px)
-    .navbar-fixed-top, .navbar-fixed-bottom {
-    border-radius: 0;
-    }
-
-    bootswatch.com/media="screen"
-    .navbar-fixed-top, .navbar-fixed-bottom {
-        position: fixed;
-        right: 0;
-        left: 0;
-        z-index: 1030;
-    }
-
-    bootswatch.com/media="screen"
-    @media (min-width: 768px)
-    .navbar {
-        border-radius: 4px;
-    }
-
-    bootswatch.com/media="screen"
-    .navbar {
-        position: relative;
-        min-height: 50px;
-        margin-bottom: 20px;
-        border: 1px solid transparent;
-    }
-
-    bootswatch.com/media="screen"
-    * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    }
-
-
 /************** panel and tiles ********************************************************************/
 
-    
     .panel {
         border-radius: 0;
+        background-color: #191919;
+        border-radius: 4px;
     }
     
     .panel-default {
         border-radius: 0;
+        background-color: #191919;
+        border-radius: 4px;
     }
 
+    #socket_link a{
+       background-color:  #191919;
+    }
 
+    a.list-group-item {
+        height:auto;
+        min-height:150px;
+    }
 
-.panel-green {
-    border-color: #5cb85c;
-    background-color: #5cb85c;
-    color: #000;
-
-}
-
-.panel-green .panel-heading {
-    border-color: #5cb85c;
-    color: #000;
-    background-color: #5cb85c;
-    padding: 15px 20px;
-
-}
-
-.panel-green a {
-    color: #5cb85c;
-}
-
-.panel-green a:hover {
-    color: #3d8b3d;
-}
-
-.panel-red {
-    border-color: #d9534f;
-}
-
-.panel-red .panel-heading {
-    border-color: #d9534f;
-    color: #fff;
-    background-color: #d9534f;
-    padding: 15px 20px;
-
-}
-
-.panel-red a {
-    color: #d9534f;
-}
-
-.panel-red a:hover {
-    color: #b52b27;
-}
-
-.panel-yellow {
-    border-color: #f0ad4e;
-}
-
-.panel-yellow .panel-heading {
-    border-color: #f0ad4e;
-    color: #fff;
-    background-color: #f0ad4e;
-    padding: 15px 20px;
-
-}
-
-.panel-yellow a {
-    color: #f0ad4e;
-}
-
-.panel-yellow a:hover {
-    color: #df8a13;
-}
-
+    a.list-group-item.active small {
+        color:#fff;
+    }
 
 /* ------------------------------------------------  slider -----------------------------------------------------------------------------*/
 
@@ -266,9 +168,9 @@
     content:'';
     position:absolute;
     left:0;
-    background:-webkit-linear-gradient(left, white 2%, rgba(255,255,255,0) 15%);
-    background:-moz-linear-gradient(left, white 2%, rgba(255,255,255,0) 15%);
-    background: linear-gradient(left, white 2%, rgba(0,0,0,0) 15%);
+    background:-webkit-linear-gradient(left, #191919 2%, rgba(255,255,255,0) 15%);
+    background:-moz-linear-gradient(left, #191919 2%, rgba(255,255,255,0) 15%);
+    background: linear-gradient(left, #191919 2%, rgba(0,0,0,0) 15%);
     width:25%;
     height:100%;
 }
@@ -276,14 +178,14 @@
     content:'';
     position:absolute;
     right:0;
-    background:-webkit-linear-gradient(right, white 2%, rgba(255,255,255,0) 25%);
-    background:-moz-linear-gradient(right, white 2%, rgba(0,0,0,0) 15%);
-    background: linear-gradient(right, #303030 2%, rgba(255,255,255,0) 95%);
+    background:-webkit-linear-gradient(right, #191919 2%, rgba(255,255,255,0) 25%);
+    background:-moz-linear-gradient(right, #191919 2%, rgba(0,0,0,0) 15%);
+    background: linear-gradient(right, #191919 2%, rgba(255,255,255,0) 95%);
     width:25%;
     height:100%;
 }
 .slider ul{
-    background:#303030;
+    background:#191919;
     overflow:hidden;
     width:1000%;
     margin:0;

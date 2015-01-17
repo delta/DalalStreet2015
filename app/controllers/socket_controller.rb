@@ -310,7 +310,6 @@ require "json"
      end
 
      def index_updater
-      if user_signed_in?
               Stock.connection.clear_query_cache
               @stocks_list = Stock.all
               @market_events_paginate = MarketEvent.page(1).per(10)
@@ -320,10 +319,6 @@ require "json"
               data = {}
               data = load_data_with_partials(data)
               send_message :index_updater, data
-        else
-           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
-           redirect_to :action => 'index'
-        end
      end
 
 end ## end of socket controller
