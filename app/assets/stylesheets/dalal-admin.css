@@ -8,9 +8,18 @@
 body {
     margin-top: 100px;
     background-color: #222;
-    -webkit-appearance: none;
+  /*  -webkit-appearance: none;
     -webkit-text-size-adjust: none;
+*/
+   font-family: "helvetica neue", Helvetica, Arial, sans-serif;
+   font-size: 12px !important;
+   -webkit-text-size-adjust: 100% !important;
+   -ms-text-size-adjust: 100% !important;
+   font-size-adjust: 0.5 !important;
+   font-weight: 500 !important;
 }
+
+@font-face { font-family: 'helvetica neue'; src: local('Arial'); } @font-face { font-family: 'helvetica'; src: local('Arial'); }
 
 @media(min-width:768px) {
     body {
@@ -34,7 +43,6 @@ body {
 
 .panel{
 
-    font-size: 13px;
     background-color: #fff;
     border-bottom: 1px solid #efefef !important;
     box-sizing: border-box;
@@ -165,7 +173,7 @@ ul.alert-dropdown {
 }
 
 .table{
-    font-size: 13px;
+    font-size: 12px;
 }
 
 /* Side Navigation */
@@ -345,3 +353,4 @@ ul.alert-dropdown {
     display:inline-block;
     padding:0 10px;
 }
+

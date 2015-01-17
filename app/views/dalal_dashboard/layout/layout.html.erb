@@ -246,32 +246,17 @@
           });
           requestAnimationFrame(currencySlide);
   })();
-    
-    // var dispatcher = new WebSocketRails($('.table').data('uri'), true);
 
     var update_modal_partials = function(num,type){
 
-         var data = {page: num,
-                     type: type
-                    };
-
-         var success = function(response) {
-                  console.log("Wow it worked: "+response.message);
-                  //dispatcher.unbind('notification_update');
+       var data = {page: num,
+                   type: type
                   };
 
-         var failure = function(response) {
-                   console.log("That just totally failed: "+response.message);
-                  };
-
-         dispatcher.bind('update_modal_partials', function(modal_value) {
-                      console.log(modal_value);
-                      var rs = new RestfulWebsockets();
-                      rs.refresh(modal_value);
-                         
-          });
-     
-         dispatcher.trigger('update_modal_partials', data, success, failure);   
+       var modal_update_socket = new WebsocketClass(".table");
+       var modal_update_socket_binder = modal_update_socket.evt_binder("update_modal_partials");
+       var modal_update_socket_trigger = modal_update_socket.evt_trigger("update_modal_partials",data);
+       var modal_update_socket_unbind = modal_update_socket.evt_unbinder();
 
     };
 

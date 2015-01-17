@@ -31,7 +31,7 @@ var WebsocketClass = function(socket_url){
 
     this.bind_fail = function(){
          if(this.establish_conn)
-         	this.evt_binder(this.evt);
+         	this.evt_binder(evt);
          
     };
     
@@ -53,8 +53,9 @@ var WebsocketClass = function(socket_url){
 	};
 
 	this.evt_unbinder = function(){
+	     // console.log(dispatcher);
          if(binder)
-            {dispatcher.unbind(this.evt);
+            {dispatcher.unbind(evt);
              binder = false;
 	         console.log("Connection unbound : "+binder);
            }

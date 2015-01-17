@@ -87,10 +87,6 @@
         return true;
     };
     
-    var round = function(value, decimals) {
-       return Number(Math.round(value+'e'+decimals)+'e-'+decimals); 
-    }
-
     var getvalues = function(value){
         var valuenum = value.split('_')[1];
         var data = {identity: valuenum,value: document.getElementById(value).value};
@@ -103,47 +99,6 @@
         $("#news1,#news2").newsticker();
    };
     
-    // var dispatcher = new WebSocketRails($('.table').data('uri'), true);
-         
-    //      var getvalues = function(value){  
-         
-    //              var valuenum = value.split('_')[1];
-    //              var data = {identity: valuenum,value: document.getElementById(value).value};
-
-    //              var success = function(response) {
-    //                 console.log("Wow it worked: "+response.message);
-    //               };
-
-    //              var failure = function(response) {
-    //                 console.log("That just totally failed: "+response.message);
-    //               };
-
-    //              var gettable = function (get_stock_value) {
-
-    //                  // console.log(get_stock_value.sent_stock_data.current_user);
-    //                  // console.log(get_stock_value.sent_stock_data.stock_update);
-
-    //                   // for(var i = 0; i < get_stock_value.sent_stock_data.stock_update.length; i++) {
-    //                   //       var obj = get_stock_value.sent_stock_data.stock_update[i];
-
-    //                   //       var fill_table = fill_table+'<tr><td>'+obj.stockname+'</td><td>'+round(obj.daylow, 2)+'</td><td>'+round(obj.dayhigh, 2)+'</td><td>'+round(obj.currentprice, 2)+'</td><td>'+obj.stocksinmarket+'</td><td>'+obj.stocksinexchange+'</td><td><input id="'+obj.current_user+'_'+obj.id+'" type="text" onkeypress="return isNumber(event)" onchange="swapper(this.id);" style="width:75px;" maxlength="2"></input></td><td><input id="stocktrade_'+obj.id+'" type="hidden" name="stocktrade_'+obj.id+'" value=""></input> <input id="identity" type="hidden" value="stocktrade_'+obj.id+'" name="identity"></input><input type="button" value="Trade" name="Trade" onclick="getvalues(\'stocktrade_'+obj.id+'\');"></input></td></tr>'; 
-    //                   //    }
-    //                   // $("#render_tbody_stock").empty().append(fill_table);
-                      
-    //                   console.log(get_stock_value);
-    //                   var rs = new RestfulWebsockets();
-    //                   rs.refresh(get_stock_value);
-    //                   $("#news1,#news2").newsticker();
-    //                   getnotifications();
-                
-    //               };
-
-    //             if(!bind_check)
-    //                 bind_check = dispatcher.bind('stock_ajax_handler', gettable);
-    //                 dispatcher.trigger('stock_ajax_handler', data, success, failure);      
-               
-    // };
-
 </script>
 
 <% end %>    

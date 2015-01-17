@@ -10,7 +10,6 @@ protect_from_forgery with: :null_session
     # channel communication gets criss crossed in show and stock ############################################################################################
     # fix multiple binding ###############################################################################
     # fix the application.html.erb page also  .......####################  
-
     @stocks_list = Stock.all
     @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
     @market_events_count = MarketEvent.count/7

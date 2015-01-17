@@ -111,18 +111,10 @@
 <% end %>
 
 <% content_for :script do %>
+
+
  <script type="text/javascript">
   
-  $('#myModal').modal('hide')
-    jQuery(function ($) {
-        function check_values() {
-            if ($("#username").val().length != 0 && $("#password").val().length != 0) {
-                $("#button1").removeClass("hidden").animate({ left: '250px' });
-                $("#lock1").addClass("hidden").animate({ left: '250px' });
-            }
-        }
-    });
-
    $(function(){
         var bankmortgage_channel = new WebsocketClass(".table");
         var bankmortgage_subscribe = bankmortgage_channel.channel_subscribe("index");
@@ -144,45 +136,7 @@
         var bankmortgage_socket_trigger = bankmortgage_socket.evt_trigger("bank_mortgage_partial_render",data);
         var bankmortgage_socket_unbind = bankmortgage_socket.evt_unbinder();
    };
-
-  // var dispatcher = new WebSocketRails($('.table').data('uri'), true);
-
-  // $(function(){
-  //     dispatcher.on_open = function(){
-  //       console.log("Connection established");
-  //     };
-
-  //     var channel = dispatcher.subscribe('stocks_all');
-  //     channel.bind('call_channel_stock_all', function(get_value) {  
-  //       console.log(get_value);
-  //       get_completestock_info(get_value,dispatcher);
-  //     });
-      
-  //   });
-
-  //   var get_single_stock_modal = function(stock_id,dispatcher){
-
-  //            var data = {id: stock_id};
-
-  //            var success = function(response) {
-  //                     console.log("success : "+response.message);
-  //                     //dispatcher.unbind('notification_update');
-  //                     };
-
-  //            var failure = function(response) {
-  //                      console.log("failure: "+response.message);
-  //                     };
-
-  //                dispatcher.bind('bank_mortgage_partial_render', getdata);
-  //                dispatcher.trigger('bank_mortgage_partial_render', data, success, failure); 
-                
-  //                function getdata(get_data) {
-  //                         var rs = new RestfulWebsockets();
-  //                         console.log(get_data)
-  //                         rs.refresh(get_data); 
-  //                   }
-  //   };
-
+  
 </script>
 
 <% end %>    
