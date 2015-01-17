@@ -1,6 +1,6 @@
 
     body {
-        padding-top:70px; 
+        padding-top: 70px; 
         /*background-image: url('../../../../assets/index_bg2.jpg');*/
         /*background-repeat: repeat;*/
         background-color:#000000;
@@ -15,16 +15,6 @@
 
     .thumbnail{
         border-radius: 0;
-    }
-    
-    .col-mod{
-       padding-left: 0px;
-       padding-right: 0px;
-    }
-
-    .container-mod{
-      padding-left: 50px;
-      padding-right: 50px;
     }
 
     .redborder {
@@ -55,7 +45,7 @@
         left: 0;
         right: 0;
         margin: 10px auto;
-        background-color: white;
+        /*background-color: white;*/
         padding: 20px;
     }
 

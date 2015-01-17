@@ -5,10 +5,10 @@
       <% @stocks_list.each do |stock| %>
       <% if stock.updown == 1%>
       <% @color="style=color:green"%> 
-      <% @image="src=/assets/up-arrow.jpg"%> 
+      <% @image="src=/assets/green.png"%> 
       <% else %> 
       <% @color="style=color:red" %>
-      <% @image="src=/assets/stock_down.gif"%> 
+      <% @image="src=/assets/red.png"%> 
       <%end%>
         <li class="slideItem" >
       <span><%= "#{stock.stockname} " %></span><span <%=@color%> ><%="#{stock.currentprice.round(2)} "%></span><span><img <%=@image%> style="width:7px;height:7px;"></img></span>

@@ -12,6 +12,7 @@
  *
  *= require_self
  *= require ./index/bootstrap
+ *= require font-awesome
  *= require ./index/land-mod
  *= require_tree ./index
  */
