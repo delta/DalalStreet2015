@@ -1,15 +1,38 @@
 <%= will_paginate @allEvent %>
 
-						<% eventList=["Stock ID","Event Name","Event Type","Event turn","Event","Event Done","Current Price",] %>	
+						<% eventList=[" Stock ID"," Event Name"," Event Type"," Event turn"," Event"," Event Done"," Current Price",] %>
+						<% orderList=["stock_id","eventname","event_type","event_turn","event","event_done"] %>
+						<div>					
+							<form method="get" id="products_search" >
+							<%= hidden_field_tag :direction,params[:direction] %>
+							<%= hidden_field_tag :order,params[:order] %>
+
+						    <%= text_field_tag :search, params[:search],{:style=>"width:20%;background-color:white;color:black;",:class=>"input",:placeholder=>"Enter Stock ID"} %>
+						    <%= submit_tag "Search", :name => nil,:class=>"btn btn-sm btn-success",:style=>"width:10%" %>
+						  	</form>
+						</div>
+						
 						<table class="table table-hover table-condensed table-bordered" > 
+										
+									
 							<thead>
 								<tr>
 									<% (0..6).each do |i| %>
-										<th> <%= eventList[i] %> </th>
+										<th>
+											 <% if i<6 %>
+												 <%= sortable "#{orderList[i]}" ,"#{eventList[i]}" %>
+												 
+											<%else%>
+												<%= eventList[i] %>
+											<%end%>
+
+										 </th>
 									<% end %>
+
 								</tr>
 							</thead>
-							<tbody> 
+							<tbody>
+
 								<% @allEvent.each do |f| %>
 									<tr>	
 										<td><%= f.stock_id %></td>
@@ -34,6 +57,9 @@
 										
 									</tr>
 								<% end %>
+										
+																	
 							</tbody>
 						</table>
+
 <%= will_paginate @allEvent %>

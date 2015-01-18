@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/websocket-rails/websocket-rails.git
+  remote: https://github.com/websocket-rails/websocket-rails.git
   revision: 712fd4e35325887956724be388821121a866c7fc
   branch: master
   specs:
@@ -44,7 +44,7 @@ GEM
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
     bcrypt (3.1.9)
-    better_errors (2.1.1)
+    better_errors (1.1.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
       rack (>= 0.9.0)

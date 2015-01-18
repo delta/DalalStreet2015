@@ -107,12 +107,26 @@ class AdminController < ApplicationController
             end
            
             if !MarketEvent.all.empty?
-                @stock= Stock.paginate(:page => params[:page], :per_page => 5)
-                @allEvent = MarketEvent.paginate(:page => params[:page], :per_page => 5)
-                
+                @stock= Stock.all
+                @no_of_row=6
+                if(params[:order])
+                    if(params[:search])
+                        @allEvent = MarketEvent.search(params[:search]).order(params[:order]+ " " + sort_direction).paginate(:page => params[:page], :per_page => @no_of_row)
+                    else
+                        @allEvent = MarketEvent.order(params[:order]+ " " + sort_direction).paginate(:page => params[:page], :per_page => @no_of_row)
+                    end
+                else
+                    if(params[:search])
+                        @allEvent = MarketEvent.search(params[:search]).paginate(:page => params[:page], :per_page => @no_of_row)
+                    else
+                        @allEvent = MarketEvent.paginate(:page => params[:page], :per_page => @no_of_row)
+                    end
+                end
+
             else
                 @allEvent="Event Empty. Please add new Events"    
-            end  
+            end
+            
             
         end
         

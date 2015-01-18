@@ -51,7 +51,7 @@ gem 'seed_dump'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'websocket-rails', github: 'websocket-rails/websocket-rails', branch: 'master'
+gem 'websocket-rails', :git=> 'https://github.com/websocket-rails/websocket-rails.git', :branch=> 'master'
 # gem 'websocket-rails'
 
 gem "resque"

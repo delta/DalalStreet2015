@@ -84,4 +84,14 @@ class MarketEvent < ActiveRecord::Base
     end           
   end ##end event_runner
 
+
+def self.search(search)
+  if search
+    MarketEvent.where("stock_id"=>"#{search}")      # PAIN HERE
+  else
+    scoped
+  end
+end
+
+
 end
