@@ -109,15 +109,16 @@ class AdminController < ApplicationController
             if !MarketEvent.all.empty?
                 @stock= Stock.all
                 @no_of_row=6
-                if(params[:order])
-                    if(params[:search])
-                        @allEvent = MarketEvent.search(params[:search]).order(params[:order]+ " " + sort_direction).paginate(:page => params[:page], :per_page => @no_of_row)
+                
+                if params[:order]
+                    if params[:search]
+                            @allEvent = MarketEvent.select("*").where("stock_id=#{params[:search]}").order(params[:order]+ " " + sort_direction).paginate(:page => params[:page], :per_page => @no_of_row)
                     else
-                        @allEvent = MarketEvent.order(params[:order]+ " " + sort_direction).paginate(:page => params[:page], :per_page => @no_of_row)
+                            @allEvent = MarketEvent.order(params[:order]+ " " + sort_direction).paginate(:page => params[:page], :per_page => @no_of_row)
                     end
                 else
                     if(params[:search])
-                        @allEvent = MarketEvent.search(params[:search]).paginate(:page => params[:page], :per_page => @no_of_row)
+                        @allEvent = MarketEvent.select("*").where("stock_id=#{params[:search]}").paginate(:page => params[:page], :per_page => @no_of_row)
                     else
                         @allEvent = MarketEvent.paginate(:page => params[:page], :per_page => @no_of_row)
                     end

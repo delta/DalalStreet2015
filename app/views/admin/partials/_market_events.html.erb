@@ -4,13 +4,13 @@
 						<% orderList=["stock_id","eventname","event_type","event_turn","event","event_done"] %>
 						<div>					
 							<form method="get" id="products_search" >
-							<%= hidden_field_tag :direction,params[:direction] %>
-							<%= hidden_field_tag :order,params[:order] %>
+							<%= hidden_field_tag :direction,params[:direction]? params[:direction] : "asc" %>
+							<%= hidden_field_tag :order,params[:order]? params[:order] : "stock_id" %>
 
 						    <%= text_field_tag :search, params[:search],{:style=>"width:20%;background-color:white;color:black;",:class=>"input",:placeholder=>"Enter Stock ID"} %>
 						    <%= submit_tag "Search", :name => nil,:class=>"btn btn-sm btn-success",:style=>"width:10%" %>
 						  	</form>
-						</div>
+						</div> 
 						
 						<table class="table table-hover table-condensed table-bordered" > 
 										
