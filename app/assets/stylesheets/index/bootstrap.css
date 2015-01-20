@@ -8,13 +8,12 @@
 */
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
-  font-family: "Helvetica Neue",Helvetica, Arial, sans-serif !important;
-  -webkit-text-size-adjust: 100%;
-      -ms-text-size-adjust: 50% !important;
+    font-family: "Helvetica Neue",Helvetica, Arial, sans-serif !important;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 50% !important;
     font-size-adjust: 0.5 !important;
     font-weight: normal;
     font-size: 12px !important;
-
 }
 body {
   margin: 0;
