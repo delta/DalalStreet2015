@@ -1,17 +1,17 @@
 
     body {
-        padding-top: 70px; 
-        /*background-image: url('../../../../assets/index_bg2.jpg');*/
-        /*background-repeat: repeat;*/
-        background-color:#000000;
+        padding-top: 20px; 
+        background-color:#0c0c0c;
         /*#303030*/
-        font-size: 12px;
         /*#303030*/
+        font-size: 12px !important;
+
     }
 
     img{
         display-block; width:100%;
     }
+
 
     .thumbnail{
         border-radius: 0;
@@ -92,7 +92,7 @@
         border-bottom-right-radius: 0;
     }
 
-    .navbar {
+    .navbar {/*
         background-image: -webkit-linear-gradient(#252525, #3a3f44 60%, #313539);
         background-image: -o-linear-gradient(#252525, #3a3f44 60%, #313539);
         background-image: -webkit-gradient(linear, left top, left bottom, from(#252525), color-stop(60%, #3a3f44), to(#313539));
@@ -100,13 +100,13 @@
         background-repeat: no-repeat;
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff252525', endColorstr='#ff313539', GradientType=0);
         -webkit-filter: none;
-        filter: none;
-        border: 1px solid rgba(0, 0, 0, 0.6);
+        filter: none;*/
+        /*border: 1px solid rgba(0, 0, 0, 0.6);*/
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
         }
 
     .navbar-default {
-        background-color: #252525;
+        background-color: #191919;
         border-color: #2b2e32;
      }
 
@@ -116,6 +116,7 @@
         border-radius: 0;
         background-color: #191919;
         border-radius: 4px;
+
     }
     
     .panel-default {
@@ -159,7 +160,7 @@
     position:absolute;
     left:0;
     background:-webkit-linear-gradient(left, #191919 2%, rgba(255,255,255,0) 15%);
-    background:-moz-linear-gradient(left, #191919 2%, rgba(255,255,255,0) 15%);
+    background:-moz-linear-gradient(left, #191919 2%, rgba(0,0,0,0) 15%);
     background: linear-gradient(left, #191919 2%, rgba(0,0,0,0) 15%);
     width:25%;
     height:100%;
@@ -186,3 +187,42 @@
     display:inline-block;
     padding:0 10px;
 }
+
+/*****************************************Carousel slider***********************/
+
+#myCarousel .carousel-caption {
+    left:0;
+    right:0;
+    bottom:0;
+    text-align:left;
+    padding:10px;
+    background:rgba(0,0,0,0.6);
+    text-shadow:none;
+}
+
+#myCarousel h4{
+    font-size: 15px;
+}
+
+#myCarousel .list-group {
+    position:absolute;
+    top:0;
+    right:0;
+}
+#myCarousel .list-group-item {
+    border-radius:0px;
+    cursor:pointer;
+}
+#myCarousel .list-group .active {
+    background-color:#eee; 
+    color: #000; 
+}
+
+@media (min-width: 992px) { 
+    #myCarousel {padding-right:33.3333%;}
+    #myCarousel .carousel-controls {display:none;}  
+}
+@media (max-width: 991px) { 
+    .carousel-caption p,
+    #myCarousel .list-group {display:none;} 
+    

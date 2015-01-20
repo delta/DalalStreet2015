@@ -11,8 +11,9 @@ protect_from_forgery with: :null_session
     # fix multiple binding ###############################################################################
     # fix the application.html.erb page also  .......####################  
     @stocks_list = Stock.all
-    @market_events_paginate = MarketEvent.order('created_at DESC').limit(3).offset(0)
+    @market_events_paginate = MarketEvent.order('created_at DESC').limit(5).offset(0)
     @market_events_count = MarketEvent.count/7
+    @i = 0;
         
   	if user_signed_in?
        @user = User.find(current_user)

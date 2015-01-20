@@ -18,32 +18,11 @@
 
 
 <body>
-
-   <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
-	<div class="modal-dialog">
-	  <div class="modal-content contcustom">
-	    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	    <br> 		 
-	           <div class="modal-body">
-	              <span class="fa fa-spinner bigicon"></span>
-		           <h2>Login</h2> 
-		        <div>      
-                <%=form_for(resource, :as => resource_name, :url => session_path(resource_name), :method =>'post') do |f| %>
-					  <p><%= f.text_field :email , :placeholder => "email" %></p>
-					  <p><%= f.password_field :password , :placeholder => "password"%></p>
-					  <p><%= f.submit "Sign in", :class => "btn btn-primary" %></p>
-				<% end %>
-			          <span id="lock1" class="fa fa-lock medhidden redborder"></span>
-	            </div>
-
-	           </div>
-	      </div><!-- /.modal-content -->
-	  </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-
-
+    <!-- Page Content -->
+ <div class="container">
+                    
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-default" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -73,193 +52,158 @@
         </div>
         <!-- /.container -->
     </nav>
+     
+   
 
-    <!-- Page Content -->
- <div class="container">
-                    
-             <div class="row">
-                 <div class="col-lg-12">
-                 <div class="panel">
-              <%= render partial:"/dalal_dashboard/partials/stock_marquee_partial",locals: { stocks_list: @stocks_list }%>
-                   </div>
-                  </div>
-             </div>
+    <div class="row">
 
-        
-        <!-- Jumbotron Header -->
-        <div class="row text-center">
-       
-        <div class="col-lg-7 col-md-7 col-sm-7">
-        <div class="panel" style="padding:5px;">
-            <!-- <h3>Dalal Street</h3> -->
-			<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="3000">
-			  <!-- Indicators -->
-			  <ol class="carousel-indicators">
-			    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-			    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-			    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-			  </ol>
-			 
-			  <!-- Wrapper for slides -->
-			  <div class="carousel-inner">
-			    <div class="item active">
-                  <img src="/assets/dalal_street_cover.jpg" alt="Dalal street cover">
-			      <div class="carousel-caption">
-			          <!-- <h3>Caption Text</h3> -->
-			      </div>
-			    </div>
-			    <div class="item">
-			      <img src="/assets/stock_down.jpg" alt="Dalal street cover" class="img-responsive">
-			      <div class="carousel-caption">
-			          <!-- <h3>Caption Text</h3> -->
-			      </div>
-			    </div>
-			    <div class="item">
-			      <img src="/assets/stock_market.jpg" alt="Dalal street cover" class="img-responsive">
-			      <div class="carousel-caption">
-			          <!-- <h3>Caption Text</h3> -->
-			      </div>
-			    </div>
-			  </div>
-			 
-			  <!-- Controls -->
-			  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-			    <span class="glyphicon glyphicon-chevron-left"></span>
-			  </a>
-			  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-			    <span class="glyphicon glyphicon-chevron-right"></span>
-			  </a>
-			</div> <!-- Carousel -->
-            
-        </div>
-        </div>
-
-		   <div class="col-md-5 col-sm-5">
-             <div class="panel">
-		     <div class="list-group" id="socket_link">
-		     <%@market_events_paginate.each do |event|%>
-             <a href="#" class="list-group-item active">
-                <div class="media col-md-6">
-                    <figure class="pull-left">
-                        <img class="media-object img-rounded img-responsive"  src="http://placehold.it/350x250" alt="placehold.it/350x250" >
-                    </figure>
-                </div>
-                <div class="col-md-6">
-                    <h4 class="list-group-item-heading"> List group heading </h4>
-                    <p class="list-group-item-text"> <%= event.eventname%>
-                    </p>
-                </div>
-             </a>
-		     <% end %>
-             </div>
-             </div>
-		   	</div>
+    <div class="col-lg-12">
+	   <div class="panel">
+	    <%= render partial:"/dalal_dashboard/partials/stock_marquee_partial",locals: { stocks_list: @stocks_list }%>
+	   </div>
+    </div>
 		    
-        </div>
+    <div class="col-lg-12" style="margin-left:5px;">
 
-        <!-- <hr> -->
+	      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+	      <!-- Wrapper for slides -->
+	      <div class="carousel-inner">
+	      
+	        <div class="item active">
+	          <img src="http://placehold.it/760x400/cccccc/ffffff">	
+	           <div class="carousel-caption">
+	            <h4><a href="#">Lorem ipsum dolor sit amet consetetur sadipscing</a></h4>
+	            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
+	          </div>
+	        </div><!-- End Item -->
+	 
+	         <div class="item">
+	          <img src="http://placehold.it/760x400/999999/cccccc">
+	           <div class="carousel-caption">
+	            <h4><a href="#">consetetur sadipscing elitr, sed diam nonumy eirmod</a></h4>
+	            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
+	          </div>
+	        </div><!-- End Item -->
+	        
+	        <div class="item">
+	          <img src="http://placehold.it/760x400/dddddd/333333">
+	           <div class="carousel-caption">
+	            <h4><a href="#">tempor invidunt ut labore et dolore</a></h4>
+	            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
+	          </div>
+	        </div><!-- End Item -->
+	        
+	        <div class="item">
+	          <img src="http://placehold.it/760x400/999999/cccccc">
+	           <div class="carousel-caption">
+	            <h4><a href="#">magna aliquyam erat, sed diam voluptua</a></h4>
+	            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
+	          </div>
+	        </div><!-- End Item -->
 
-        <!-- Title -->
-<!--         <div class="row">
-            <div class="col-lg-12">
-             <h3>Latest News</h3>
-            </div>
-        </div>
- -->        <!-- /.row -->
+	        <div class="item">
+	          <img src="http://placehold.it/760x400/dddddd/333333">
+	           <div class="carousel-caption">
+	            <h4><a href="#">tempor invidunt ut labore et dolore magna aliquyam erat</a></h4>
+	            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
+	          </div>
+	        </div><!-- End Item -->
+	                
+	      </div><!-- End Carousel Inner -->
 
-         <div class="row">
-             <div class="col-lg-12">
-                 <div class="panel-body">
-                  <ul id="news1">
-                     <% if @market_events_paginate.blank? %>
-                        <li>No occuring events.</li>
-                        <li>Stand by for stock info</li>
-                        <li>New events will start soon.</li>
-                     <% else %>
-                        <%@market_events_paginate.each do |event|%>
-                        <li> <%= event.eventname%> </li>
-                        <% end %>
-                     <% end -%> 
-                  </ul>
-                 </div>
-            </div>                
-          </div>
 
-        <!-- Page Features -->
-<!--            <div class="row text-center">
-            <div class="col-md-3 col-sm-6">
-                <div class="panel">
-                     <img src="/assets/dalal_thumb.jpg" alt="Dalal Thumb" style="height:225px;" class="img-responsive">
-            
-                    <div class="caption">
-                        <h3>Feature Label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        <p>
-                            <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+	    <ul class="list-group col-sm-4">
+	     <%@market_events_paginate.each do |event|%>
+	      <li data-target="#myCarousel" <%= "data-slide-to= #{@i}" %> class="list-group-item"><h4><%= event.eventname%></h4></li>
+	      <% @i = @i + 1%>
+	     <% end %>
+	    </ul>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="panel">
-                     <img src="/assets/dalal_thumb2.jpg" alt="Dalal Thumb2" style="height:225px;" class="img-responsive">
-                    <div class="caption">
-                        <h3>Feature Label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        <p>
-                            <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+	      <!-- Controls -->
+	      <div class="carousel-controls">
+	          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+	            <span class="glyphicon glyphicon-chevron-left"></span>
+	          </a>
+	          <a class="right carousel-control" href="#myCarousel" data-slide="next">
+	            <span class="glyphicon glyphicon-chevron-right"></span>
+	          </a>
+	      </div>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="panel">
-                    <img src="/assets/dalal_thumb3.jpg" alt="Dalal Thumb3" style="height:225px;" class="img-responsive">
-                    <div class="caption">
-                        <h3>Feature Label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        <p>
-                            <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+	    </div><!-- End Carousel -->
 
-            <div class="col-md-3 col-sm-6">
-                <div class="panel">
-                    <img src="/assets/dalal_thumb2.jpg" alt="Dalal Thumb2" style="height:225px;" class="img-responsive">
-                    <div class="caption">
-                        <h3>Feature Label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        <p>
-                            <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+    </div>
+    </div>
 
-        </div>
- -->        <!-- /.row -->
-
-        <hr>
+   <hr>
 
         <!-- Footer -->
         <footer>
             <div class="row	 text-center">
                 <div class="col-lg-12">
                     <p>Copyright © Dalal Street 2015</p>
+                    <p>Pragan 2015</p>
                 </div>
             </div>
         </footer>
 
     </div>
+
+     <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+	<div class="modal-dialog">
+	  <div class="modal-content contcustom">
+	    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	    <br> 		 
+	           <div class="modal-body">
+	              <span class="fa fa-spinner bigicon"></span>
+		           <h2>Login</h2> 
+		        <div>      
+                <%=form_for(resource, :as => resource_name, :url => session_path(resource_name), :method =>'post') do |f| %>
+					  <p><%= f.text_field :email , :placeholder => "email" %></p>
+					  <p><%= f.password_field :password , :placeholder => "password"%></p>
+					  <p><%= f.submit "Sign in", :class => "btn btn-primary" %></p>
+				<% end %>
+			          <span id="lock1" class="fa fa-lock medhidden redborder"></span>
+	            </div>
+
+	           </div>
+	      </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
     
 </body>
 
 <script type="text/javascript">
 	
+	$(document).ready(function(){
+    
+	var clickEvent = false;
+	$('#myCarousel').carousel({
+		interval:   4000	
+	}).on('click', '.list-group li', function() {
+			clickEvent = true;
+			$('.list-group li').removeClass('active');
+			$(this).addClass('active');		
+	}).on('slid.bs.carousel', function(e) {
+		if(!clickEvent) {
+			var count = $('.list-group').children().length -1;
+			var current = $('.list-group li.active');
+			current.removeClass('active').next().addClass('active');
+			var id = parseInt(current.data('slide-to'));
+			if(count == id) {
+				$('.list-group li').first().addClass('active');	
+			}
+		}
+		clickEvent = false;
+	});
+})
+
+$(window).load(function() {
+    var boxheight = $('#myCarousel .carousel-inner').innerHeight();
+    var itemlength = $('#myCarousel .item').length;
+    var triggerheight = Math.round(boxheight/itemlength+1);
+	$('#myCarousel .list-group-item').outerHeight(triggerheight);
+});
+
    $(function(){
         var index_channel = new WebsocketClass("#socket_link");
         var index_subscribe = index_channel.channel_subscribe("index");
