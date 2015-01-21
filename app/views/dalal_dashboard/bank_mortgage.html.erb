@@ -6,7 +6,7 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <br>         
             <div class="modal-body">
-            <%= render partial:"dalal_dashboard/partials/bank_mortgage_partial",locals: { stock: @stock, mortgage: @mortgage, no_mortgage: @no_mortgage} %>
+            <%= render partial:"dalal_dashboard/partials/bank_mortgage_partial_socket",locals: { stock: @stock, mortgage: @mortgage, no_mortgage: @no_mortgage} %>
             </div>
           </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -32,9 +32,7 @@
                     </div>
                 </div>
                 <!-- /.row -->
- 
                 <%= render partial:"dalal_dashboard/partials/panel_dashboard_partial",locals: { stocks_list: @stocks_list }%>
-               
                 <div class="row">
                   <div class="col-lg-12">
                         <div class="panel panel-default">
@@ -42,45 +40,7 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="table-responsive">
-                                     <table class="table table-bordered table-hover table-striped"  data-uri="<%= request.host %>:<%= request.port %>/websocket">
-                                        <thead>
-                                            <tr>
-                                                <th>Stock</th>
-                                                <th>AllTimeLow</th>
-                                                <th>AllTimeHigh</th>
-                                                <th>DayLow</th>
-                                                <th>DayHigh</th>
-                                                <th>Current (USD)</th>
-                                                <th>StockInMarket</th>
-                                                <th>StocksBought</th>
-                                                <th>TotalStockPrice</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="render_tbody">
-                                            <% @stocks.each do |stock| %>
-                                                <tr>
-                                                 <%if stock.updown == 1%>
-                                                    <% @color="style=color:green"%> 
-                                                    <% @image="src=/assets/up-arrow.jpg"%> 
-                                                <%else%> 
-                                                    <% @color="style=color:red" %>
-                                                    <% @image="src=/assets/stock_down.gif"%> 
-                                                <%end%>
-                                                    <td><a href="#myModal" data-toggle="modal" data-target="#myModal" <%="onclick=get_single_stock_id('#{stock.id}');"%> ><%=stock.stockname%></a></td>
-                                                    <td><%=stock.alltimelow.round(2) %></td>
-                                                    <td><%=stock.alltimehigh.round(2) %></td>
-                                                    <td><%=stock.daylow.round(2) %></td>
-                                                    <td><%=stock.dayhigh.round(2) %></td>
-                                                    <td <%=@color%> ><%=stock.currentprice.round(2) %><span><img <%=@image%> style="width:7px;height:7px;"></img></span></td>
-                                                    <td><%=stock.stocksinmarket.round(2)%></td>
-                                                    <td><%=stock.totalstock.round(2)%></td>
-                                                    <td><%=stock.netcash.round(2)%></td>
-                                                </tr>
-                                            <% end %>     
-                                        </tbody>
-                                    </table>
-                                </div>
+                <%= render partial:"dalal_dashboard/partials/main_bank_mortgage_partial",locals: { stocks: @stocks }%>
                             </div>
                         </div>
                     </div>
@@ -125,6 +85,16 @@
 
    };
    
+
+   var isNumber = function(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    };
+
    var get_single_stock_id = function(stock_id){
         get_single_stock_modal(stock_id);
    };
@@ -137,6 +107,31 @@
         var bankmortgage_socket_unbind = bankmortgage_socket.evt_unbinder();
    };
   
+   var sort_data_bank = function(value){
+      var type = value.split("_")[0];
+
+      if (type == "bank")
+        var num = document.getElementById("num_of_stock").value;
+      else if (type == "bankreturn")
+        var num = 0;
+      else
+        alert("Invalid.Please try again.");
+
+      var data = {type_stock: value,
+                  num_of_stock: num,
+                 };
+
+      return data;
+    };
+
+   var sendvalues_mortgage = function(value){
+        var data = sort_data_bank(value);
+        var bank_mortgage_send_socket = new WebsocketClass(".table");
+        var bank_mortgage_send_socket_binder = bank_mortgage_send_socket.evt_binder("bank_mortgage_socket");
+        var bank_mortgage_send_socket_trigger = bank_mortgage_send_socket.evt_trigger("bank_mortgage_socket",data);
+        var bank_mortgage_send_socket_unbind = bank_mortgage_send_socket.evt_unbinder();
+    };
+
 </script>
 
 <% end %>    

@@ -171,7 +171,7 @@
                                       </div>
                                       <div class="form-group">
                                       <%= hidden_field_tag "identity_buy","buy_#{@stock.id}"%><br>
-                                      <%= tag "input", { "type" => "button", "value" => "Buy","name" => "Buy", "class"=>"btn btn-primary btn-sm", "onclick" => "sendvalues('buy_#{@stock.id}');" } %>
+                                      <%= tag "input", { "type" => "button", "value" => "Buy","name" => "Buy", "class"=>"btn btn-primary btn-sm","data-dismiss"=>"modal", "onclick" => "sendvalues('buy_#{@stock.id}');" } %>
                                       </div>
                              </div>   
                              </div>
@@ -196,7 +196,7 @@
                                       </div>
                                       <div class="form-group">
                                       <%= hidden_field_tag "identity_sell","sell_#{@stock.id}"%><br>
-                                      <%= tag "input", { "type" => "button", "value" => "Sell","name" => "Sell", "class"=>"btn btn-primary btn-sm", "onclick" => "sendvalues('sell_#{@stock.id}');" } %>
+                                      <%= tag "input", { "type" => "button", "value" => "Sell","name" => "Sell", "class"=>"btn btn-primary btn-sm","data-dismiss"=>"modal", "onclick" => "sendvalues('sell_#{@stock.id}');" } %>
                                       </div>
                                <% end -%>      
                               </div>

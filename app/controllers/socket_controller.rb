@@ -196,9 +196,9 @@ require "json"
          @no_mortgage = "You have not mortgaged any stocks of #{@stock.stockname} yet."
         end
           
-        update_partial_input('dalal_dashboard/partials/bank_mortgage_partial', :@stock, @stock)
-        update_partial_input('dalal_dashboard/partials/bank_mortgage_partial', :@mortgage, @mortgage)
-        update_partial_input('dalal_dashboard/partials/bank_mortgage_partial', :@no_mortgage, @no_mortgage)
+        update_partial_input('dalal_dashboard/partials/bank_mortgage_partial_socket', :@stock, @stock)
+        update_partial_input('dalal_dashboard/partials/bank_mortgage_partial_socket', :@mortgage, @mortgage)
+        update_partial_input('dalal_dashboard/partials/bank_mortgage_partial_socket', :@no_mortgage, @no_mortgage)
         
         data = {}
         data = load_data_with_partials(data)
@@ -307,6 +307,69 @@ require "json"
           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
           redirect_to :action => 'index'
         end
+     end
+
+     def bank_mortgage_socket
+      if user_signed_in?
+           @type = data[:type_stock].split("_")[0]
+ 
+          if @type == 'bank' && !data[:num_of_stock].blank?
+                @stockid = data[:type_stock].split("_")[1]
+                @numofstock_to_mortgage = data[:num_of_stock]
+                @check_stock = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.id' => @stockid ).group("stock_id").first
+                
+                if @check_stock.totalstock.to_f >= @numofstock_to_mortgage.to_f and @numofstock_to_mortgage.to_f>0
+                   @user_cash_inhand = User.find(current_user.id)
+                   @user_cash_inhand.cash = @user_cash_inhand.cash.to_f + 0.75*@numofstock_to_mortgage.to_f*@check_stock.currentprice.to_f
+                   @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @stockid,:numofstock => -1*@numofstock_to_mortgage.to_f)
+                   @mortgage = Bank.create(:user_id => current_user.id, :stock_id => @stockid,:pricerendered => @check_stock.currentprice, :numofstock => @numofstock_to_mortgage)
+                   @user_cash_inhand.save  
+                   @extra_cash = 0.75*@numofstock_to_mortgage.to_f*@check_stock.currentprice.to_f
+                   @extra_cash = @extra_cash.round(2)
+                   flash[:notice] = "Mortgage Successful.$#{@extra_cash} added to your account"
+                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                   bank_mortgage_socket_helper
+                   # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                else
+                   flash[:error] = "Invalid request.You only have #{@check_stock.totalstock} stocks of #{@check_stock.stockname}."
+                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                   bank_mortgage_socket_helper
+                   # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                end
+            elsif @type == 'bankreturn'
+                   logger.info data[:type_stock]
+                   ################## check mortgage again ######################################################
+                   @id = data[:type_stock].split("_")[1]
+                   @mortgage = Bank.where("banks.user_id" => current_user.id,"banks.id" => @id).first
+                   @user = User.find(current_user.id)
+                   @stock = Stock.select("currentprice").where('stocks.id' => @mortgage.stock_id).first
+                   #### u can just modifify that that record #####
+                   @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @mortgage.stock_id,:numofstock => @mortgage.numofstock)
+                   @user.cash = @user.cash - @mortgage.numofstock.to_f*@stock.currentprice.to_f
+                   @deducted = (@mortgage.numofstock.to_f*@stock.currentprice).round(2);
+
+                   if @user.save
+                      @mortgage.destroy
+                      flash[:notice] = "Stocks retrieved from bank.$#{@deducted} deducted from your account"
+                      @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                      bank_mortgage_socket_helper
+                      # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                   else
+                      flash[:error] = "Error processing request.Please try again."
+                      @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
+                      bank_mortgage_socket_helper
+                      # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                   end
+        else
+           flash[:error] = "Did not recieve request.Please try again."
+           @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
+           bank_mortgage_socket_helper
+           # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+        end  
+        else
+          flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+          redirect_to :action => 'index'
+        end ##end of user_signed_in
      end
 
      def index_updater

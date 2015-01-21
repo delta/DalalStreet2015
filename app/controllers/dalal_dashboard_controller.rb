@@ -190,9 +190,9 @@ def show
                @no_mortgage = nil
              end  
 
-              if @mortgage.blank?
+             if @mortgage.blank?
                @no_mortgage = "You have not mortgaged any stocks yet."
-              end
+             end
              
              @notifications_list = Notification.get_notice(current_user.id,10)
              @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 

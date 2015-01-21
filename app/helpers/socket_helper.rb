@@ -80,7 +80,7 @@ module SocketHelper
               Stock.connection.clear_query_cache
               # @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               @stocks_list = Stock.all
-              @market_events_paginate = MarketEvent.page(1).per(10)
+              @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
 
               @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
               update_partial_input('dalal_dashboard/partials/main_buy_sell_partial', :@stocks_list, @stocks_list)
@@ -94,5 +94,39 @@ module SocketHelper
               send_message :buy_sell_stock_socket, data
        end
    end
+
+  def bank_mortgage_socket_helper
+       if user_signed_in?
+             @stocks_list = Stock.all
+             @stocks = Stock.return_bought_stocks(current_user.id)
+             @stock = Stock.return_stock_user_first(current_user.id)
+             @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+
+             if !@stock.blank?
+               @mortgage = Bank.where("banks.user_id" => current_user.id,"banks.stock_id" => @stock.id)
+             else  
+               @no_mortgage = nil
+             end  
+
+             if @mortgage.blank?
+               @no_mortgage = "You have not mortgaged any stocks yet."
+             end
+             
+             @notifications_list = Notification.get_notice(current_user.id,10)
+             @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
+             @notifications_count = Notification.count/7      
+             @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
+             @market_events_count = MarketEvent.count/7 
+             
+             update_partial_input('dalal_dashboard/partials/main_bank_mortgage_partial', :@stocks , @stocks)
+             update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock , @price_of_tot_stock)
+             update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@stocks_list, @stocks_list )
+             update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@market_events_paginate , @market_events_paginate)
+         
+              data = {}
+              data = load_data_with_partials(data)
+              send_message :bank_mortgage_socket, data
+       end
+   end ##bank_mortgage_socket_helper 
 
 end

@@ -1,0 +1,40 @@
+<div id="main_bank_mortgage_partial">
+<div class="table-responsive">
+   <table class="table table-bordered table-hover table-striped"  data-uri="<%= request.host %>:<%= request.port %>/websocket"> 
+       <thead>
+        <tr> 
+         <th>Stock</th> 
+         <th>AllTimeLow</th> 
+         <th>AllTimeHigh</th>
+         <th>DayLow</th> 
+         <th>DayHigh</th> 
+         <th>Current (USD)</th> 
+         <th>StockInMarket</th> 
+         <th>StocksBought</th> 
+         <th>TotalStockPrice</th> 
+        </tr> 
+       </thead>
+       <tbody id="render_tbody"> 
+        <% @stocks.each do |stock| %> 
+         <tr> 
+	         <%if stock.updown == 1%> 
+	            <% @color="style=color:green"%> 
+	            <% @image="src=/assets/up-arrow.jpg"%> 
+	         <%else%> 
+	            <% @color="style=color:red" %> 
+	            <% @image="src=/assets/stock_down.gif"%> 
+	         <%end%> 
+	         <td><a href="#myModal" data-toggle="modal" data-target="#myModal" <%="onclick=get_single_stock_id('#{stock.id}');"%> ><%=stock.stockname%></a></td> 
+	         <td><%=stock.alltimelow.round(2) %></td> 
+	         <td><%=stock.alltimehigh.round(2) %></td>
+	         <td><%=stock.daylow.round(2) %></td> 
+	         <td><%=stock.dayhigh.round(2) %></td> 
+	         <td <%=@color%> ><%=stock.currentprice.round(2) %><span><img <%=@image%> style="width:7px;height:7px;"></img></span></td> <td><%=stock.stocksinmarket.round(2)%></td> 
+	         <td><%=stock.totalstock.round(2)%></td> 
+	         <td><%=stock.netcash.round(2)%></td> 
+         </tr> 
+        <% end %> 
+       </tbody> 
+    </table> 
+</div>
+</div>
