@@ -61,12 +61,21 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Stock Price</h3>
                             </div>
-                            <div>
-                            <canvas id="canvas_line" width="401" height="150" style="width: 401px; height: 150px;">
+                          <div>
+                          <canvas id="canvas_line" width="401" height="150" style="width: 401px; height: 150px;">
                             </canvas>
+                          </div>
                         </div>
+
+                         <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Market Capital</h3>
+                            </div>
+                          <div>
+                          <canvas id="canvas_line2" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
+                          </div>
                         </div>
                     
                         </div>
@@ -100,7 +109,8 @@
 <% content_for :script do %>
 
  <%= render partial:"dalal_dashboard/partials/chart_partial.html.erb",locals: {price_list: @price_list}%>
-
+ <%= render partial:"dalal_dashboard/partials/chart_partial_2.html.erb",locals: {price_list: @price_list,stocksinmarket: @stock.stocksinmarket}%>
+ 
  <script type="text/javascript">
   
     // $(function(){

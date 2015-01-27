@@ -14,7 +14,6 @@ require "json"
 layout "../dalal_dashboard/layout/layout.html.erb"
 
 	def index
-		if user_signed_in?
        #caution ::::   change to devise parameters later #####
        #######.................redirect to main page if user not valid ..............instead it is redirecting now to /user/sign_in...which is not correct
   		 #######....Wats the limit of stocks user can buy from stocksinmarket,,how much he can bid for etc.........###########################
@@ -28,10 +27,8 @@ layout "../dalal_dashboard/layout/layout.html.erb"
        ######### check for null values and rows .......................##############################
        ####### the top menu notification doesnot get updated ...............#######################
        @user = User.find(current_user)
-  		 redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
-  		else
-  		 redirect_to :action => 'index'	
-  		end 	
+       @username = @user.username
+       redirect_to :action => 'index' 
 	end
 	
 def show
@@ -320,6 +317,7 @@ def show
     	if user_signed_in?
 	      @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
         @stock = Stock.select("*").first
+        @stocksinmarket = @stock.stocksinmarket
         @market_event_list = MarketEvent.get_events(10)
         @stock_list = Stock.pluck(:stockname)
         @price_list = Stock.read_current_price(@stock.id)

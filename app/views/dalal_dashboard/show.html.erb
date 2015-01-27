@@ -75,27 +75,24 @@
 
                             <div class="panel-body">
 
-                            <div role="tabpanel">
-                              <ul id="myTab" class="nav nav-tabs" role="tablist">
-                                <li role="presentation"  class="active"><a href="#cur_price" aria-controls="home" role="tab" data-toggle="tab">Current Price</a></li>
-                                <li role="presentation"><a href="#mark_cap" aria-controls="profile" role="tab" data-toggle="tab">Market capital</a></li>
+                            <div class="bs-example">
+                              <ul class="nav nav-tabs">
+                                  <li class="active"><a data-toggle="tab" href="#sectionA">Section A</a></li>
                               </ul>
-                              <!-- Tab panes -->
                               <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane active" id="cur_price"> 
-                                    <div>
+                                  <div id="sectionA" class="tab-pane fade in active">
+                                       <div>
                                     <canvas id="canvas_line" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
                                     </div>
-                                </div>
-                                <div role="tabpanel" class="tab-pane" id="mark_cap">
-                                    <div>
+                                  </div>
+                                 <!--  <div id="sectionB" class="tab-pane fade">
+                                     <div>
                                     <canvas id="canvas_line2" width="401" height="150" style="width: 401px; height: 150px;"></canvas>
                                     </div>
-                                </div>
+                                  </div> -->
                               </div>
-                            </div>
-
-                            </div>
+                          </div>
+                         </div>
 
                         </div><!-- col-->
                         <div class="col-lg-4">
@@ -200,8 +197,6 @@
 <% content_for :script do %>
  
  <%= render partial:"dalal_dashboard/partials/chart_partial.html.erb",locals: {price_list: @price_list}%>
- <%= render partial:"dalal_dashboard/partials/chart_partial_2.html.erb",locals: {price_list: @price_list}%>
-
  
  <script type="text/javascript">
  
@@ -231,10 +226,10 @@
                     var company_socket_unbind = company_socket.evt_unbinder();
                 };
   
-                $("#myTab a").click(function(b) {
-                  b.preventDefault();
-                  $(this).tab("show") 
-                });
+                // $("#myTab a").click(function(b) {
+                //   b.preventDefault();
+                //   $(this).tab("show") 
+                // });
 </script>
 
 <% end %>    

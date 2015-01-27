@@ -18,7 +18,8 @@ include IndexHelper
         
   	if user_signed_in?
        @user = User.find(current_user)
-       redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
+       @username = @user.username
+       # redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
   	end
     	   
   end

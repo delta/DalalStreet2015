@@ -1,6 +1,6 @@
-User.create!([
-  {email: "johnrejimathai@gmail.com", encrypted_password: "$2a$10$zZhZYpwlos0M1mYRvZXVQuRcoPuzNzMovwDWsxciEJoGtHR60B85a", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 1, current_sign_in_at: "2015-01-14 06:56:53", last_sign_in_at: "2015-01-14 06:56:53", current_sign_in_ip: "127.0.0.1", last_sign_in_ip: "127.0.0.1", status: nil, username: nil, cash: "9141.695163308788"}
-])
+# User.create!([
+#   {email: "johnrejimathai@gmail.com", encrypted_password: "$2a$10$zZhZYpwlos0M1mYRvZXVQuRcoPuzNzMovwDWsxciEJoGtHR60B85a", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 1, current_sign_in_at: "2015-01-14 06:56:53", last_sign_in_at: "2015-01-14 06:56:53", current_sign_in_ip: "127.0.0.1", last_sign_in_ip: "127.0.0.1", status: nil, username: nil, cash: "9141.695163308788"}
+# ])
 Bank.create!([
   {user_id: 1, stock_id: 5, pricerendered: "117.1854511177061", numofstock: 2},
   {user_id: 1, stock_id: 4, pricerendered: "74.33887449159684", numofstock: 1}

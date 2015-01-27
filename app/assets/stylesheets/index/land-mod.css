@@ -8,11 +8,6 @@
 
     }
 
-    img{
-        display-block; width:100%;
-    }
-
-
     .thumbnail{
         border-radius: 0;
     }
@@ -22,10 +17,10 @@
         border-radius: 2px;
     }
     .hidden {
-        display: none;
+        display:none;
     }
     .visible {
-        display: normal;
+        display:normal;
     }
     .colored {
         background-color: #F0EEEE;
@@ -225,4 +220,5 @@
 @media (max-width: 991px) { 
     .carousel-caption p,
     #myCarousel .list-group {display:none;} 
+}
     

@@ -14,7 +14,7 @@ GIT
       thin
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     actionmailer (4.1.8)
       actionpack (= 4.1.8)

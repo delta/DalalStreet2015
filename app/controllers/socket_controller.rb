@@ -143,6 +143,7 @@ require "json"
            update_partial_input('dalal_dashboard/partials/marketevent_partial', :@market_event_list , @market_event_list)
            update_partial_input('dalal_dashboard/partials/chart_partial', :@price_list , @price_list)
            update_partial_input('dalal_dashboard/partials/chart_partial_2', :@price_list , @price_list)
+           update_partial_input('dalal_dashboard/partials/chart_partial_2', :@stocksinmarket , @stock.stocksinmarket)
 
            data = {}
            data = load_data_with_partials(data)

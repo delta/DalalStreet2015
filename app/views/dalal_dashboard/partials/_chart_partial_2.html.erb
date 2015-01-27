@@ -1,9 +1,18 @@
 <div id="chart_partial_2">
  <script type="text/javascript">
    
+     $(function(){
+                    
       var current_price_list_array = function(pricelist){
       var price_list_array = pricelist.split(",")
-         return price_list_array
+
+       if(price_list_array.length > 12)
+          price_list_array = price_list_array.splice(price_list_array.length/2, price_list_array.length);
+         
+       for(var i = 0; i<price_list_array.length; i++)
+         price_list_array[i] = price_list_array[i] * parseInt('<%=@stocksinmarket%>');
+
+         return price_list_array;
       };
 
       var canvas2 = document.getElementById("canvas_line2");
@@ -17,26 +26,28 @@
       for(var i = 0; i<pricelist.length; i++)
              label.push(i);
       
-      var lineChartData = {
+      var lineChartData2 = {
             labels : label,
             datasets : [
                 {
                     label: "My First dataset",
-                    fillColor : "rgba(255,0,0,0.1)",
-                    strokeColor : "rgba(220,0,0,0.3)",
-                    pointColor : "rgba(220,0,0,0.3)",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
                     pointStrokeColor : "#fff",
                     pointHighlightFill : "#fff",
-                    pointHighlightStroke : "rgba(220,0,0,0.3)",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
                     data : pricelist
                 }]
         };  
             
-      window.myLine2 = new Chart(ctx1).Line(lineChartData, {
+      window.myLine2 = new Chart(ctx2).Line(lineChartData2, {
                     responsive: true,
                 });
 
       myLine2.destroy();
+
+               });
 
  </script>
 </div>

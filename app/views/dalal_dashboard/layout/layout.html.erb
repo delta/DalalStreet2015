@@ -145,7 +145,7 @@
                 <ul class="nav navbar-nav side-nav">
                     <li <% if !@class_show_active.blank? %><%= @class_show_active %><% end %> >
                     <%= link_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id  do %>
-                        <span id="span"><i class="fa fa-fw fa-dashboard"></i>Dalal Panel</span>
+                        <span id="span"><i class="fa fa-fw fa-home"></i>Dalal Panel</span>
                     <% end %>
                     </li>
                     <li <% if !@class_stock_active.blank? %><%= @class_stock_active %><% end %>  >
@@ -160,7 +160,7 @@
                     </li>
                     <li <% if !@class_bank_active.blank? %><%= @class_bank_active %><% end %> >
                     <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'bank_mortgage' do %>
-                        <span id="span"><i class="fa fa-fw fa-desktop"></i> Bank Mortage</span>
+                        <span id="span"><i class="fa fa-fw fa-bank"></i> Bank Mortage</span>
                     <% end %>
                     </li>
                     <li <% if !@class_company_active.blank? %><%= @class_company_active %><% end %> >
@@ -175,12 +175,12 @@
                     </li> -->
                     <li <% if !@class_history_active.blank? %><%= @class_history_active %><% end %> >
                     <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'buy_sell_history' do %>
-                        <span id="span"><i class="fa fa-fw fa-file"></i> Buy Sell History</span>
+                        <span id="span"><i class="fa fa-fw fa-book"></i> Buy Sell History</span>
                     <% end %>
                     </li>
                     <li <% if !@class_leader_active.blank? %><%= @class_leader_active %><% end %> >
                     <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'leaderboard' do %>
-                        <span id="span"><i class="fa fa-fw fa-file"></i> Leaderboard</span>
+                        <span id="span"><i class="fa fa-fw fa-users"></i> Leaderboard</span>
                     <% end %>
                     </li>
                 </ul>

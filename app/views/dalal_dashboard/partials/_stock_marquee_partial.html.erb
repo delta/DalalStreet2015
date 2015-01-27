@@ -3,15 +3,15 @@
 <div class="edge"></div>
 <ul class="slideContainer" id="money_start">
       <% @stocks_list.each do |stock| %>
-      <% if stock.updown == 1%>
-      <% @color="style=color:green"%> 
-      <% @image="src=/assets/green.png"%> 
-      <% else %> 
-      <% @color="style=color:red" %>
-      <% @image="src=/assets/red.png"%> 
-      <%end%>
+      <% if stock.updown == 1-%>
+      <% @color="style=color:green"-%> 
+      <% @image="src=/assets/green.png"-%> 
+      <% else -%> 
+      <% @color="style=color:red" -%>
+      <% @image="src=/assets/red.png" -%> 
+      <%end-%>
         <li class="slideItem" >
-      <span><%= "#{stock.stockname} " %></span><span <%=@color%> ><%="#{stock.currentprice.round(2)} "%></span><span><img <%=@image%> style="width:7px;height:7px;"></img></span>
+      <span><%= "#{stock.stockname} " %></span><span <%=@color%> ><%="#{stock.currentprice.round(2)} "%><img <%=@image%> style="width:7px;height:7px;"></img></span>
         </li>
 <% end %>
 </ul>

@@ -1,0 +1,11 @@
+.bundle/
+.idea/
+
+doc/
+pkg
+nbproject
+Gemfile.lock
+.rvmrc
+*.swp
+
+/coverage/

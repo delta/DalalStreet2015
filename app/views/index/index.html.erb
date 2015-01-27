@@ -41,24 +41,31 @@
                         <a href="#">About</a>
                     </li>
                     <li>
-                        <a href="#myModal" role="button" data-toggle="modal" data-target="#myModal">Login</a>
-                    </li>
-                    <li>
                         <a href="#">Contact</a>
                     </li>
+                    <% if user_signed_in? %>
+                    <li>
+                      <%= link_to "Dalal", controller: "dalal_dashboard", action: "show", id: current_user.id %>
+                    </li>
+                    <li>
+                        <a href="#"><%= "Welcome #{ @username}" %></a>
+                    </li>
+                    <%else%>
+                    <li>
+                        <a href="#myModal" role="button" data-toggle="modal" data-target="#myModal">Login</a>
+                    </li>
+                    <%end%>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
-     
-   
 
     <div class="row">
 
     <div class="col-lg-12">
-	   <div class="panel">
+	   <div class="panel" id="socket_link" data-uri="<%= request.host %>:<%= request.port %>/websocket">
 	    <%= render partial:"/dalal_dashboard/partials/stock_marquee_partial",locals: { stocks_list: @stocks_list }%>
 	   </div>
     </div>

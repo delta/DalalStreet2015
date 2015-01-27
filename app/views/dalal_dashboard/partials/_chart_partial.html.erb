@@ -1,6 +1,8 @@
 <div id="chart_partial">
  <script type="text/javascript">
    
+    $(function(){
+
       var current_price_list_array = function(pricelist){
       var price_list_array = pricelist.split(",")
          return price_list_array
@@ -37,6 +39,8 @@
                 });
 
       myLine.destroy();
+
+            });
 
  </script>
 </div>
