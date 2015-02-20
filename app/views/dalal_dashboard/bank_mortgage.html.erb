@@ -4,8 +4,12 @@
     <div class="modal-dialog">
       <div class="modal-content contcustom">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <br>         
+        <br>     
+             <div class="loader-modal-div">
+                            
+             </div>    
             <div class="modal-body">
+            
             <%= render partial:"dalal_dashboard/partials/bank_mortgage_partial_socket",locals: { stock: @stock, mortgage: @mortgage, no_mortgage: @no_mortgage} %>
             </div>
           </div><!-- /.modal-content -->
@@ -100,11 +104,13 @@
    };
 
    var get_single_stock_modal = function(stock_id){
+
         var data = {id: stock_id};
         var bankmortgage_socket = new WebsocketClass('.table');
         var bankmortgage_socket_binder = bankmortgage_socket.evt_binder("bank_mortgage_partial_render");
         var bankmortgage_socket_trigger = bankmortgage_socket.evt_trigger("bank_mortgage_partial_render",data);
         var bankmortgage_socket_unbind = bankmortgage_socket.evt_unbinder();
+
    };
   
    var sort_data_bank = function(value){

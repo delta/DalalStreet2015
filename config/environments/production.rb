@@ -12,7 +12,7 @@ Rails.application.configure do
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = false
+  config.action_controller.perform_caching = true
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
@@ -38,7 +38,6 @@ Rails.application.configure do
   config.assets.digest = true
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
-
 
   # Devise gem config refer Devise documentation
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
@@ -87,4 +86,7 @@ Rails.application.configure do
 
   config.assets.precompile = ['*.js', '*.css', '*.css.erb']
   config.assets.precompile += %w( index.css )
+
+  # Devise gem config refer Devise documentation
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 end

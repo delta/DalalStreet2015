@@ -193,7 +193,10 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <br>         
+            <br>   
+             <div class="loader-modal-div">
+                            
+             </div>      
                 <div class="modal-body">
                 <%= render partial:"dalal_dashboard/partials/marketevent_modal_partial",locals: { market_events_paginate: @market_events_paginate,market_events_count: @market_events_count } %>
                 </div>
@@ -206,7 +209,10 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <br>         
+            <br>       
+             <div class="loader-modal-div">
+                            
+             </div>  
                 <div class="modal-body" data-uri="<%= request.host %>:<%= request.port %>/websocket">
                 <%= render partial:"dalal_dashboard/partials/notification_modal_partial",locals: {notifications_paginate: @notifications_paginate, notifications_count: @notifications_count} %>
                 </div>

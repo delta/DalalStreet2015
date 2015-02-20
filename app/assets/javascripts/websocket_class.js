@@ -17,10 +17,13 @@ var WebsocketClass = function(socket_url){
          var connect = __connect(socket_url);
 	}()
 
-
 	this.callback = function(data){
          var rs = new RestfulWebsockets();
          console.log(data);
+         $(".loader-div").replaceWith(" "); //make changes if necessary
+         $(".loader-modal-div").replaceWith(" "); //make changes if necessary
+         // alert("");
+         $("input").prop('disabled', false);
          rs.refresh(data);
 	};
 
@@ -47,12 +50,16 @@ var WebsocketClass = function(socket_url){
 
 	this.evt_trigger = function(evt,data){
          if(binder)
-            dispatcher.trigger(evt, data, this.success, this.failure);
+           {dispatcher.trigger(evt, data, this.success, this.failure);
+            $( ".loader-div" ).append("<div class=\"loader\"> <div></div> <div></div> <div></div> <div></div> <div></div> </div>");
+            $( ".loader-modal-div" ).append("<div class=\"loader\"> <div></div> <div></div> <div></div> <div></div> <div></div> </div>");
+            $("input").prop('disabled', true);
+           }         
          else
             this.bind_fail(this.evt);            
 	};
 
-	this.evt_unbinder = function(){
+	this.evt_unbinder = function(){    
 	     // console.log(dispatcher);
          if(binder)
             {dispatcher.unbind(evt);
@@ -76,7 +83,7 @@ var WebsocketClass = function(socket_url){
           { // binder = true;
                 channel.bind(evt, function(data){
                     console.log("data received :"+data);
-                    callback_fn(data);
+                    callback(data);
                 });
           }
         else

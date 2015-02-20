@@ -9,7 +9,8 @@ html {
    font-family: "Helvetica Neue",Helvetica, Arial, sans-serif !important;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
-    font-size-adjust: 0.5;
+    font-size: 12px !important;
+    font-size-adjust: 0.40;
     font-weight: normal;
 }
 

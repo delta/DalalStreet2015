@@ -8,15 +8,19 @@
 body {
     margin-top: 100px;
     background-color: #222;
-  /*  -webkit-appearance: none;
-    -webkit-text-size-adjust: none;
-*/
-   font-family: "helvetica neue", Helvetica, Arial, sans-serif;
-   font-size: 12px !important;
-   -webkit-text-size-adjust: 100% !important;
+  
+   /*-webkit-text-size-adjust: 100% !important;
    -ms-text-size-adjust: 100% !important;
-   font-size-adjust: 0.5 !important;
-   font-weight: 500 !important;
+   -moz-text-size-adjust: 100% !important;
+   font-weight: 500 !important;*/
+
+    font-family: "Helvetica Neue",Helvetica, Arial, sans-serif !important;
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    font-size: 13px !important;
+    font-size-adjust: 0.45 !important;
+    font-weight: normal;
+
 }
 
 @font-face { font-family: 'helvetica neue'; src: local('Arial'); } @font-face { font-family: 'helvetica'; src: local('Arial'); }

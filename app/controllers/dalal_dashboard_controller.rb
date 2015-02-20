@@ -40,7 +40,7 @@ def show
             @stocks_list = Stock.all
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(5).reverse
             
-            @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
+            @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
             @notifications_count = Notification.count/7 
             @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
             @market_events_count = MarketEvent.count/7
@@ -74,7 +74,7 @@ def show
 	        	@stocks_list = Stock.all
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-            @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
+            @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
             @notifications_count = Notification.count/7       
             @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
             @market_events_count = MarketEvent.count/7
@@ -192,7 +192,7 @@ def show
              end
              
              @notifications_list = Notification.get_notice(current_user.id,10)
-             @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
+             @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
              @notifications_count = Notification.count/7      
              @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
              @market_events_count = MarketEvent.count/7
@@ -302,7 +302,7 @@ def show
             end
           @notifications_list = Notification.get_notice(current_user.id,10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-          @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
+          @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
           @notifications_count = Notification.count/7  
           @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
           @market_events_count = MarketEvent.count/7
@@ -325,7 +325,7 @@ def show
         @class_company_active = "class=active"
         
         @stocks_list = Stock.all
-        @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
+        @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
         @notifications_count = Notification.count/7       
         @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
         @market_events_count = MarketEvent.count/7
@@ -344,7 +344,7 @@ def show
         @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
         @stocks_list = Stock.all
         @notifications_list = Notification.get_notice(current_user.id,10)
-        @notifications_paginate = Notification.order('created_at DESC').limit(7).offset(0) 
+        @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
         @notifications_count = Notification.count/7    
         @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
         @market_events_count = MarketEvent.count/7

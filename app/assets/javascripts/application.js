@@ -19,4 +19,5 @@
 //= require jquery.newsticker.1.0.min
 //= require Chart.js
 //= require index.js
+//= require restfulWebsockets
 //= require_tree .
