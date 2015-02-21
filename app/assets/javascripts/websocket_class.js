@@ -8,7 +8,8 @@ var WebsocketClass = function(socket_url){
     var channel = null;
 
 	var __connect = function(socket_url){
-         dispatcher = new WebSocketRails($(socket_url).data('uri'), true);
+         // dispatcher = new WebSocketRails($(socket_url).data('uri'), true);
+         dispatcher = socket_url;
          establish_conn = true;
 	     console.log("Connection established : "+establish_conn);
 	};
@@ -22,20 +23,25 @@ var WebsocketClass = function(socket_url){
          console.log(data);
          $(".loader-div").replaceWith(" "); //make changes if necessary
          $(".loader-modal-div").replaceWith(" "); //make changes if necessary
-         // alert("");
          $("input").prop('disabled', false);
          rs.refresh(data);
 	};
 
 	this.evt_binder = function(evt){
-         dispatcher.bind(evt, this.callback);
          binder = true;
+         evt = evt;
+        if(binder)
+          dispatcher.bind(evt,this.callback);
+        else
+          console.log("Binder status : "+binder);
 	};
 
-    this.bind_fail = function(){
-         if(this.establish_conn)
+    /// incomplete function for checking connection again....
+    this.bind_fail = function(evt){
+         if(establish_conn)
          	this.evt_binder(evt);
-         
+         else
+            alert("Please refresh your page!");         
     };
     
     this.failure = function(response){
@@ -56,16 +62,18 @@ var WebsocketClass = function(socket_url){
             $("input").prop('disabled', true);
            }         
          else
-            this.bind_fail(this.evt);            
+            this.bind_fail(evt);     
 	};
 
 	this.evt_unbinder = function(){    
-	     // console.log(dispatcher);
          if(binder)
             {dispatcher.unbind(evt);
              binder = false;
-	         console.log("Connection unbound : "+binder);
-           }
+	         console.log("binder status : "+binder);
+            }
+        else
+           console.log("binder status : "+binder);
+
 	};
 
     this.channel_subscribe = function(channel_nm){

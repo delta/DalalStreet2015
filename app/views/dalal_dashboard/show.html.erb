@@ -201,35 +201,31 @@
  <script type="text/javascript">
  
               $(function(){
-                    var show_channel = new WebsocketClass(".table");
+                    var show_channel = new WebsocketClass(dispatcher);
                     var show_subscribe = show_channel.channel_subscribe("show");
                     var show_binder = show_channel.channel_binder("show_channel",get_userstock_info);
                });
 
+               var show_update_socket = new WebsocketClass(dispatcher);
+               var show_update_socket_binder = show_update_socket.evt_binder("index_updater");
                var get_userstock_info = function(data){
                     var data = {bool:true};
-                    var show_update_socket = new WebsocketClass(".table");
-                    var show_update_socket_binder = show_update_socket.evt_binder("index_updater");
                     var show_update_socket_trigger = show_update_socket.evt_trigger("index_updater",data);
-                    var show_update_socket_unbind = show_update_socket.evt_unbinder();
+                    // var show_update_socket_unbind = show_update_socket.evt_unbinder();
                };
 
                 var get_company_name = function(name){
                    get_company_info(name);
                 };
                 
+                var company_socket = new WebsocketClass(dispatcher);
+                var company_socket_binder = company_socket.evt_binder("company_handler");
                 var get_company_info = function(company_name){
                     var data = {name: company_name};
-                    var company_socket = new WebsocketClass("#market_event_list");
-                    var company_socket_binder = company_socket.evt_binder("company_handler");
                     var company_socket_trigger = company_socket.evt_trigger("company_handler",data);
-                    var company_socket_unbind = company_socket.evt_unbinder();
+                    // var company_socket_unbind = company_socket.evt_unbinder();
                 };
   
-                // $("#myTab a").click(function(b) {
-                //   b.preventDefault();
-                //   $(this).tab("show") 
-                // });
 </script>
 
 <% end %>    

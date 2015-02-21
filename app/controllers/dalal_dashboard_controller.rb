@@ -19,7 +19,6 @@ layout "../dalal_dashboard/layout/layout.html.erb"
        #######.................redirect to main page if user not valid ..............instead it is redirecting now to /user/sign_in...which is not correct
   		 #######....Wats the limit of stocks user can buy from stocksinmarket,,how much he can bid for etc.........###########################
   		 #######....wat to do if sum of total stock is zero in stock_useds ..........................#########################
-  		 ########....................... current user cash doesnt get rendered all the time ............................##################
        ####### .................... add market capital to dalal and company page .....................#####################
        ###### ....... some websockets dont run without the show page being loaded ...................##############
        ###### ...............remember to change active record gem sqlite file in server gem....................................#############
@@ -69,7 +68,7 @@ def show
          end
 	    else
 	       ##fill up
-
+         ##############################################
 	    end   
 	end
 
@@ -81,9 +80,9 @@ def show
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
             @user_current_cash = current_user.cash.round(2)
             @market_events_total = MarketEvent.count
-            @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
+            @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at ASC').limit(7).offset(0) 
             @notifications_count = Notification.count/7       
-            @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
+            @market_events_paginate = MarketEvent.order('created_at ASC').limit(7).offset(0)
             @market_events_count = MarketEvent.count/7
             @class_stock_active = "class=active"
          else

@@ -14,7 +14,9 @@ module DalalDashboardHelper
     @gap = 1
     active = active.to_i
       
-      @link = @link.to_s+"<a href='#paginator' onclick=update_modal_partials('#{active-1}','#{type}');> << </a>"
+      if active != 0
+       @link = @link.to_s+"<a href='#paginator' onclick=update_modal_partials('#{active-1}','#{type}');> << </a>"
+      end
       # @link = @link.to_s+"<a href='#paginator' onclick=update_modal_partials('0','#{type}');> 0 </a>"
       # @link = @link.to_s+"<a href='#paginator' onclick=update_modal_partials('1','#{type}');> 1 </a>"
         count.to_i.times do |i|
@@ -30,14 +32,12 @@ module DalalDashboardHelper
           else
            @link = @link
           end
-        end  
-      @link = @link.to_s+"<a href='#paginator' onclick=update_modal_partials('#{active+1}','#{type}');> >> </a>"
-      
+        end
+      if !(active > count-4 && active <= count+1)        
+       @link = @link.to_s+"<a href='#paginator' onclick=update_modal_partials('#{active+1}','#{type}');> >> </a>"
+      end
+
         return @link.html_safe
   end
-
-#          <% @market_events_count.to_i.times do |i| %>
-#          <a href="#paginator" <%= "onclick=update_modal_partials('#{i}','market');" %> ><%="#{i}"%></a>
-#          <% end %>
 
 end

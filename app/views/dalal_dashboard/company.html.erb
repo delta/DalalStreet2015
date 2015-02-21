@@ -122,12 +122,12 @@
        get_company_info(name);
     };
     
+    var company_socket = new WebsocketClass(dispatcher);
+    var company_socket_binder = company_socket.evt_binder("company_handler");
     var get_company_info = function(company_name){
         var data = {name: company_name};
-        var company_socket = new WebsocketClass("#market_event_list");
-        var company_socket_binder = company_socket.evt_binder("company_handler");
         var company_socket_trigger = company_socket.evt_trigger("company_handler",data);
-        var company_socket_unbind = company_socket.evt_unbinder();
+        // var company_socket_unbind = company_socket.evt_unbinder();
     };
 </script>
 

@@ -80,7 +80,7 @@
  <script type="text/javascript">
   
    $(function(){
-        var bankmortgage_channel = new WebsocketClass(".table");
+        var bankmortgage_channel = new WebsocketClass(dispatcher);
         var bankmortgage_subscribe = bankmortgage_channel.channel_subscribe("index");
         var bankmortgage_binder = bankmortgage_channel.channel_binder("index_channel",update_bankmortgage);
    });
@@ -103,14 +103,12 @@
         get_single_stock_modal(stock_id);
    };
 
+   var bankmortgage_socket = new WebsocketClass(dispatcher);
+   var bankmortgage_socket_binder = bankmortgage_socket.evt_binder("bank_mortgage_partial_render");
    var get_single_stock_modal = function(stock_id){
-
         var data = {id: stock_id};
-        var bankmortgage_socket = new WebsocketClass('.table');
-        var bankmortgage_socket_binder = bankmortgage_socket.evt_binder("bank_mortgage_partial_render");
         var bankmortgage_socket_trigger = bankmortgage_socket.evt_trigger("bank_mortgage_partial_render",data);
-        var bankmortgage_socket_unbind = bankmortgage_socket.evt_unbinder();
-
+        // var bankmortgage_socket_unbind = bankmortgage_socket.evt_unbinder();
    };
   
    var sort_data_bank = function(value){
@@ -130,12 +128,12 @@
       return data;
     };
 
+   var bank_mortgage_send_socket = new WebsocketClass(dispatcher);
+   var bank_mortgage_send_socket_binder = bank_mortgage_send_socket.evt_binder("bank_mortgage_socket");
    var sendvalues_mortgage = function(value){
         var data = sort_data_bank(value);
-        var bank_mortgage_send_socket = new WebsocketClass(".table");
-        var bank_mortgage_send_socket_binder = bank_mortgage_send_socket.evt_binder("bank_mortgage_socket");
         var bank_mortgage_send_socket_trigger = bank_mortgage_send_socket.evt_trigger("bank_mortgage_socket",data);
-        var bank_mortgage_send_socket_unbind = bank_mortgage_send_socket.evt_unbinder();
+        // var bank_mortgage_send_socket_unbind = bank_mortgage_send_socket.evt_unbinder();
     };
 
 </script>

@@ -87,15 +87,14 @@
         return true;
     };
     
+    var stock_socket = new WebsocketClass(dispatcher);
+    var stock_socket_binder = stock_socket.evt_binder("stock_ajax_handler");
+    
     var getvalues = function(value){
         var valuenum = value.split('_')[1];
         var data = {identity: valuenum,value: document.getElementById(value).value};
-
-        var stock_socket = new WebsocketClass('.table');
-        var stock_socket_binder = stock_socket.evt_binder("stock_ajax_handler");
         var stock_socket_trigger = stock_socket.evt_trigger("stock_ajax_handler",data);
-            // getnotifications();
-        var stock_socket_unbind = stock_socket.evt_unbinder();
+        // var stock_socket_unbind = stock_socket.evt_unbinder();
         $("#news1,#news2").newsticker();
    };
     

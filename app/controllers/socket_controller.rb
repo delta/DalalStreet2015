@@ -266,11 +266,12 @@ require "json"
                 @stockid = data[:type_stock].split("_")[1]
                 @numofstock_buy_for = data[:num_of_stock]
                 @bid_price = data[:price]
+                @bid_price = @bid_price.to_f.round(2);
                 @stock = Stock.find(@stockid) 
                 @user_cash_inhand = User.find(current_user.id)
              
               if @stock.stocksinmarket.to_f >= @numofstock_buy_for.to_f
-                 if @bid_price.to_f <= (0.1*@stock.currentprice.to_f+@stock.currentprice.to_f)
+                 if @bid_price <= (0.1*@stock.currentprice.to_f+@stock.currentprice.to_f)
                    if @user_cash_inhand.cash.to_f >= @numofstock_buy_for.to_f*@bid_price.to_f 
                       @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
                       flash[:notice] = "Successful Bid."
@@ -299,6 +300,7 @@ require "json"
                 @stockid = data[:type_stock].split("_")[1]
                 @numofstock_sell_for = data[:num_of_stock]
                 @ask_price = data[:price]
+                @ask_price = @ask_price.to_f.round(2)
                 @user_stock_inhand = Stock.joins(:stock_useds).select("stocks.*,sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => current_user.id,'stocks.id' => @stockid ).group("stock_id")
                  
                 if @user_stock_inhand[0].totalstock.to_f >= @numofstock_sell_for.to_f
@@ -314,7 +316,7 @@ require "json"
                   buy_sell_stock_socket_helper
                 end
          else
-            flash[:error] = "Did Not receive request.Please try again."
+            flash[:error] = "Invalid parameters.Please try again."
             @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
             buy_sell_stock_socket_helper
          end

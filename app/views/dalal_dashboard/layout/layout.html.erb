@@ -242,6 +242,8 @@
             };
   })();
 
+  var dispatcher = new WebSocketRails($(".table").data('uri'), true);
+
   var speed = 1000;
   (function currencySlide(){
       var currencyPairWidth = $('.slideItem:first-child').outerWidth();
@@ -259,7 +261,7 @@
                    type: type
                   };
 
-       var modal_update_socket = new WebsocketClass(".table");
+       var modal_update_socket = new WebsocketClass(dispatcher);
        var modal_update_socket_binder = modal_update_socket.evt_binder("update_modal_partials");
        var modal_update_socket_trigger = modal_update_socket.evt_trigger("update_modal_partials",data);
        var modal_update_socket_unbind = modal_update_socket.evt_unbinder();
