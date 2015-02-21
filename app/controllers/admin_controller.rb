@@ -8,7 +8,18 @@ class AdminController < ApplicationController
         end
             
     end 
+
+	def bulkupdate
+		if !user_signed_in?
+            		render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
+                        
+		else
+		@stocks_list = Stock.all
+		@sto=Stock.new
 	
+       end
+  end
+
 	def user_details
         	if !user_signed_in?
             	render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"

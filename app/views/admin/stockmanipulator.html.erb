@@ -85,9 +85,9 @@
 						<% end %></td>
                                                     <td><%=stock.alltimelow %></td>
                                                     <td><%=stock.alltimehigh %></td>
-                                                    <td><%=stock.daylow %></td>
-                                                    <td><%=stock.dayhigh %></td>
-                                                    <td><%=stock.currentprice %></td>
+                                                    <td><%=stock.daylow.round(2) %></td>
+                                                    <td><%=stock.dayhigh.round(2) %></td>
+                                                    <td><%=stock.currentprice.round(2) %></td>
                                                     <td><%=stock.stocksinmarket%></td>
 						    <td><%= link_to :controller=>'admin', :action=>'stockmanipulator', :delete_id => stock.id, :method => :delete,data: { confirm: 'Are you sure?' } do%>Delete<%end%></td>
 						</tr>
@@ -168,7 +168,7 @@
                             </div>
                             <div class="panel-body">
                             
-				    <%= form_for(@updatestock,:html=>{:class => "form-horizontal",:role=>"form"} , url:{action: "stockmanipulator"},method: :patch,:up_id => @updatestock.id) do |f| %>
+				    <%= form_for(@updatestock,:html=>{:class => "form-horizontal",:role=>"form"} , url:{action: "stockmanipulator"},method: :patch,:up_id => @updatestock.id	) do |f| %>
 				
 				<div class="form-group">	
 					<%= f.label :id,:class =>"control-label col-sm-4" %>
