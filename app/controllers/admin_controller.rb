@@ -1,57 +1,57 @@
 class AdminController < ApplicationController
     layout "../admin/layout/layout.html.erb"
-
+    http_basic_authenticate_with name: "admin", password: "root"
     def index
         if !user_signed_in?
             render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-              
+
         end
-            
-    end 
+
+    end
 
 	def bulkupdate
 		if !user_signed_in?
             		render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-                        
+
 		else
 		@stocks_list = Stock.all
 		@sto=Stock.new
-	
+
        end
   end
 
 	def user_details
         	if !user_signed_in?
             	render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-        	else      
+        	else
 		          @user_all = User.all.map{|u| [ u.id, u.id ] }
-		          @users = User.new	
+		          @users = User.new
 			         if params[:id]
 				        @user=User.find(params[:id])
 			         end
 		      end
 	end
-	
+
 	def stockmanipulator
 		if !user_signed_in?
             	render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-  	else      
+  	else
       @stock= Stock.new
       @stocks_list = Stock.all
 		if params[:order]
 		    @stocks_list = Stock.order(params[:order] + " " + sort_direction)
 		end
-	
-	       if params[:stock] 
+
+	       if params[:stock]
 	           @stock=Stock.new(id:params[:stock][:stock_id],stockname:params[:stock][:stockname],currentprice:params[:stock][:currentprice], stocksinexchange:params[:stock][:stocksinexchange],daylow:params[:stock][:daylow],dayhigh:params[:stock][:dayhigh],alltimelow:params[:stock][:alltimelow],alltimehigh:params[:stock][:alltimehigh],stocksinmarket:params[:stock][:stocksinmarket])
               if @stock.save
                   flash[:queryStatus] = "Saved Successfully"
                   redirect_to action:'stockmanipulator'
               end
-  	    end	
-		    
+  	    end
+
         if params[:update_id]
-    			 @updatestock=Stock.find(params[:update_id])  
+    			 @updatestock=Stock.find(params[:update_id])
 	      end
 
  		    if params[:up_id]
@@ -59,19 +59,19 @@ class AdminController < ApplicationController
     			if @updatestock.update(stock_params)
     				@updatestock=Stock.delete
     				redirect_to action:'stockmanipulator'
-    	                 
+
 			    end
 		    end
 
 		    if params[:delete_id]
-     			@deletestock=Stock.find(params[:delete_id]).delete  
+     			@deletestock=Stock.find(params[:delete_id]).delete
 		    end
 
     end
-	
+
   end
 
-    
+
     def market_events
         if !user_signed_in?
             render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
@@ -86,7 +86,7 @@ class AdminController < ApplicationController
                 redirect_to action:'market_events'
             end
 
-            if params[:market_event] 
+            if params[:market_event]
                  @check=Stock.where("id = ?", params[:market_event][:stock_id]).exists?
                 if @check
                     logger.info params[:market_event][:token]
@@ -116,11 +116,11 @@ class AdminController < ApplicationController
                     end
                 end
             end
-           
+
             if !MarketEvent.all.empty?
                 @stock= Stock.all
                 @no_of_row=6
-                
+
                 if params[:order]
                     if params[:search]
                             @allEvent = MarketEvent.select("*").where("stock_id=#{params[:search]}").order(params[:order]+ " " + sort_direction).paginate(:page => params[:page], :per_page => @no_of_row)
@@ -136,32 +136,32 @@ class AdminController < ApplicationController
                 end
 
             else
-                @allEvent="Event Empty. Please add new Events"    
+                @allEvent="Event Empty. Please add new Events"
             end
-            
-            
+
+
         end
-        
+
     end
-    
+
     def company_events
         if !user_signed_in?
             render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-            
+
         end
-        
-        
+
+
     end
-    
+
     def bank_rates
         if !user_signed_in?
                 render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-        else      
+        else
           @bank= Bank.new
           @banks_list = Bank.all
-                
+
             if params[:update_id]
-                     @updatebankrates=Bank.find(params[:update_id])  
+                     @updatebankrates=Bank.find(params[:update_id])
               end
 
                 if params[:up_id]
@@ -169,17 +169,17 @@ class AdminController < ApplicationController
                     if @updatebankrates.update(stock_params)
                         @updatebankrates=Bank.delete
                         redirect_to action:'bank_rates'
-                             
+
                     end
                 end
 
                 if params[:delete_id]
-                    @deletestock=Bank.find(params[:delete_id]).delete  
+                    @deletestock=Bank.find(params[:delete_id]).delete
                 end
 
         end
-        
-    
+
+
     end
 
 
