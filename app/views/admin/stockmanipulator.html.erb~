@@ -54,13 +54,27 @@
                                      <table class="table table-bordered table-hover table-striped"  data-uri="<%= request.host %>:<%= request.port %>/websocket">
                                         <thead>
                                             <tr>
-                                                <th>Stock</th>
-                                                <th>AllTimeLow</th>
-                                                <th>AllTimeHigh</th>
-                                                <th>DayLow</th>
-                                                <th>DayHigh</th>
-                                                <th>Current (USD)</th>
-                                                <th>StockInMarket</th>
+                                                <th><%= link_to :controller=>'admin', :action=>'stockmanipulator', :order=>'stockname' do%>
+						Stock
+						<% end %></th>
+					<th><%= link_to :controller=>'admin', :action=>'stockmanipulator', :order=>'alltimelow' do%>
+						AllTimeLow
+					<% end %></th>
+                                        <th><%= link_to :controller=>'admin', :action=>'stockmanipulator', :order=>'alltimehigh' do%>
+						AllTimeHigh
+					<% end %></th>
+                                        <th><%= link_to :controller=>'admin', :action=>'stockmanipulator', :order=>'daylow' do%>
+						DayLow
+					<% end %></th>
+                                        <th><%= link_to :controller=>'admin', :action=>'stockmanipulator', :order=>'dayhigh' do%>
+						DayHigh
+					<% end %></th>
+                                        <th><%= link_to :controller=>'admin', :action=>'stockmanipulator', :order=>'currentprice' do%>
+						Current (USD)
+					<% end %></th>
+                                        <th><%= link_to :controller=>'admin', :action=>'stockmanipulator', :order=>'stocksinmarket' do%>
+						StockInMarket
+					<% end %></th>
                                             </tr>
                                         </thead>
                                         <tbody id="render_tbody">
@@ -71,7 +85,7 @@
 						<% end %></td>
                                                     <td><%=stock.alltimelow %></td>
                                                     <td><%=stock.alltimehigh %></td>
-                                                    <td><%=stock.daylow %></td>
+                                                    <td><%=stock.daylow.round(2) %></td>
                                                     <td><%=stock.dayhigh %></td>
                                                     <td><%=stock.currentprice %></td>
                                                     <td><%=stock.stocksinmarket%></td>

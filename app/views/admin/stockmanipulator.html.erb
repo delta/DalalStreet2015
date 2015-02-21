@@ -85,9 +85,9 @@
 						<% end %></td>
                                                     <td><%=stock.alltimelow %></td>
                                                     <td><%=stock.alltimehigh %></td>
-                                                    <td><%=stock.daylow %></td>
-                                                    <td><%=stock.dayhigh %></td>
-                                                    <td><%=stock.currentprice %></td>
+                                                    <td><%=stock.daylow.round(2) %></td>
+                                                    <td><%=stock.dayhigh.round(2) %></td>
+                                                    <td><%=stock.currentprice.round(2) %></td>
                                                     <td><%=stock.stocksinmarket%></td>
 						    <td><%= link_to :controller=>'admin', :action=>'stockmanipulator', :delete_id => stock.id, :method => :delete,data: { confirm: 'Are you sure?' } do%>Delete<%end%></td>
 						</tr>
