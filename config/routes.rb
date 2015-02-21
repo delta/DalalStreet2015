@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   post '/admin/user_details' => 'admin#user_details'  
   patch '/admin/stockmanipulator' => 'admin#stockmanipulator' ###not defined yet  
   get '/admin/stockmanipulator' => 'admin#stockmanipulator'  
+  get '/admin/bulkupdate' => 'admin#bulkupdate'  
 
 
   # The priority is based upon order of creation: first created -> highest priority.

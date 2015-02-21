@@ -168,7 +168,7 @@
                             </div>
                             <div class="panel-body">
                             
-				    <%= form_for(@updatestock,:html=>{:class => "form-horizontal",:role=>"form"} , url:{action: "stockmanipulator"},method: :patch,:up_id => @updatestock.id) do |f| %>
+				    <%= form_for(@updatestock,:html=>{:class => "form-horizontal",:role=>"form"} , url:{action: "stockmanipulator"},method: :patch,:up_id => @updatestock.id	) do |f| %>
 				
 				<div class="form-group">	
 					<%= f.label :id,:class =>"control-label col-sm-4" %>
