@@ -19,6 +19,21 @@ require "json"
           send_message :notification_update, :notice =>  @not_signed_in
         end
     end  ##end of #notification updates   
+   
+    def stocktable_ajax_handler
+        if user_signed_in?
+              Stock.connection.clear_query_cache
+              @stocks_list = Stock.all
+              update_partial_input('dalal_dashboard/partials/stock_partial', :@stocks_list, @stocks_list)
+             
+              data = {}
+              data = load_data_with_partials(data)
+              broadcast_message :stocktable_ajax_handler, data
+        else
+           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
+           redirect_to :action => 'index'
+        end  
+    end
 
    def stock_ajax_handler
            if user_signed_in?
@@ -179,12 +194,8 @@ require "json"
          @no_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
        end   
       
-      @buy_history = Buy.get_buy_history(id,3)
-      @sell_history = Sell.get_sell_history(id,3)
-
-      # @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-      # @user_cash_inhand = User.find(current_user.id)
-      # @user_current_cash = @user_cash_inhand.cash.round(2)
+          @buy_history = Buy.where('buys.stock_id' => id).order("price DESC").limit(3)
+          @sell_history = Sell.where('sells.stock_id' => id).order("priceexpected ASC").limit(3)
 
           update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@stock, @stock)
           update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@no_stock_found , @no_stock_found)

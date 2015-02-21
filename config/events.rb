@@ -13,6 +13,7 @@ WebsocketRails::EventMap.describe do
     subscribe :update_modal_partials, to: SocketController, with_method: :update_modal_partials
     subscribe :buy_sell_stock_socket, to: SocketController, with_method: :buy_sell_stock_socket
     subscribe :bank_mortgage_socket, to: SocketController, with_method: :bank_mortgage_socket
+    subscribe :stocktable_ajax_handler, to: SocketController, with_method: :stocktable_ajax_handler
     subscribe :index_updater, to: SocketController, with_method: :index_updater
     
   # Uncomment and edit the next line to handle the client connected event:

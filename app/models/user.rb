@@ -26,8 +26,7 @@ class User < ActiveRecord::Base
 
          logger.info @all_ids
 
-
-          @all_ids.each do |id| ##start of buy_sell for each loop comparator
+         @all_ids.each do |id| ##start of buy_sell for each loop comparator
             logger.info id 
 
              @offset_buy_count = 0
@@ -84,7 +83,8 @@ class User < ActiveRecord::Base
            elsif @sell_user_stock.totalstock.to_f < @Sell_id.numofstock.to_f
                @offset_sell_count = @offset_sell_count + 1
            else
-               @check_next = User.check_next_buy_sell(id,mode)
+               ###############
+               @check_next = User.check_next_buy_sell(id,mode) 
            end
            @buy_stock_check_looper = User.buy_price_stock_num_looper(id,mode)
          end  

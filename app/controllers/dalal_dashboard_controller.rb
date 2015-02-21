@@ -39,7 +39,6 @@ def show
 	       else
             @stocks_list = Stock.all
 	       	  @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(5).reverse
-            
             @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
             @notifications_count = Notification.count/7 
             @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)

@@ -95,9 +95,20 @@
         var data = {identity: valuenum,value: document.getElementById(value).value};
         var stock_socket_trigger = stock_socket.evt_trigger("stock_ajax_handler",data);
         // var stock_socket_unbind = stock_socket.evt_unbinder();
+        get_table();
         $("#news1,#news2").newsticker();
    };
-    
+
+    var stock_table_socket = new WebsocketClass(dispatcher);
+    var stock_table_socket_binder = stock_table_socket.evt_binder("stocktable_ajax_handler");
+    var get_table = function(){
+        data = {bool:true};
+        var stock_table_socket_trigger = stock_table_socket.evt_trigger("stocktable_ajax_handler",data);
+        // var stock_table_socket_unbind = stock_table_socket.evt_unbinder();
+   };   
+
+
+
 </script>
 
 <% end %>    
