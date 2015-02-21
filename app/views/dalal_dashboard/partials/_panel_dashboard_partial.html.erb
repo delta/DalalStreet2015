@@ -31,7 +31,7 @@
                                         <i class="fa fa-comments fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">26</div>
+                                        <div class="huge"><%= @market_events_total %></div>
                                         <div>Market Events</div>
                                     </div>
                                 </div>
@@ -53,7 +53,7 @@
                                        <i class="fa fa-money fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%=current_user.cash.round(2)%></div>
+                                        <div class="huge"><%=  @user_current_cash %></div>
                                         <div>Cash</div>
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@
                                         <i class="fa fa-support fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge"><%= (@price_of_tot_stock+current_user.cash).round(2) %></div>
+                                        <div class="huge"><%= (@price_of_tot_stock+@user_current_cash).round(2) %></div>
                                         <div>Net Wealth</div>
                                     </div>
                                 </div>
@@ -156,7 +156,5 @@
                             
                     </div>
                     </div>
-
-                    
 
 </div>

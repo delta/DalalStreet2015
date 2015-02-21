@@ -1,4 +1,4 @@
-class IndexController < ApplicationController
+class IndexController < Devise::SessionsController
 protect_from_forgery with: :null_session
 # before_filter :authenticate_user!
 include IndexHelper

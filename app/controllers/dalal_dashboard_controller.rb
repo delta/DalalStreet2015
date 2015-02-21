@@ -1,15 +1,16 @@
 class DalalDashboardController < ApplicationController
-before_filter :authenticate_user!,:set_cache_buster #devise filters#
+before_filter :authenticate_user!
+# :set_cache_buster #devise filters#
 protect_from_forgery with: :null_session
 
 include RemoteLinkRenderer
 require "json"
 
-  def set_cache_buster
-    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
-  end
+  # def set_cache_buster
+  #   response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+  #   response.headers["Pragma"] = "no-cache"
+  #   response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  # end
 
 layout "../dalal_dashboard/layout/layout.html.erb"
 
@@ -44,7 +45,7 @@ def show
             @notifications_count = Notification.count/7 
             @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
             @market_events_count = MarketEvent.count/7
-            
+
             @stocks = Stock.return_bought_stocks(current_user.id)
            if !@stocks.blank?
               @stock = @stocks[0]
@@ -53,7 +54,11 @@ def show
               else
                 @no_stock_found = "You have not bought any stocks yet"
 	          end
+            
             @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+            @user_current_cash = current_user.cash.round(2)
+            @market_events_total = MarketEvent.count
+
             @mortgage = Stock.joins(:banks).select("*,banks.numofstock*stocks.currentprice as netcash").where("banks.user_id" => current_user.id).group("banks.id")
             if @mortgage.blank?
                @no_mortgage_found = "You have not mortgaged any stocks yet."
@@ -74,6 +79,8 @@ def show
 	        	@stocks_list = Stock.all
 	        	@notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
 	          @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+            @user_current_cash = current_user.cash.round(2)
+            @market_events_total = MarketEvent.count
             @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
             @notifications_count = Notification.count/7       
             @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
@@ -90,6 +97,8 @@ def show
              @stock = Stock.return_stock_user_first(current_user.id)
 	           @stocks_list = Stock.all
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+             @user_current_cash = current_user.cash.round(2)
+             @market_events_total = MarketEvent.count
              @no_stock_found = nil
              if !@stock
               @stock = Stock.select("*").first
@@ -180,6 +189,8 @@ def show
              @stocks = Stock.return_bought_stocks(current_user.id)
              @stock = Stock.return_stock_user_first(current_user.id)
 	           @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+             @user_current_cash = current_user.cash.round(2)
+             @market_events_total = MarketEvent.count
 
              if !@stock.blank?
                @mortgage = Bank.where("banks.user_id" => current_user.id,"banks.stock_id" => @stock.id)
@@ -302,6 +313,8 @@ def show
             end
           @notifications_list = Notification.get_notice(current_user.id,10)
 	        @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+          @user_current_cash = current_user.cash.round(2)
+          @market_events_total = MarketEvent.count
           @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 
           @notifications_count = Notification.count/7  
           @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
@@ -316,6 +329,8 @@ def show
     def company
     	if user_signed_in?
 	      @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+        @user_current_cash = current_user.cash.round(2)
+        @market_events_total = MarketEvent.count
         @stock = Stock.select("*").first
         @stocksinmarket = @stock.stocksinmarket
         @market_event_list = MarketEvent.get_events(10)
@@ -342,6 +357,8 @@ def show
         end
         @user_leader =  @user_leader.sort_by { |user| user[:cash] }.reverse
         @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+        @user_current_cash = current_user.cash.round(2)
+        @market_events_total = MarketEvent.count
         @stocks_list = Stock.all
         @notifications_list = Notification.get_notice(current_user.id,10)
         @notifications_paginate = Notification.select("notification,updated_at").where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(0) 

@@ -85,14 +85,19 @@ require "json"
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               #send_message :update_stock_user, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
               @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+              @user_cash_inhand = User.find(current_user.id)
+              @user_current_cash = @user_cash_inhand.cash.round(2)
               @market_events_paginate = MarketEvent.page(1).per(10)
+              @market_events_total = MarketEvent.count
              
               update_partial_input('dalal_dashboard/partials/show_partial', :@stocks, @stocks)
               update_partial_input('dalal_dashboard/partials/notification_partial', :@notifications_list , @notifications_list)
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock, @price_of_tot_stock )
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@stocks_list, @stocks_list )
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@market_events_paginate , @market_events_paginate)
-              
+              update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@user_current_cash,@user_current_cash)
+              update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@market_events_total,@market_events_total)
+             
               data = {}
               data = load_data_with_partials(data)
               send_message :update_stock_user, data
@@ -108,15 +113,21 @@ require "json"
               @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
               @stocks_list = Stock.all
               @market_events_paginate = MarketEvent.page(1).per(10)
+              @market_events_total = MarketEvent.count
 
               #send_message :update_stock_all, :sent_data => {:notice => @notifications_list,:stock_update => @stocks}
               @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+              @user_cash_inhand = User.find(current_user.id)
+              @user_current_cash = @user_cash_inhand.cash.round(2)
+              
               update_partial_input('dalal_dashboard/partials/main_buy_sell_partial', :@stocks_list, @stocks_list)
               update_partial_input('dalal_dashboard/partials/notification_partial', :@notifications_list , @notifications_list)
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@price_of_tot_stock ,  @price_of_tot_stock)
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@stocks_list, @stocks_list )
               update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@market_events_paginate , @market_events_paginate)
-  
+              update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@user_current_cash,@user_current_cash)
+              update_partial_input('dalal_dashboard/partials/panel_dashboard_partial', :@market_events_total,@market_events_total)
+             
               data = {}
               data = load_data_with_partials(data)
               send_message :update_stock_all, data
@@ -144,7 +155,7 @@ require "json"
            update_partial_input('dalal_dashboard/partials/chart_partial', :@price_list , @price_list)
            update_partial_input('dalal_dashboard/partials/chart_partial_2', :@price_list , @price_list)
            update_partial_input('dalal_dashboard/partials/chart_partial_2', :@stocksinmarket , @stock.stocksinmarket)
-
+           
            data = {}
            data = load_data_with_partials(data)
            send_message :company_handler, data
@@ -171,12 +182,15 @@ require "json"
       @buy_history = Buy.get_buy_history(id,3)
       @sell_history = Sell.get_sell_history(id,3)
 
-      @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@stock, @stock)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@no_stock_found , @no_stock_found)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@buy_history, @buy_history)
-      update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@sell_history, @sell_history)
-  
+      # @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
+      # @user_cash_inhand = User.find(current_user.id)
+      # @user_current_cash = @user_cash_inhand.cash.round(2)
+
+          update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@stock, @stock)
+          update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@no_stock_found , @no_stock_found)
+          update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@buy_history, @buy_history)
+          update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@sell_history, @sell_history)
+      
       data = {}
       data = load_data_with_partials(data)
       send_message :buy_sell_partial_render, data

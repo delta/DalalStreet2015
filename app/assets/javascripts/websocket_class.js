@@ -51,8 +51,8 @@ var WebsocketClass = function(socket_url){
 	this.evt_trigger = function(evt,data){
          if(binder)
            {dispatcher.trigger(evt, data, this.success, this.failure);
-            $( ".loader-div" ).append("<div class=\"loader\"> <div></div> <div></div> <div></div> <div></div> <div></div> </div>");
-            $( ".loader-modal-div" ).append("<div class=\"loader\"> <div></div> <div></div> <div></div> <div></div> <div></div> </div>");
+            $(".loader-div").append("<div class=\"loader\"> <div></div> <div></div> <div></div> <div></div> <div></div> </div>");
+            $(".loader-modal-div").append("<div class=\"loader\"> <div></div> <div></div> <div></div> <div></div> <div></div> </div>");
             $("input").prop('disabled', true);
            }         
          else

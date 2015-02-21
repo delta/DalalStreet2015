@@ -22,8 +22,7 @@
                 </div>
                 <!-- /.row -->
 
-                <%= render partial:"dalal_dashboard/partials/panel_dashboard_partial",locals: { stocks_list: @stocks_list }%>
-              
+                <%= render partial:"dalal_dashboard/partials/panel_dashboard_partial",locals: { stocks_list: @stocks_list, market_events_total: @market_events_total,price_of_tot_stock: @price_of_tot_stock, user_current_cash: @user_current_cash }%>
               
                 <div class="row">
                     <div class="col-lg-8">

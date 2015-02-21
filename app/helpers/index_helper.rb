@@ -17,7 +17,7 @@ module IndexHelper
     @market_events_paginate = MarketEvent.order('created_at DESC').limit(15).offset(0)
     @market_events_paginate = @market_events_paginate.sample(7)
 	
-	@market_events_paginate.each do |event|
+	  @market_events_paginate.each do |event|
       @find_stock = Stock.where(:id => "#{event.stock_id}").first
       @stock_names.push(@find_stock.stockname+[1,2].sample.to_s)
     end

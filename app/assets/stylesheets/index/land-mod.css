@@ -4,7 +4,13 @@
         background-color:#0c0c0c;
         /*#303030*/
         /*#303030*/
-        font-size: 12px !important;
+        font-family: "Helvetica Neue",Helvetica, Arial, sans-serif !important;
+        -webkit-text-size-adjust: 100% !important;
+        -ms-text-size-adjust: 100% !important;
+        font-size-adjust: 0.45 !important;
+        font-weight: normal;
+
+        font-size: 13px !important;
 
     }
 
@@ -105,34 +111,6 @@
         border-color: #2b2e32;
      }
 
-/************** panel and tiles ********************************************************************/
-
-    .panel {
-        border-radius: 0;
-        background-color: #191919;
-        border-radius: 4px;
-
-    }
-    
-    .panel-default {
-        border-radius: 0;
-        background-color: #191919;
-        border-radius: 4px;
-    }
-
-    #socket_link a{
-       background-color:  #191919;
-    }
-
-    a.list-group-item {
-        height:auto;
-        min-height:150px;
-    }
-
-    a.list-group-item.active small {
-        color:#fff;
-    }
-
 /* ------------------------------------------------  slider -----------------------------------------------------------------------------*/
 
 .slider{
@@ -190,7 +168,7 @@
     right:0;
     bottom:0;
     text-align:left;
-    padding:1.5%;
+    /*padding:1.5%;*/
     background:rgba(0,0,0,0.6);
     text-shadow:none;
 }

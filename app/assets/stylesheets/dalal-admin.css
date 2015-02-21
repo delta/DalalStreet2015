@@ -8,12 +8,7 @@
 body {
     margin-top: 100px;
     background-color: #222;
-  
-   /*-webkit-text-size-adjust: 100% !important;
-   -ms-text-size-adjust: 100% !important;
-   -moz-text-size-adjust: 100% !important;
-   font-weight: 500 !important;*/
-
+    
     font-family: "Helvetica Neue",Helvetica, Arial, sans-serif !important;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
