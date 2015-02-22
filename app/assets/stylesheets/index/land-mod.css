@@ -200,3 +200,71 @@
     #myCarousel .list-group {display:none;} 
 }
     
+/*--------------------------------------------------------------------------------------------*/
+  
+  .contcustom-help {
+        text-align: left;
+        width: 1000px;
+        border-radius: 0.5rem;
+        top: 0;
+        bottom: 0;
+        left: -30%;
+        right: 0;
+        margin: 10px auto;
+        /*background-color: white;*/
+        padding: 20px;
+    }
+    .contcustom-help p{
+        font-size: 15px;
+    }
+
+    .contcustom-help li{
+        font-size: 15px;
+    }
+
+    .contcustom-contact{
+        text-align: center;
+        width: 600px;
+        border-radius: 0.5rem;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 10px auto;
+        /*background-color: white;*/
+        padding: 20px;
+    }
+
+   @media(max-width:768px) {
+  .contcustom-help {
+        text-align: left;
+        width: 90%;
+        border-radius: 0.5rem;
+        top: 0;
+        bottom: 0;
+        left: 0px;
+        right: 0;
+        margin: 10px auto;
+        /*background-color: #fafafa;*/
+        padding: 20px;
+    }
+
+    .contcustom-contact{
+        text-align: center;
+        width: 80%;
+        border-radius: 0.5rem;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 10px auto;
+        /*background-color: white;*/
+        padding: 20px;
+    }
+
+    .modal-body img{
+        width:90%;
+        height:20%;
+    }
+
+}
