@@ -9,16 +9,6 @@ class AdminController < ApplicationController
 
     end
 
-	def bulkupdate
-		if !user_signed_in?
-            		render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-
-		else
-		@stocks_list = Stock.all
-		@sto=Stock.new
-
-       end
-  end
 
 	def user_details
         	if !user_signed_in?
@@ -89,7 +79,7 @@ class AdminController < ApplicationController
             if params[:market_event]
                  @check=Stock.where("id = ?", params[:market_event][:stock_id]).exists?
                 if @check
-                    logger.info params[:market_event][:token]
+
                     if params[:token]=="1"
                         @market_event=MarketEvent.new(stock_id:params[:market_event][:stock_id],eventname:params[:market_event][:eventname],event_type:params[:market_event][:event_type],event:params[:market_event][:event],event_turn:params[:market_event][:event_turn],event_done:params[:market_event][:event_done])
                     else
@@ -145,13 +135,37 @@ class AdminController < ApplicationController
     end
 
     def company_events
-        if !user_signed_in?
-            render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
+      if !user_signed_in?
+        render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
+
+      else
+        @stocks_list = Stock.new
+        @stocks_all=Stock.all
+
+
+          if params[:token]
+
+            Stock.find_each do |s|
+
+                if params["#{s.id}"].present?
+                  s.stocksinexchange= params["#{s.id}"]
+
+                      if s.save
+                         flash[:qS]="Stocks Updated"
+                       else
+                         flash[:Er]="Error occurred in updating Stocks."
+                      end
+                end
+              end
+
+            end
+
 
         end
 
+      end
 
-    end
+
 
     def bank_rates
         if !user_signed_in?

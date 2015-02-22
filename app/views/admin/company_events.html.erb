@@ -1,3 +1,44 @@
+
 <% content_for :page_wrapper do %>
-	<h2 style="color:white;">Coming soon</h2>
-<%end%>
+<style>
+.well{background-color:#474343;color:white;}
+.alert{text-align: center;margin: 3%; font-family: monospace;}
+input{background-color:rgba(239, 234, 180, 0.63);width:100%; }
+input[type="submit"]{width:20%;}
+
+</style>
+<div class="jumbotron" >
+	<header class="container" style="text-align:center;" >
+	</header>
+
+	<% if flash[:qS] %>
+	<div class="alert alert-success"><%= flash[:qS] %></div>
+	<% end %>
+	<% if flash[:Er] %>
+	<div class="alert alert-warning"><%= flash[:Er] %></div>
+	<% end %>
+
+
+
+	<!-- edit events -->
+
+	<div id="editEve" style="margin:4%;" >
+		<div class="well" >Enter the stock in exchange values</div>
+		<div class="container">
+			<%= render partial:"admin/partials/bulkUpdateForm",locals: { code: '1' } %>
+		</div>
+
+	</div>
+	<script>
+	var isNumber= function(evt) {
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	};
+	</script>
+
+</div>
+<% end %>

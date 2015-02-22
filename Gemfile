@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 gem 'coderay'
 
-gem 'better_errors', group: :development
+#uncomment better_error bfore pushing
+#gem 'better_errors', group: :development
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.8'
 # Use sqlite3 as the database for Active Record
@@ -66,4 +67,3 @@ gem "resque-scheduler", '~> 2.5.5'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
