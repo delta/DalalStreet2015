@@ -98,7 +98,7 @@
                                                 <tr>
                                                     <td><%=stock.pricerendered.round(2) %></td>
                                                     <td><%=stock.numofstock %></td>
-                                                    <td><%= hidden_field_tag "identity_bankreturn","bankreturn_#{stock.id}"%> <%= tag "input", { "type"=>"button", "value"=>"Return","name"=>"Return", "class"=>"btn btn-primary btn-sm","data-dismiss"=>"modal", "onclick"=>"sendvalues_mortgage('bankreturn_#{stock.id}');" } %></td>
+                                                    <td><%= hidden_field_tag "identity_bankreturn","bankreturn_#{stock.id}"%> <%= tag "input", { "type"=>"button", "value"=>"Return","data-dismiss"=>"modal", "name"=>"Return", "class"=>"btn btn-primary btn-sm","onclick"=>"sendvalues_mortgage('bankreturn_#{stock.id}');" } %></td>
                                                 </tr>
                                             <% end %>
                                         </tbody>
