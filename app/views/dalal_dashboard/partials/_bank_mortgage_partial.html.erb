@@ -100,7 +100,7 @@
                                                     <td><%=stock.pricerendered.round(2) %></td>
                                                     <td><%=stock.numofstock %></td>
                               <td><%= form_tag({:controller => 'dalal_dashboard',:id => current_user.id, :action => 'bank_return_stock'},{:class => 'bank_return_table', :method => 'post', :role=> "form"}) do |f|%>
-                              <%= hidden_field_tag "identity_bankreturn","bank_#{stock.id}"%><%= submit_tag "Return" %></td>
+                              <%= hidden_field_tag "identity_bankreturn","bank_#{stock.id}"%><%= submit_tag "return",data: { dismiss: "modal"}%></td>
                                                  <% end %>
                                                 </tr>
                                             <% end %>

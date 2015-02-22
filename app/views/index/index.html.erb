@@ -155,8 +155,10 @@
 
 <script type="text/javascript">
 	
-	$(document).ready(function(){
-    
+    var dispatcher = new WebSocketRails($("#socket_link").data('uri'), true);
+
+ $(document).ready(function(){
+
 	var clickEvent = false;
 	$('#myCarousel').carousel({
 		interval:   4000	
@@ -176,6 +178,31 @@
 		}
 		clickEvent = false;
 	});
+
+  window.requestAnimationFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            function( callback ){
+              window.setTimeout(callback, 1000 / 60);
+            };
+  })();
+
+  var speed = 1000;
+  (function currencySlide(){
+      var currencyPairWidth = $('.slideItem:first-child').outerWidth();
+      $(".modal-backdrop").remove();
+      $(".slideContainer").animate({marginLeft:-currencyPairWidth},speed, 'linear', function(){
+                  $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
+          });
+          requestAnimationFrame(currencySlide);
+  })();
+
+        var index_channel = new WebsocketClass(dispatcher);
+        var index_subscribe = index_channel.channel_subscribe("index");
+        var index_binder = index_channel.channel_binder("index_channel",update_index_page);
+  
+
 })
 
 $(window).load(function() {
@@ -184,12 +211,6 @@ $(window).load(function() {
     var triggerheight = Math.round(boxheight/itemlength+1);
 	$('#myCarousel .list-group-item').outerHeight(triggerheight);
 });
-
-   $(function(){
-        var index_channel = new WebsocketClass("#socket_link");
-        var index_subscribe = index_channel.channel_subscribe("index");
-        var index_binder = index_channel.channel_binder("index_channel",update_index_page);
-   });
 
    var update_index_page = function(){
         var data = {bool:true};

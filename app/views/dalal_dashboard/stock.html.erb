@@ -73,6 +73,12 @@
 <% content_for :script do %>
  <script type="text/javascript">
 
+    $(function(){
+        var stock_channel = new WebsocketClass(dispatcher);
+        var stock_subscribe = stock_channel.channel_subscribe("stock");
+        var stock_binder = stock_channel.channel_binder("stock_channel",get_table);
+    });
+
     var swapper = function(swap_stock_trade){
      var coin_field_id = "stocktrade_"+swap_stock_trade.split('_')[1];
      document.getElementById(coin_field_id).value = document.getElementById(swap_stock_trade).value;
@@ -95,7 +101,7 @@
         var data = {identity: valuenum,value: document.getElementById(value).value};
         var stock_socket_trigger = stock_socket.evt_trigger("stock_ajax_handler",data);
         // var stock_socket_unbind = stock_socket.evt_unbinder();
-        get_table();
+        // get_table();
         $("#news1,#news2").newsticker();
    };
 

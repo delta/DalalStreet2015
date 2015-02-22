@@ -28,7 +28,7 @@ require "json"
              
               data = {}
               data = load_data_with_partials(data)
-              broadcast_message :stocktable_ajax_handler, data
+              send_message :stocktable_ajax_handler, data
         else
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            redirect_to :action => 'index'
@@ -156,6 +156,7 @@ require "json"
        WebsocketRails[:show].trigger(:show_channel, "true")
        WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
        WebsocketRails[:index].trigger(:index_channel, "true");
+       WebsocketRails[:stock].trigger(:stock_channel, "true");
     end
 
     def company_handler

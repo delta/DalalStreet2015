@@ -26,12 +26,12 @@ class User < ActiveRecord::Base
 
          logger.info @all_ids
 
-         @all_ids.each do |id| ##start of buy_sell for each loop comparator
-            logger.info id 
-
+          @all_ids.each do |id| ##start of buy_sell for each loop comparator
+             
+             logger.info id 
              @offset_buy_count = 0
              @offset_sell_count = 0
-
+           
             Buy.connection.clear_query_cache
             Sell.connection.clear_query_cache
             
@@ -55,25 +55,17 @@ class User < ActiveRecord::Base
           end  ##end of for each loop .............comparator
                   
     end ##end of comparator def
-#############################instance variable @@@@@@@@@@@@@@@@@@ ############# can be access anywhere in a class #########################################
-    def self.buy_price_stock_num_looper(id,mode)
-        Buy.connection.clear_query_cache
-        Sell.connection.clear_query_cache
 
-        @Buy_id = Buy.select('*').where(:stock_id => id).order('price DESC').limit(1).offset(@offset_buy_count).first
-        @Sell_id = Sell.select('*').where(:stock_id => id).order('priceexpected ASC').limit(1).offset(@offset_sell_count).first
+    def self.buy_price_stock_num_looper(id,mode)
+       Buy.connection.clear_query_cache
+       Sell.connection.clear_query_cache
+
+       @Buy_id = Buy.select('*').where(:stock_id => id).order('price DESC').limit(1).offset(@offset_buy_count).first
+       @Sell_id = Sell.select('*').where(:stock_id => id).order('priceexpected ASC').limit(1).offset(@offset_sell_count).first
         
        if !@Buy_id.blank? && !@Sell_id.blank?
         @user_buying = User.select('cash').where(:id => @Buy_id.user_id).first
         @sell_user_stock = StockUsed.select("sum(stock_useds.numofstock) as totalstock").where('stock_useds.user_id' => @Sell_id.user_id,'stock_id' => id).group("stock_id").first
-
-         # logger.info @Buy_id.user_id
-         # logger.info @Sell_id.user_id
-         # logger.info @user_buying.cash
-         # logger.info @Buy_id.price*@Buy_id.numofstock.to_f
-         # logger.info @sell_user_stock.totalstock.to_f
-         # logger.info @Sell_id.numofstock.to_f
-
         if @Buy_id.price.to_f >= @Sell_id.priceexpected.to_f
          if (@user_buying.cash >= @Buy_id.price*@Buy_id.numofstock.to_f) && (@sell_user_stock.totalstock.to_f >= @Sell_id.numofstock.to_f) && (@Buy_id.user_id != @Sell_id.user_id)
             @stock_looper = User.stock_looper(id,mode)    
@@ -83,7 +75,7 @@ class User < ActiveRecord::Base
            elsif @sell_user_stock.totalstock.to_f < @Sell_id.numofstock.to_f
                @offset_sell_count = @offset_sell_count + 1
            else
-               ###############
+               ###############User##########same###########
                @check_next = User.check_next_buy_sell(id,mode) 
            end
            @buy_stock_check_looper = User.buy_price_stock_num_looper(id,mode)
@@ -96,19 +88,15 @@ class User < ActiveRecord::Base
         log_data = "USERID: nil STOCKID: #{id} LOG: No stock match found for #{id}"
         @log_file = User.custom_logger(log_data)
       end
-
     end  ##end of buy_price_stock_num_looper
 
     def self.stock_looper(id,mode)    
 
      	if @Buy_id.numofstock.to_f > @Sell_id.numofstock.to_f
 
-    	    #@user_buying = User.select('cash').where(:id => @Buy_id.user_id).first
     	     @user_buying = User.find(@Buy_id.user_id)
            @user_buying.cash = @user_buying.cash - @Buy_id.price*@Sell_id.numofstock.to_f
-           logger.info @Buy_id.user_id
            @user_buying.save
-          #@user_selling = User.select('cash').where(:id => @Sell_id.user_id).first
            @user_selling = User.find(@Sell_id.user_id)
            @user_selling.cash = @user_selling.cash + @Sell_id.priceexpected*@Sell_id.numofstock.to_f
            @user_selling.save
@@ -124,29 +112,21 @@ class User < ActiveRecord::Base
            
            WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
 
-           # if mode == "buy"
-           # 	 flash[:notice] = "You bought #{@Sell_id.numofstock} stocks at the rate of $#{@Buy_id.price} per share"
-           # else
-           # 	 flash[:notice] = "You sold #{@Sell_id.numofstock} stocks at the rate of $#{@Sell_id.priceexpected} per share"
-           # end	 
-
            @Buy_id.numofstock = @Buy_id.numofstock.to_f - @Sell_id.numofstock.to_f
            @Buy_id.save
            @Sell_id.destroy
           
-           if @offset_sell_count != 0 
-            @offset_sell_count = @offset_sell_count - 1
-           end
+           # if @offset_sell_count != 0 
+           #  @offset_sell_count = @offset_sell_count - 1
+           # end
            @next_compatible_stock_bid_ask = User.next_compatible_stock_bid_ask(id,mode)
            
         elsif @Buy_id.numofstock.to_f < @Sell_id.numofstock.to_f
 
-           #@user_buying = User.select('cash').where(:id => @Buy_id.user_id).first
            @user_buying = User.find(@Buy_id.user_id)
            @user_buying.cash = @user_buying.cash - @Buy_id.price*@Buy_id.numofstock.to_f
            logger.info @Buy_id.user_id
            @user_buying.save
-           #@user_selling = User.select('cash').where(:id => @Sell_id.user_id).first
            @user_selling = User.find(@Sell_id.user_id)
            @user_selling.cash = @user_selling.cash + @Sell_id.priceexpected*@Buy_id.numofstock.to_f
            @user_selling.save
@@ -162,12 +142,6 @@ class User < ActiveRecord::Base
            
            WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
 
-           # if mode == "buy"
-           # 	 flash[:notice] = "You bought #{@Buy_id.numofstock} stocks at the rate of $#{@Buy_id.price} per share"
-           # else
-           # 	 flash[:notice] = "You sold #{@Buy_id.numofstock} stocks at the rate of $#{@Sell_id.priceexpected} per share"
-           # end	 
-
            @Sell_id.numofstock = @Sell_id.numofstock.to_f - @Buy_id.numofstock.to_f
            @Sell_id.save
            @Buy_id.destroy
@@ -175,7 +149,7 @@ class User < ActiveRecord::Base
            # if @offset_buy_count != 0 
            #  @offset_buy_count = @offset_buy_count - 1
            # end
-           @offset_buy_count = 0
+           # @offset_buy_count = 0
            @next_compatible_stock_bid_ask = User.next_compatible_stock_bid_ask(id,mode)
            
         else
@@ -196,20 +170,15 @@ class User < ActiveRecord::Base
            @notification = Notification.create(:user_id =>@Sell_id.user_id, :notification => "You sold #{@Sell_id.numofstock} stocks of #{@stockname.stockname} at the rate of $#{@Sell_id.priceexpected} per share", :seen => 1, :notice_type => 1)
              
            WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
-           # if mode == "buy"
-           # 	 flash[:notice] = "You bought #{@Buy_id.numofstock} stocks at the rate of $#{@Buy_id.price} per share"
-           # else
-           # 	 flash[:notice] = "You sold #{@Sell_id.numofstock} stocks at the rate of $#{@Sell_id.priceexpected} per share"
-           # end	 
            @Buy_id.destroy
            @Sell_id.destroy
            
-           if @offset_buy_count != 0 
-            @offset_buy_count = @offset_buy_count - 1
-           end
-           if @offset_sell_count != 0 
-            @offset_sell_count = @offset_sell_count - 1
-           end
+           # if @offset_buy_count != 0 
+           #  @offset_buy_count = @offset_buy_count - 1
+           # end
+           # if @offset_sell_count != 0 
+           #  @offset_sell_count = @offset_sell_count - 1
+           # end
            @next_compatible_stock_bid_ask = User.next_compatible_stock_bid_ask(id,mode)
         end
     end #stock_looper
@@ -245,7 +214,6 @@ class User < ActiveRecord::Base
              else
                  log_data = "USERID: nil STOCKID: #{id} LOG: No matching stock found"
                  @log_file = User.custom_logger(log_data)
-                 #@log = Log.create(:user_id => @Buy_id.user_id, :stock_id => id , :log => "Buyer cash insufficient or Seller don't have enough stocks")   
              end #@Buy_id && @Sell_id
    end ###next_compatible_stock_bid_ask def
 
@@ -274,21 +242,63 @@ class User < ActiveRecord::Base
    end
 
    def self.check_next_buy_sell(id,mode)
-    # count_sell = Sell.where(:stock_id => id).order('priceexpected ASC').count
-     @Buy_id = Buy.select('*').where(:stock_id => id).order('price DESC').limit(1).offset(@offset_buy_count+1).first
-     @Sell_id = Sell.select('*').where(:stock_id => id).order('priceexpected ASC').limit(1).offset(@offset_sell_count+1).first
+     
+     @Buy_id = Buy.select('*').where(:stock_id => id).order('price DESC').limit(10).offset(@offset_buy_count)
+     @Sell_id = Sell.select('*').where(:stock_id => id).order('priceexpected ASC').limit(10).offset(@offset_sell_count)
+     @temp_user_id = Buy.select('*').where(:stock_id => id).order('price DESC').limit(1).offset(@offset_buy_count).first
+     @i = 0
+     check = 0
+     
+     # @Buy_id.each do |buy|
+     #   logger.info buy.user_id
+     # end
+     # @Sell_id.each do |sell|
+     #   logger.info sell.user_id
+     # end
     
-     if !@Buy_id.blank? && !@Sell_id.blank?
-         @offset_buy_count = @offset_buy_count + 1
-     elsif @Buy_id.blank? && !@Sell_id.blank?
+    if !@Buy_id.blank? && !@Sell_id.blank?
+     @Buy_id.zip(@Sell_id).each do |buy, sell|
+      
+       if !sell.blank? && buy.user_id == sell.user_id 
+         @i = @i + 1
+         check = 0
+         logger.info "i"
+         logger.info @i
+         logger.info "buy"
+         logger.info buy.user_id
+         logger.info "sell"
+         logger.info sell.user_id
+       elsif sell.blank? || @temp_user_id.user_id != sell.user_id
          @offset_buy_count = 0
-         @offset_sell_count = @offset_sell_count + 1
-     elsif !@Buy_id.blank? && @Sell_id.blank?
+         @offset_sell_count = @offset_sell_count + @i
+         logger.info "flag1"
+         check = 1
+         break
+       elsif @temp_user_id.user_id != buy.user_id
          @offset_sell_count = 0
-         @offset_buy_count = @offset_buy_count + 1
-     else
-         @offset_buy_count = @offset_buy_count + 1
-     end
+         @offset_buy_count = @offset_buy_count + @i
+         logger.info "flag2"
+         check = 1
+         break
+       else
+         @offset_sell_count = @offset_sell_count + @i
+         @offset_buy_count = 0
+       end  
+     end ##zip loop
+    end ##if block
+
+      if (check==0)
+         @offset_sell_count = @offset_sell_count + @i
+         @offset_buy_count = 0
+      end   
+
+     logger.info "offset"
+     logger.info @offset_buy_count
+     logger.info @offset_sell_count
+     
+     logger.info "user_id"
+     logger.info @temp_user_id.user_id
+
    end ##end of check_next_buy
 
 end

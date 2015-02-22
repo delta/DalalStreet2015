@@ -207,10 +207,10 @@
                });
 
                var show_update_socket = new WebsocketClass(dispatcher);
-               var show_update_socket_binder = show_update_socket.evt_binder("index_updater");
+               var show_update_socket_binder = show_update_socket.evt_binder("update_stock_user");
                var get_userstock_info = function(data){
                     var data = {bool:true};
-                    var show_update_socket_trigger = show_update_socket.evt_trigger("index_updater",data);
+                    var show_update_socket_trigger = show_update_socket.evt_trigger("update_stock_user",data);
                     // var show_update_socket_unbind = show_update_socket.evt_unbinder();
                };
 

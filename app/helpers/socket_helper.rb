@@ -76,7 +76,10 @@ module SocketHelper
 
         data = {}
         data = load_data_with_partials(data)
+        
         WebsocketRails[:show].trigger(:show_channel, "true")
+        WebsocketRails[:stock].trigger(:stock_channel, "true")
+
         send_message :stock_ajax_handler, data
       end
    end
