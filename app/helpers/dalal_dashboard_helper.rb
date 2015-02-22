@@ -10,7 +10,7 @@ module DalalDashboardHelper
   end
   
   def mojo_paginator(count,type=nil,active = 0)
-  	@link = nil
+  	@link = ""
     @gap = 1
     active = active.to_i
       

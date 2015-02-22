@@ -8,7 +8,8 @@ Bundler.require(*Rails.groups)
 
 module Dalal
   class Application < Rails::Application
-
+    
+    config.time_zone = 'Chennai'
     config.assets.paths << Rails.root.join("app", "assets", "fonts")
     config.assets.paths << Rails.root.join("app", "assets", "index")
     config.autoload_paths = %W(#{config.root}/lib)
