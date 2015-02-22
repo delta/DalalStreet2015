@@ -56,6 +56,7 @@ def show
             @price_of_tot_stock = Stock.get_total_stock_price(current_user.id)
             @user_current_cash = current_user.cash.round(2)
             @market_events_total = MarketEvent.count
+            @message = Message.order('created_at DESC').limit(10);
 
             @mortgage = Stock.joins(:banks).select("*,banks.numofstock*stocks.currentprice as netcash").where("banks.user_id" => current_user.id).group("banks.id")
             if @mortgage.blank?
@@ -83,6 +84,8 @@ def show
             @notifications_count = Notification.count/7       
             @market_events_paginate = MarketEvent.order('created_at ASC').limit(7).offset(0)
             @market_events_count = MarketEvent.count/7
+            @message = Message.order('created_at DESC').limit(10);
+
             @class_stock_active = "class=active"
          else
 	          redirect_to :action => 'index'
@@ -108,6 +111,7 @@ def show
              @market_events_count = MarketEvent.count/7
              @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
              @class_buy_sell_active = "class=active"
+             @message = Message.order('created_at DESC').limit(10);
              
              @buy_history = Buy.get_buy_history(@stock.id,3)
              @sell_history = Sell.get_sell_history(@stock.id,3)
@@ -206,6 +210,8 @@ def show
              @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
              @market_events_count = MarketEvent.count/7
              @class_bank_active = "class=active"
+             @message = Message.order('created_at DESC').limit(10);
+
        else
 	       redirect_to :action => 'index'
 	     end
@@ -319,6 +325,8 @@ def show
           @market_events_count = MarketEvent.count/7
           @stocks_list = Stock.all
           @class_history_active = "class=active"
+          @message = Message.order('created_at DESC').limit(10);
+
         else
         	redirect_to :action => 'index'
         end
@@ -342,6 +350,8 @@ def show
         @notifications_count = Notification.count/7       
         @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
         @market_events_count = MarketEvent.count/7
+        @message = Message.order('created_at DESC').limit(10);
+
       else
 	      redirect_to :action => 'index'
 	    end
@@ -364,6 +374,8 @@ def show
         @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
         @market_events_count = MarketEvent.count/7
         @class_leader_active = "class=active"
+        @message = Message.order('created_at DESC').limit(10);
+
       else
         redirect_to :action => 'index'
       end  
