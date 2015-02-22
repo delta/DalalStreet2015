@@ -113,7 +113,9 @@
                         <li>
                             <a href="#" class="dropdown-toggle disabled"><%=alert.message%></a>
                         </li>
+                        <li class="divider"></li>
                       <%end%>
+                      <li href="#"></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -173,7 +175,7 @@
                     </li> -->
                     <li <% if !@class_history_active.blank? %><%= @class_history_active %><% end %> >
                     <%= link_to :controller=>'dalal_dashboard', :id => current_user.id , :action=>'buy_sell_history' do %>
-                        <span id="span"><i class="fa fa-fw fa-book"></i> Buy Sell History</span>
+                        <span id="span"><i class="fa fa-fw fa-book"></i>Bids and Asks</span>
                     <% end %>
                     </li>
                     <li <% if !@class_leader_active.blank? %><%= @class_leader_active %><% end %> >
