@@ -2,11 +2,14 @@ class AdminController < ApplicationController
     layout "../admin/layout/layout.html.erb"
     http_basic_authenticate_with name: "admin", password: "root"
     def index
-        if !user_signed_in?
-            render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
-
+        if user_signed_in?
+        
+          if params[:q]
+            @send_all = Message.create(:message => params[:q])
+            WebsocketRails[:layout].trigger(:layout_channel, params[:q])
+          end  
+        
         end
-
     end
 
 
