@@ -1,6 +1,6 @@
 require 'resque/server'
 Rails.application.routes.draw do
-   
+
   mount Resque::Server.new, at: "/resque"
 
   devise_for :users
@@ -24,22 +24,21 @@ Rails.application.routes.draw do
   get '/dalal_dashboard/:id/buy_sell_history' => 'dalal_dashboard#buy_sell_history'
   get '/dalal_dashboard/:id/leaderboard' => 'dalal_dashboard#leaderboard'
 
-  get '/admin/index' => 'admin#index' ###controller not yet created
-  get '/admin/market_events' => 'admin#market_events'
-  #post '/admin/market_events' => 'admin#market_events'
+  get '/4Dm1N/index' => 'admin#index' ###controller not yet created
+  get '/4Dm1N/market_events' => 'admin#market_events'
+  #post '/4Dm1N/market_events' => 'admin#market_events'
 
-  get '/admin/company_events' => 'admin#company_events'
+  get '/4Dm1N/company_events' => 'admin#company_events'
 
 
-  get '/admin/bank_rates' => 'admin#bank_rates'
-  
+  get '/4Dm1N/bank_rates' => 'admin#bank_rates'
+
 
   resources :users
-  get '/admin/user_details' => 'admin#user_details'   
-  post '/admin/user_details' => 'admin#user_details'  
-  patch '/admin/stockmanipulator' => 'admin#stockmanipulator' ###not defined yet  
-  get '/admin/stockmanipulator' => 'admin#stockmanipulator'  
-  get '/admin/bulkupdate' => 'admin#bulkupdate'  
+  get '/4Dm1N/user_details' => 'admin#user_details'
+  post '/4Dm1N/user_details' => 'admin#user_details'
+  patch '/4Dm1N/stockmanipulator' => 'admin#stockmanipulator' ###not defined yet
+  get '/4Dm1N/stockmanipulator' => 'admin#stockmanipulator'
 
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -92,8 +91,8 @@ Rails.application.routes.draw do
 
   # Example resource route within a namespace:
   #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
+  #     # Directs /4Dm1N/products/* to Admin::ProductsController
+  #     # (app/controllers/4Dm1N/products_controller.rb)
   #     resources :products
   #   end
 end

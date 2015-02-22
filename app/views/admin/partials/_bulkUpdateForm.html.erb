@@ -1,0 +1,51 @@
+
+<style>
+  input[type="text"],.input-group-addon{
+    margin:0px;
+    font-size:16px;
+    font-weight:bold;
+  }
+  th{
+    background:lightgreen;
+    font-size:16px;
+    text-align:center;
+  }
+
+
+</style>
+
+<table class="table  table-hover" >
+
+<%= form_for @stocks_list,:html=>{:class => "form-vertical",:role=>"form",:method=>"get"} , url:{action: "company_events"} do |f| %>
+  <thead>
+      <tr>
+        <th>Stock Name</th>
+        <th>Stocks In Exchange</th>
+      </tr>
+  </thead>
+    <tbody>
+    <% Stock.find_each do |s| %>
+
+          <div class="form-group">
+            <div class="col-sm-4">
+            <tr>
+              <td><span class="input-group-addon"  ><%= s.stockname %></span></td>
+
+              <td><input type="text" name=<%= s.id.to_s  %> onkeypress="return isNumber(event)" ></input> </td>
+            </tr>
+            </div>
+          </div>
+
+    <%end%>
+    <tr><td><%=	hidden_field_tag :token, 1 %></td></tr>
+    <tr>
+      <td></td><td><%= submit_tag "Go", class: "btn btn-medium btn-success",style:"position:relative;top:20%;" %></td>
+      <% (0..9).each do  %>
+        <td></td>
+      <% end %>
+    </tr>
+  </tbody>
+
+
+<% end %>
+</table>
