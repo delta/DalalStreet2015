@@ -255,16 +255,24 @@
           requestAnimationFrame(currencySlide);
   })();
 
+
+
+    $(function(){
+        var layout_channel = new WebsocketClass(dispatcher);
+        var layout_subscribe = layout_channel.channel_subscribe("layout");
+        var layout_binder = layout_channel.channel_binder("layout_channel",display_mass_message);
+    });
+
+    var display_mass_message = function(data){
+      $( ".mass-alert" ).append('<div class="alert alert-warning alert-dismissable"><button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>'+data+'</div>' );
+    };
+
+    var modal_update_socket = new WebsocketClass(dispatcher);
+    var modal_update_socket_binder = modal_update_socket.evt_binder("update_modal_partials");
     var update_modal_partials = function(num,type){
-
-       var data = {page: num,
-                   type: type
-                  };
-
-       var modal_update_socket = new WebsocketClass(dispatcher);
-       var modal_update_socket_binder = modal_update_socket.evt_binder("update_modal_partials");
+       var data = {page: num,type: type};
        var modal_update_socket_trigger = modal_update_socket.evt_trigger("update_modal_partials",data);
-       var modal_update_socket_unbind = modal_update_socket.evt_unbinder();
+       // var modal_update_socket_unbind = modal_update_socket.evt_unbinder();
 
     };
 
