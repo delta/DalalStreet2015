@@ -47,10 +47,15 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Panel 1</h3>
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Mass Alert</h3>
+
                             </div>
                             <div class="panel-body">
-
+                            <%= form_tag do %>
+                             <%= label_tag(:q, "Alert Message:") %>
+                             <%= text_field_tag(:q) %>
+                             <%= submit_tag("Send") %>
+                            <% end %>
                             </div>
                         </div>
                     </div>

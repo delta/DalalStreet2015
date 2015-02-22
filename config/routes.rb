@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get '/dalal_dashboard/:id/leaderboard' => 'dalal_dashboard#leaderboard'
 
   get '/4Dm1N/index' => 'admin#index' ###controller not yet created
+  post '/4Dm1N/index' => 'admin#index' ###controller not yet created
+
   get '/4Dm1N/market_events' => 'admin#market_events'
   #post '/4Dm1N/market_events' => 'admin#market_events'
 
