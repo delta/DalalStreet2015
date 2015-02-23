@@ -43,7 +43,7 @@
 <body>
     <!-- Page Content -->
  <div class="container">
-                    
+
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-default" role="navigation">
         <div class="container">
@@ -89,26 +89,30 @@
 	    <%= render partial:"/dalal_dashboard/partials/stock_marquee_partial",locals: { stocks_list: @stocks_list }%>
 	   </div>
     </div>
-		    
+
     <div class="col-lg-12" style="margin-left:5px;">
 
 	      <div id="myCarousel" class="carousel slide" data-ride="carousel">
 	      <!-- Wrapper for slides -->
 	      <div class="carousel-inner">
-	      
+
 	       <%@stock_names.each do |name|%>
 	       <%if @i == 0-%>
 	        <div class="item active">
 	        <%@i=@i+1%>
 	       <%else-%>
 	        <div class="item">
-	       <%end-%> 
+	       <%end-%>
 	         <img <%= "src = /assets/#{name}.jpg" %> style="width:760px;height:400px;" class="img-responsive">
+<<<<<<< Updated upstream
 	           <div class="carousel-caption">
 	          </div>
+=======
+	           
+>>>>>>> Stashed changes
 	        </div>
 	       <% end %>
-	                
+
 	      </div><!-- End Carousel Inner -->
         <%@i = 0%>
 	    <ul class="list-group col-sm-4">
@@ -147,15 +151,19 @@
 
     </div>
 
+<<<<<<< Updated upstream
     <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+=======
+     <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+>>>>>>> Stashed changes
 	<div class="modal-dialog">
 	  <div class="modal-content contcustom">
 	    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	    <br> 		 
+	    <br>
 	           <div class="modal-body">
 	              <span class="fa fa-spinner bigicon"></span>
-		           <h2>Login</h2> 
-		        <div>      
+		           <h2>Login</h2>
+		        <div>
                 <%=form_for(resource, :as => resource_name, :url => session_path(resource_name), :method =>'post') do |f| %>
 					  <p><%= f.text_field :email , :placeholder => "email" %></p>
 					  <p><%= f.password_field :password , :placeholder => "password"%></p>
@@ -169,6 +177,7 @@
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 
+<<<<<<< Updated upstream
     <div class="modal" id="contact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
     <div class="modal-dialog">
       <div class="modal-content contcustom-contact">
@@ -278,21 +287,23 @@
     </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     
+=======
+>>>>>>> Stashed changes
 </body>
 
 <script type="text/javascript">
-	
+
     var dispatcher = new WebSocketRails($("#socket_link").data('uri'), true);
 
  $(document).ready(function(){
 
 	var clickEvent = false;
 	$('#myCarousel').carousel({
-		interval:   4000	
+		interval:   4000
 	}).on('click', '.list-group li', function() {
 			clickEvent = true;
 			$('.list-group li').removeClass('active');
-			$(this).addClass('active');		
+			$(this).addClass('active');
 	}).on('slid.bs.carousel', function(e) {
 		if(!clickEvent) {
 			var count = $('.list-group').children().length -1;
@@ -300,7 +311,7 @@
 			current.removeClass('active').next().addClass('active');
 			var id = parseInt(current.data('slide-to'));
 			if(count == id) {
-				$('.list-group li').first().addClass('active');	
+				$('.list-group li').first().addClass('active');
 			}
 		}
 		clickEvent = false;
@@ -309,6 +320,10 @@
         var index_channel = new WebsocketClass(dispatcher);
         var index_subscribe = index_channel.channel_subscribe("index");
         var index_binder = index_channel.channel_binder("index_channel",update_index_page);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 })
 
