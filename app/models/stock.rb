@@ -33,6 +33,23 @@ has_many :banks
    end
  end
 
+ def self.individual_statistics(id)
+    @stock = Stock.select("*").where(:id => id).first
+      if @stock.daylow.to_f > @stock.currentprice.to_f
+         @stock.daylow = @stock.currentprice.to_f
+      end
+      if @stock.dayhigh.to_f < @stock.currentprice.to_f
+         @stock.dayhigh = @stock.currentprice.to_f
+      end      
+      if @stock.alltimehigh.to_f < @stock.dayhigh.to_f
+         @stock.alltimehigh.to_f = @stock.dayhigh.to_f
+      end
+      if @stock.alltimelow.to_f > @stock.daylow.to_f
+         @stock.alltimelow.to_f = @stock.daylow.to_f
+      end
+      @stock.save
+  end
+
  def self.update_current_price(id,price)
      file_name = Rails.root.join('app','chart-data',id.to_s+'.log')
      if file_name.exist?
@@ -41,6 +58,7 @@ has_many :banks
       file = File.new(file_name, "w+")
      end
      file.print price.round(2).to_s+","
+     @update_stats = Stock.individual_statistics(id) 
      file.close
  end
 
