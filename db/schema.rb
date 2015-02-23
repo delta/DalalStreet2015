@@ -31,14 +31,6 @@ ActiveRecord::Schema.define(version: 20150223112939) do
     t.datetime "updated_at"
   end
 
-  create_table "leaderboards", force: true do |t|
-    t.string   "username"
-    t.integer  "user_id"
-    t.decimal  "total",      precision: 4, scale: 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "logs", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
