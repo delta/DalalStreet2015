@@ -68,10 +68,7 @@
                     </li>
                     <% if user_signed_in? %>
                     <li>
-                      <%= link_to "Dalal", controller: "dalal_dashboard", action: "show", id: current_user.id %>
-                    </li>
-                    <li>
-                        <a href="#"><%= "Welcome #{ @username}" %></a>
+                      <%= link_to "Play Dalal", controller: "dalal_dashboard", action: "show", id: current_user.id %>
                     </li>
                     <%else%>
                     <li>
@@ -312,7 +309,6 @@
         var index_channel = new WebsocketClass(dispatcher);
         var index_subscribe = index_channel.channel_subscribe("index");
         var index_binder = index_channel.channel_binder("index_channel",update_index_page);
-  
 
 })
 

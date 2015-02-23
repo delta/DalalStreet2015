@@ -42,10 +42,10 @@ has_many :banks
          @stock.dayhigh = @stock.currentprice.to_f
       end      
       if @stock.alltimehigh.to_f < @stock.dayhigh.to_f
-         @stock.alltimehigh.to_f = @stock.dayhigh.to_f
+         @stock.alltimehigh = @stock.dayhigh.to_f
       end
       if @stock.alltimelow.to_f > @stock.daylow.to_f
-         @stock.alltimelow.to_f = @stock.daylow.to_f
+         @stock.alltimelow = @stock.daylow.to_f
       end
       @stock.save
   end

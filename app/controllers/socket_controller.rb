@@ -56,6 +56,7 @@ require "json"
                        @stock_bought.stocksinmarket = @stock_bought.stocksinmarket + @numofstock
                        @stock_bought.save
                        @user_cash_inhand.save
+                       @user_total_calculator = User.calculate_total(current_user.id)
                        @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @stockidbought,:numofstock => @numofstock)
                        flash[:notice] = "#{@numofstock} stocks of #{@stock_bought.stockname} traded successfully"
                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
@@ -247,7 +248,7 @@ require "json"
          skip = page.to_f*7
          @market_events_count = MarketEvent.count/7
          MarketEvent.connection.clear_query_cache
-         @market_events_paginate = MarketEvent.limit(7).offset(skip)
+         @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(skip)
          update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@market_events_paginate, @market_events_paginate)
          update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@market_events_count, @market_events_count)
          update_partial_input('dalal_dashboard/partials/marketevent_modal_partial', :@active, @active)
@@ -255,8 +256,8 @@ require "json"
 
        if data[:type] == "notice"
          skip = page.to_f*7
-         @notifications_count = Notification.count/7
-         @notifications_paginate = Notification.limit(7).offset(skip)
+         @notifications_count = Notification.where('user_id' => current_user.id).count/7
+         @notifications_paginate = Notification.where('user_id' => current_user.id).order('created_at DESC').limit(7).offset(skip)
          update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_paginate, @notifications_paginate)
          update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@notifications_count, @notifications_count)
          update_partial_input('dalal_dashboard/partials/notification_modal_partial', :@active, @active)
@@ -284,13 +285,13 @@ require "json"
                 @user_cash_inhand = User.find(current_user.id)
              
               if @stock.stocksinmarket.to_f >= @numofstock_buy_for.to_f
-                 if @bid_price <= (0.1*@stock.currentprice.to_f+@stock.currentprice.to_f)
+                 if @bid_price >= (@stock.currentprice.to_f-0.1*@stock.currentprice.to_f)
                    if @user_cash_inhand.cash.to_f >= @numofstock_buy_for.to_f*@bid_price.to_f 
                       @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
                       flash[:notice] = "Successful Bid."
                       @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
-                        ## call comparator ##can be made efficient
                       @comparator = User.comparator("buy")
+                      @user_total_calculator = User.calculate_total(current_user.id)
                       buy_sell_stock_socket_helper
                    else
                       flash[:error] = "Buy request failed.You only have $ #{@user_cash_inhand.cash}."
@@ -298,8 +299,8 @@ require "json"
                       buy_sell_stock_socket_helper
                    end
                  else
-                  @max_bid_price = (0.1*@stock.currentprice.to_f+@stock.currentprice.to_f).round(2)
-                  flash[:error] = "You cannot bid for more than 10% of the current price the max buy price for #{@stock.stockname} is #{@max_bid_price}."
+                  @min_bid_price = (@stock.currentprice.to_f-0.1*@stock.currentprice.to_f).round(2)
+                  flash[:error] = "You cannot bid for less than 10% of the current price the minimum buy price for #{@stock.stockname} is #{@min_bid_price}."
                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                   buy_sell_stock_socket_helper   
                  end  
@@ -320,8 +321,8 @@ require "json"
                   @sell_ask  = Sell.create(:user_id=>current_user.id, :stock_id=>@stockid, :priceexpected=>@ask_price, :numofstock=>@numofstock_sell_for)
                   flash[:notice] = "Sell request made."
                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
-                    ## call comparator ##can be made efficient
                   @comparator = User.comparator("sell")
+                  @user_total_calculator = User.calculate_total(current_user.id)
                   buy_sell_stock_socket_helper
                 else
                   flash[:error] = "Sell request failed.You only have #{@user_stock_inhand[0].totalstock} stocks of #{@user_stock_inhand[0].stockname}."
@@ -358,6 +359,7 @@ require "json"
                    @extra_cash = @extra_cash.round(2)
                    flash[:notice] = "Mortgage Successful.$#{@extra_cash} added to your account"
                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                   @user_total_calculator = User.calculate_total(current_user.id)
                    bank_mortgage_socket_helper
                    # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
                 else
@@ -375,21 +377,28 @@ require "json"
                    @stock = Stock.select("currentprice").where('stocks.id' => @mortgage.stock_id).first
                    #### u can just modifify that that record #####
                    @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @mortgage.stock_id,:numofstock => @mortgage.numofstock)
-                   @user.cash = @user.cash - @mortgage.numofstock.to_f*@stock.currentprice.to_f
-                   @deducted = (@mortgage.numofstock.to_f*@stock.currentprice).round(2);
-
-                   if @user.save
-                      @mortgage.destroy
-                      flash[:notice] = "Stocks retrieved from bank.$#{@deducted} deducted from your account"
-                      @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
-                      bank_mortgage_socket_helper
-                      # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                   
+                   if @user.cash > @mortgage.numofstock.to_f*@stock.currentprice.to_f
+                     @user.cash = @user.cash - @mortgage.numofstock.to_f*@stock.currentprice.to_f
+                     @deducted = (@mortgage.numofstock.to_f*@stock.currentprice).round(2);
+                     if @user.save
+                        @mortgage.destroy
+                        flash[:notice] = "$#{@deducted} deducted from your account,stocks retrieved from bank."
+                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
+                        @user_total_calculator = User.calculate_total(current_user.id)
+                        bank_mortgage_socket_helper
+                        # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                     else
+                        flash[:error] = "Error processing request.Please try again."
+                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
+                        bank_mortgage_socket_helper
+                        # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
+                     end
                    else
-                      flash[:error] = "Error processing request.Please try again."
-                      @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
-                      bank_mortgage_socket_helper
-                      # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
-                   end
+                     flash[:error] = "You have only $#{@user.cash} in your account.You cannot retrieve your stocks."
+                     @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
+                     bank_mortgage_socket_helper
+                   end  
         else
            flash[:error] = "Did not recieve request.Please try again."
            @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)

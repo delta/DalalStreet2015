@@ -33,19 +33,20 @@
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Cash</th>
+                                                <th>Net Worth</th>
                                             </tr>
                                         </thead>
                                         <tbody id="stock_details">
                                              <% @user_leader.each do |user| %>
                                                 <tr>
-                                                    <td><%=user.username %></td>
-                                                    <td><%=user.cash.round(2) %></td>
+                                                    <td><%=user.id %></td>
+                                                    <td><%=user.total.round(2) %></td>
                                                 </tr>
                                              <% end -%>   
                                         </tbody>
                                     </table>
                                 </div>
+                                <%= will_paginate @user_leader %>
                             </div>
                         </div>
                     </div>

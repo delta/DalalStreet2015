@@ -301,4 +301,10 @@ class User < ActiveRecord::Base
 
    end ##end of check_next_buy
 
+   def self.calculate_total(id)
+      @user = User.select("*").where(:id => id).first
+      @user.total = @user.cash + Stock.get_total_stock_price(id)
+      @user.save
+   end
+
 end
