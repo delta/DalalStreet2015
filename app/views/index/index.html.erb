@@ -13,7 +13,29 @@
 
     <%= stylesheet_link_tag "index" ,media: 'all', 'data-turbolinks-track' => true%>
     <%= csrf_meta_tags %>
+<script type="text/javascript">
+    
+    window.requestAnimationFrame = (function(){
+    return  window.requestAnimationFrame       ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame    ||
+            function( callback ){
+              window.setTimeout(callback, 1000 / 60);
+            };
+  })();
 
+
+  var speed = 1000;
+  (function currencySlide(){
+      var currencyPairWidth = $('.slideItem:first-child').outerWidth();
+      $(".modal-backdrop").remove();
+      $(".slideContainer").animate({marginLeft:-currencyPairWidth},speed, 'linear', function(){
+                  $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
+          });
+          requestAnimationFrame(currencySlide);
+  })();
+
+</script>
 </head>
 
 
@@ -286,25 +308,6 @@
 		clickEvent = false;
 	});
 
-  window.requestAnimationFrame = (function(){
-    return  window.requestAnimationFrame       ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            function( callback ){
-              window.setTimeout(callback, 1000 / 60);
-            };
-  })();
-
-  var speed = 1000;
-  (function currencySlide(){
-      var currencyPairWidth = $('.slideItem:first-child').outerWidth();
-      $(".modal-backdrop").remove();
-      $(".slideContainer").animate({marginLeft:-currencyPairWidth},speed, 'linear', function(){
-                  $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
-          });
-          requestAnimationFrame(currencySlide);
-  })();
-
         var index_channel = new WebsocketClass(dispatcher);
         var index_subscribe = index_channel.channel_subscribe("index");
         var index_binder = index_channel.channel_binder("index_channel",update_index_page);
@@ -312,11 +315,13 @@
 
 })
 
+
 $(window).load(function() {
     var boxheight = $('#myCarousel .carousel-inner').innerHeight();
     var itemlength = $('#myCarousel .item').length;
     var triggerheight = Math.round(boxheight/itemlength+1);
 	$('#myCarousel .list-group-item').outerHeight(triggerheight);
+
 });
 
    var update_index_page = function(){
