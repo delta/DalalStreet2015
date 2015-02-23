@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
     layout "../admin/layout/layout.html.erb"
-    http_basic_authenticate_with name: "admin", password: "root"
+    http_basic_authenticate_with name: "", password: ""
     def index
         if user_signed_in?
         
