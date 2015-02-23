@@ -59,6 +59,10 @@ gem "resque"
 
 gem "resque-scheduler", '~> 2.5.5'
 
+gem 'mysql'
+
+gem 'mysql2'
+
 # Use unicorn as the app server
 # gem 'unicorn'
 

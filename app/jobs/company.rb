@@ -9,7 +9,6 @@ class Company < ActiveRecord::Base
     @call_update_stock_user = SocketController.call_update_stock_user
   end
 
-
   def self.custom_logger(log)
      fname = Rails.root.join('log','market_event.log')
      somefile = File.open(fname, "a")
@@ -17,7 +16,6 @@ class Company < ActiveRecord::Base
      somefile.puts "time::"+time.to_s+"  "+log+ "\n"
      somefile.close
   end
-
 
   def self.update_statistics
     @current_price_vary = Stock.all

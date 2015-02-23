@@ -4,24 +4,57 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 #
-default: &default
-  adapter: sqlite3
-  pool: 5
-  timeout: 5000
+
+# default: &default
+#   adapter: sqlite3
+#   pool: 5
+#   timeout: 5000
+
+# development:
+#   <<: *default
+#   database: db/development.sqlite3
+#   timeout: 10000
+
+# # Warning: The database defined as "test" will be erased and
+# # re-generated from your development database when you run "rake".
+# # Do not set this db to the same as development or production.
+# test:
+#   <<: *default
+#   database: db/test.sqlite3
+
+# production:
+#   <<: *default
+#   database: db/production.sqlite3
+#   timeout: 10000
+
 
 development:
-  <<: *default
-  database: db/development.sqlite3
-  timeout: 10000
+  adapter: mysql2
+  username: root
+  password: vegeta@1993
+  port: 5432
+  database: dalalstreet_dev
+  encoding: utf8
+  reconnect: false
+  pool: 5
+  timeout: 5000
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: db/test.sqlite3
+  adapter: mysql2
+  database: dalalstreet_test
+  username: root
+  encoding: utf8
 
 production:
-  <<: *default
-  database: db/production.sqlite3
-  timeout: 10000
+  adapter: mysql2
+  username: root
+  password: vegeta@1993
+  port: 5432
+  database: dalalstreet
+  encoding: utf8
+  reconnect: false
+  pool: 5
+  timeout: 5000

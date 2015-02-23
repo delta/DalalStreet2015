@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20150223112939) do
   create_table "banks", force: true do |t|
     t.integer  "user_id"
     t.integer  "stock_id"
-    t.decimal  "pricerendered"
+    t.decimal  "pricerendered", precision: 10, scale: 0
     t.integer  "numofstock"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -25,16 +25,8 @@ ActiveRecord::Schema.define(version: 20150223112939) do
   create_table "buys", force: true do |t|
     t.integer  "user_id"
     t.integer  "stock_id"
-    t.decimal  "price"
+    t.decimal  "price",      precision: 10, scale: 0
     t.integer  "numofstock"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "leaderboards", force: true do |t|
-    t.string   "username"
-    t.integer  "user_id"
-    t.decimal  "total",      precision: 4, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -76,7 +68,7 @@ ActiveRecord::Schema.define(version: 20150223112939) do
   create_table "sells", force: true do |t|
     t.integer  "user_id"
     t.integer  "stock_id"
-    t.decimal  "priceexpected"
+    t.decimal  "priceexpected", precision: 10, scale: 0
     t.integer  "numofstock"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -92,11 +84,11 @@ ActiveRecord::Schema.define(version: 20150223112939) do
 
   create_table "stocks", force: true do |t|
     t.string   "stockname"
-    t.decimal  "currentprice",     precision: 4, scale: 2
-    t.decimal  "dayhigh",          precision: 4, scale: 2
-    t.decimal  "daylow",           precision: 4, scale: 2
-    t.decimal  "alltimehigh",      precision: 4, scale: 2
-    t.decimal  "alltimelow",       precision: 4, scale: 2
+    t.decimal  "currentprice",     precision: 8, scale: 3
+    t.decimal  "dayhigh",          precision: 8, scale: 3
+    t.decimal  "daylow",           precision: 8, scale: 3
+    t.decimal  "alltimehigh",      precision: 8, scale: 3
+    t.decimal  "alltimelow",       precision: 8, scale: 3
     t.integer  "stocksinexchange"
     t.integer  "stocksinmarket"
     t.datetime "created_at"
@@ -119,11 +111,11 @@ ActiveRecord::Schema.define(version: 20150223112939) do
     t.datetime "updated_at"
     t.integer  "status"
     t.string   "username"
-    t.decimal  "cash",                   precision: 6, scale: 2, default: 10000.0, null: false
-    t.decimal  "total",                  precision: 6, scale: 2
+    t.decimal  "cash",                   precision: 8, scale: 3, default: 10000.0, null: false
+    t.decimal  "total",                  precision: 8, scale: 3
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end
