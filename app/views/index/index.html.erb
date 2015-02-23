@@ -68,7 +68,7 @@
                     </li>
                     <% if user_signed_in? %>
                     <li>
-                      <%= link_to "Play Dalal", controller: "dalal_dashboard", action: "show", id: current_user.id %>
+                     <%= link_to "Play Dalal", { :controller=>"dalal_dashboard", :action=>"show", :id => current_user.id }, :target => "_blank" %>
                     </li>
                     <%else%>
                     <li>
@@ -322,12 +322,12 @@ $(window).load(function() {
 
 });
 
-   var update_index_page = function(){
+   var index_update_socket = new WebsocketClass(dispatcher);
+   var index_update_socket_binder = index_update_socket.evt_binder("index_updater");
+   var update_index_page = function(data){
         var data = {bool:true};
-        var index_update_socket = new WebsocketClass("#socket_link");
-        var index_update_socket_binder = index_update_socket.evt_binder("index_updater");
         var index_update_socket_trigger = index_update_socket.evt_trigger("index_updater",data);
-        var index_update_socket_unbind = index_update_socket.evt_unbinder();
+        // var index_update_socket_unbind = index_update_socket.evt_unbinder();
    };
 
 </script>
