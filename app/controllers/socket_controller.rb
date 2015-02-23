@@ -151,13 +151,14 @@ require "json"
            redirect_to :action => 'index'
         end
     end
-
+##############################################################################################################################
     def self.call_update_stock_user
        WebsocketRails[:show].trigger(:show_channel, "true")
        WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
        WebsocketRails[:index].trigger(:index_channel, "true");
        WebsocketRails[:stock].trigger(:stock_channel, "true");
     end
+##############################################################################################################################    
 
     def company_handler
        if user_signed_in?

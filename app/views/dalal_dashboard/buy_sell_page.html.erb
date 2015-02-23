@@ -125,7 +125,7 @@
     
     var buy_sell_socket = new WebsocketClass(dispatcher);
     var buy_sell_socket_binder = buy_sell_socket.evt_binder("update_stock_all");
-    var get_completestock_info  = function(){
+    var get_completestock_info  = function(data){
         var data = {bool:true};
         var buy_sell_socket_trigger = buy_sell_socket.evt_trigger("update_stock_all",data);
         // var buy_sell_socket_unbind = buy_sell_socket.evt_unbinder(); 

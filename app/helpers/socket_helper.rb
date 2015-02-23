@@ -79,6 +79,7 @@ module SocketHelper
         
         WebsocketRails[:show].trigger(:show_channel, "true")
         WebsocketRails[:stock].trigger(:stock_channel, "true")
+        WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
 
         send_message :stock_ajax_handler, data
       end
