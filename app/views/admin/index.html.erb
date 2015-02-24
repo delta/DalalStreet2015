@@ -57,6 +57,14 @@
                              <%= submit_tag("Send") %>
                             <% end %>
                             </div>
+
+                            <div class="panel-body">
+                            <%= form_tag do %>
+                             <%= label_tag(:update, "Click to update stocks:") %>
+                             <%= text_field_tag(:update) %>
+                             <%= submit_tag("update") %>
+                            <% end %>
+                            </div>
                         </div>
                     </div>
                 </div>

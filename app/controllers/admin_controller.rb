@@ -8,6 +8,10 @@ class AdminController < ApplicationController
             @send_all = Message.create(:message => params[:q])
             WebsocketRails[:layout].trigger(:layout_channel, params[:q])
           end  
+
+          if params[:update]
+            WebsocketRails[:stock].trigger(:stock_channel, "true");
+          end
         
         end
     end
@@ -158,6 +162,7 @@ class AdminController < ApplicationController
                        else
                          flash[:Er]="Error occurred in updating Stocks."
                       end
+
                 end
               end
 

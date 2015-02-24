@@ -182,7 +182,7 @@
             <div>
             <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
               <p><%= f.text_field :email , :placeholder => "email" %></p>
-              <p><%= f.text_field :id , :placeholder => "Pragyan ID" %></p>
+              <p><%= f.text_field :id , :placeholder => "Pragyan ID" ,:maxlength => 6%></p>
               <p><%= f.text_field :username , :placeholder => "Name" %></p>
               <p><%= f.password_field :password , :placeholder => "password"%></p>
               <p><%= f.password_field :password_confirmation , :placeholder => "confirm password"%></p>
