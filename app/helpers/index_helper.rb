@@ -19,7 +19,7 @@ module IndexHelper
 	
 	  @market_events_paginate.each do |event|
       @find_stock = Stock.where(:id => "#{event.stock_id}").first
-      @stock_names.push(@find_stock.stockname+[1,2].sample.to_s)
+      @stock_names.push(@find_stock.stockname+[1,2,3,4].sample.to_s)
     end
     
     return @stock_names    

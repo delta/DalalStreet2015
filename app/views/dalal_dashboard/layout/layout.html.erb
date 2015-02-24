@@ -91,7 +91,7 @@
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
                                     </span>
                                     <div class="media-body">
-                                        <h5 class="media-heading"><strong><%= current_user.username %></strong>
+                                        <h5 class="media-heading"><strong> <%= " #{current_user.username} " %></strong>
                                         </h5>
                                         <p class="small text-muted"><i class="fa fa-clock-o"></i> <%= notice.updated_at%></p>
                                         <p><%= notice.notification%></p>
@@ -122,10 +122,11 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><%= current_user.username %><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#" class="dropdown-toggle disabled"><i class="fa fa-fw fa-user"></i> Profile</a>
+                            <a href="#contact" class="dropdown-toggle disabled" role="button" data-toggle="modal" data-target="#contact"><i class="fa fa-fw fa-phone"></i> Contact</a>
                         </li>
                         <li>
-                            <a href="#" class="dropdown-toggle disabled"><i class="fa fa-fw fa-question"></i> Help</a>
+                            <a href="#help" class="dropdown-toggle disabled" role="button" data-toggle="modal" data-target="#help"><i class="fa fa-fw fa-question"></i> Help</a>
+                       </li>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -184,8 +185,7 @@
             </div>
             <!-- /.navbar-collapse -->
         </nav>
-
-
+   
         <div class="modal" id="marketevent_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" <% {:is_active => true} %> > 
         <div class="modal-dialog">
           <div class="modal-content">
@@ -217,6 +217,117 @@
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
+        <div class="modal" id="help" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+      <div class="modal-content contcustom-help">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <br>         
+          <div class="modal-body">
+           <h2>Manual</h2> 
+
+          <div class="row">
+            <div class="col-lg-12">
+               <p>
+                   Its a virtual stock exchange game. A stock exchange is a place where the company sell their stocks to the public at a price which depends on the company market value and performance. 
+               </p>
+                   <p><img src = "/assets/DS1-min.png" style="width:900px;height:400px;" class="img-responsive">
+                   </p>
+               <p>
+                   The price of the stock varies on the market events and stock transactions between different players.We have introduced a new feature in Dalal Street,Market Events.It lets you to have a better picture on what stock to buy,sell or trade.New events will be put up from time to time,so watch out for new events and trade wisely.<br><b> Note : </b>The events are fictional and not related to real market condtions.
+               </p>
+               
+               <br>
+               <br>
+               
+               <h4>Stock Exchange</h4>
+               <p><img src = "/assets/DS3-min.png" style="width:900px;height:400px;" class="img-responsive">
+                   </p>
+                <ul>
+                <li>Market events (Blue colour flash card) gives you the number of market events that has happened till this instant.</li>
+                <li>Cash (Green colour flash card) shows the amount of virtual money that is in your account.</li>
+                <li>Stock (Yellow colour flash card) shows the value of the stocks that you own in currency rate. This keeps varying depending on the present market price of the stocks that you own.</li>
+                <li>Net wealth (Red colour flash card) is the sum of CASH + STOCK.</li>
+                <li>The number of stock in exchange gives the units of shares that the company has put up on the market. Stock in Market refers to the number of stocks that are owned by the players.</li>
+                <li>To <b>trade</b> stocks enter the amount of stocks you want to purchase from the company and hit the trade button<b>(green trade button).</b></li>
+                <li>The notification panel on the right tracks all your stock transactions and moves in the market.</li>
+                </ul>
+
+                <br>
+                <br>
+
+                <h4>Buy and Sell</h4>
+                <p><img src = "/assets/DS10-min.png" style="width:900px;height:400px;" class="img-responsive">
+                   </p>
+                <ul>
+                <li>It lists all the stocks in the market and its related information.</li>
+                <li>To <b>bid</b> or <b>ask</b> click on the company name. The pop up will open as shown in the picture above.</li>
+                <li>You can bid and ask from Buy Panel and Sell Panel respectively.</li>
+                <li>The <b>highest bid</b> will be given higher preference .</li>
+                <li>You can also sell shares provided that you own shares of the company .The <b>sell bid</b> with the least price will be given highest preference.</li>
+                </ul>
+
+                <br>
+                <br>
+
+                <h4>Bank Mortgage</h4>
+                <p><img src = "/assets/DS5-min.png" style="width:900px;height:400px;" class="img-responsive">
+                   </p>
+                <ul>
+                <li>It lists all the stocks that you own and its related information.</li>
+                <li>Bank Mortgage can be used to mortgage stocks with the bank at <b>75%(may vary during the course of time)</b> of the present price of the mortgaged stocks and later the mortgaged stocks can be bought back from the bank at the stocks current price.</li>
+                </ul>
+
+                <br>
+                <br>
+
+                <h4>Company Profile</h4>
+                <p><img src = "/assets/DS9-min.png" style="width:900px;height:400px;" class="img-responsive">
+                                   </p>
+                <p>This page gives information about previous market news and history of a stock which can be of help to predict the rate of the stock.</p>
+                 
+                <br>
+                <br>
+
+                <h4>Bids and Asks</h4>
+                <p><img src = "/assets/DS11-min.png" style="width:900px;height:400px;" class="img-responsive">
+                                   </p>
+                <p>This page shows you the Bids and Asks which are not successful.<p>
+                <b>Hint : </b>If your <b>bids are not successful</b> means that  someone has already bid for that stock at a higher price which will be given more preference over yours, so try bidding at a higher price till it succeeds<b>(that is totally up to you)</b>.Always keep a check on your cash and market events and go for the right stocks.</p> 
+                <p>If your <b>not able to sell your stocks at your ask price</b> it simply means that someone else has asked for the same stock at an even lower price which will be given more preference over your ask price.(try to sell it at lower prices if you want to sell your stocks successfully).</p>
+
+                <br>
+                <br>
+                <p>You can now play Dalal Street on the go.The new interface is compatible with <b>mobile devices.</b></p>
+                <p><b>Do not hesitate to contact us if you face any problems.</b>Have a great Pragyan!</p>
+            </div>
+          </div>
+          
+      </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+     <div class="modal" id="contact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+      <div class="modal-content contcustom-contact">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <br>         
+               <div class="modal-body">
+                   <h2>Contact Us</h2> 
+                      <div class="row">
+                      <div class="col-lg-12">
+                      <h5>John Mathai - +919790922889</h5>
+                      <br>
+                      <h5>Giridhar    - +919003206058</h5>
+                      <br>
+                      <a href="https://www.facebook.com/pages/Dalal-Street/109866185756914" target="_blank" style="font-size:20px;">Visit our Facebook Page for regular updates.</a>
+                      </div>
+                      </div>
+               </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
      <%= yield :page_wrapper %>
 
 
@@ -229,6 +340,8 @@
 
    $('#notification_modal').modal('hide');
    $('#marketevent_modal').modal('hide');
+   $('#help').modal('hide');
+
  
    window.requestAnimationFrame = (function(){
     return  window.requestAnimationFrame       ||

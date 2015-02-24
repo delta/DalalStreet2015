@@ -112,7 +112,7 @@ def show
              @notifications_count = Notification.where('user_id' => current_user.id).count/7     
              @market_events_paginate = MarketEvent.order('created_at DESC').limit(7).offset(0)
              @market_events_count = MarketEvent.count/7
-             @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(10).reverse
+             @notifications_list = Notification.select("notification,updated_at").where('user_id' => current_user.id).last(9).reverse
              @class_buy_sell_active = "class=active"
              @message = Message.order('created_at DESC').limit(10);
              @user_total_calculator = User.calculate_total(current_user.id)

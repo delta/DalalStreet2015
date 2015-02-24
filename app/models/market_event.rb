@@ -55,7 +55,7 @@ class MarketEvent < ActiveRecord::Base
   # end ##acquire def end
 
   def self.event_runner
-    @running_events = MarketEvent.where("event_done" => 0).all
+    @running_events = MarketEvent.where.not("event_turn" => 3).where("event_done" => 0).all
     if !@running_events.blank?
   	    @running_events.each do |market_event|
   	       if market_event.event_type == 0 ##negative event
@@ -69,7 +69,7 @@ class MarketEvent < ActiveRecord::Base
               @stockname.updown = 1
               @update_currentprice_files = Stock.update_current_price(@stockname.id,@stockname.currentprice)
   	       end
-  		   market_event.event_turn = market_event.event_turn + 1 
+  		   market_event.event_turn = market_event.event_turn + 1
   		   if market_event.event_turn == 3
   		      market_event.event_done = 1
   		   end
@@ -83,6 +83,5 @@ class MarketEvent < ActiveRecord::Base
       @log = Company.custom_logger("No event companies found");
     end           
   end ##end event_runner
-
-
+  
 end
