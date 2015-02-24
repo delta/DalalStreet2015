@@ -163,7 +163,7 @@
                             <div class="panel-body">    
                                       <div class="form-group">
                                       <%= label_tag "buy","Bid Price",{:class => "col-lg-4"}%>
-                                      <%= text_field_tag "buy","",{:class =>"allownumericwithdecimal form-control form-control-custom"}%>
+                                      <%= text_field_tag "buy","",{:onkeypress =>"return isNumber(event);",:class =>"allownumericwithdecimal form-control form-control-custom"}%>
                                       </div>
                                       <div class="form-group">
                                       <%= label_tag "buy_num_of_stock","Stocks",{:class => "col-lg-4"}%>
@@ -188,7 +188,7 @@
                               <%if !@no_stock_found -%>
                                       <div class="form-group">
                                       <%= label_tag "sell","Ask Price",{:class => "col-lg-4"}%>             
-                                      <%= text_field_tag "sell","",{:class =>"allownumericwithdecimal form-control form-control-custom"}%>
+                                      <%= text_field_tag "sell","",{:onkeypress =>"return isNumber(event);",:class =>"allownumericwithdecimal form-control form-control-custom"}%>
                                       </div>
                                       <div class="form-group">
                                       <%= label_tag "sell_num_of_stock","Stocks",{:class => "col-lg-4"}%>

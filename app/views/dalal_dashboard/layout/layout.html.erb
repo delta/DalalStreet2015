@@ -239,7 +239,6 @@
             };
   })();
 
-  var dispatcher = new WebSocketRails($(".table").data('uri'), true);
 
   var speed = 1000;
   (function currencySlide(){
@@ -252,7 +251,8 @@
           requestAnimationFrame(currencySlide);
   })();
 
-
+    var dispatcher = new WebSocketRails($(".table").data('uri'), true);
+    
 
     $(function(){
         var layout_channel = new WebsocketClass(dispatcher);
@@ -272,7 +272,23 @@
        // var modal_update_socket_unbind = modal_update_socket.evt_unbinder();
 
     };
+    
+    var show_channel = new WebsocketClass(dispatcher);
+    var stock_channel = new WebsocketClass(dispatcher);
+    var buy_sell_channel = new WebsocketClass(dispatcher);
 
+    var show_update_socket = new WebsocketClass(dispatcher);
+    var buy_sell_socket = new WebsocketClass(dispatcher);
+    var stock_table_socket = new WebsocketClass(dispatcher);
+
+     $(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
+            //this.value = this.value.replace(/[^0-9\.]/g,'');
+     $(this).val($(this).val().replace(/[^0-9\.]/g,''));
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+     });
+   
     </script>
 
    <%= yield :script %>

@@ -199,25 +199,32 @@
  <%= render partial:"dalal_dashboard/partials/chart_partial.html.erb",locals: {price_list: @price_list}%>
  
  <script type="text/javascript">
- 
-              $(function(){
-                    var show_channel = new WebsocketClass(dispatcher);
-                    var show_subscribe = show_channel.channel_subscribe("show");
-                    var show_binder = show_channel.channel_binder("show_channel",get_userstock_info);
-               });
+              
 
-               var show_update_socket = new WebsocketClass(dispatcher);
-               var show_update_socket_binder = show_update_socket.evt_binder("update_stock_user");
-               var get_userstock_info = function(data){
+              $(document).ready(function(){
+
+                var stock_table_socket_unbind = stock_table_socket.evt_unbinder("stocktable_ajax_handler");
+                var buy_sell_socket_unbind = buy_sell_socket.evt_unbinder("update_stock_all"); 
+                var stock_unbinder = stock_channel.channel_unbinder("stock_channel");
+                var buy_sell_unbinder = buy_sell_channel.channel_unbinder("buy_sell_channel");
+                var show_update_socket_binder = show_update_socket.evt_binder("update_stock_user"); 
+
+                var get_userstock_info = function(data){
                     var data = {bool:true};
                     var show_update_socket_trigger = show_update_socket.evt_trigger("update_stock_user",data);
                     // var show_update_socket_unbind = show_update_socket.evt_unbinder();
-               };
+                };
+
+                    // var show_channel = new WebsocketClass(dispatcher);
+                    var show_subscribe = show_channel.channel_subscribe("show");
+                    var show_binder = show_channel.channel_binder("show_channel",get_userstock_info);
+
+               });
 
                 var get_company_name = function(name){
                    get_company_info(name);
                 };
-                
+
                 var company_socket = new WebsocketClass(dispatcher);
                 var company_socket_binder = company_socket.evt_binder("company_handler");
                 var get_company_info = function(company_name){

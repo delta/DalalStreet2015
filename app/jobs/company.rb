@@ -36,51 +36,51 @@ class Company < ActiveRecord::Base
       end
   end
 
-  def self.Company_event
-    @event_type = [0,1].sample
-    @event =  [1,2,3].sample
-    @random_id = MarketEvent.distil
-    if @random_id !=0	
-       @stock = Stock.where('id' => @random_id).first
-       @event_selector = Company.event_selector(@event_type,@event)
-    else
-       @log = Company.custom_logger("event_selector cancelled")
-    end   
-  end
+  # def self.Company_event
+  #   @event_type = [0,1].sample
+  #   @event =  [1,2,3].sample
+  #   @random_id = MarketEvent.distil
+  #   if @random_id !=0	
+  #      @stock = Stock.where('id' => @random_id).first
+  #      @event_selector = Company.event_selector(@event_type,@event)
+  #   else
+  #      @log = Company.custom_logger("event_selector cancelled")
+  #   end   
+  # end
 
-  def self.event_selector(event_type,event)
-    if event_type == 0 ##negative events
-      case event
-		when 1    
-		  variation = ["reports quaterly loss in revenue","faces lawsuit for illegal patent frauds"].sample
-		  random_partial_event = variation.to_s
-		  eventname = "#{@stock.stockname} #{random_partial_event}" 
-	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
-		when 2  
-		  eventname = "CEO of #{@stock.stockname} sacked" 
-	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
-		else
-		  @acquired = MarketEvent.acquire(@stock.id,event_type,event) 
-      end
-    else ## positive events
-      case event 
-		when 1    
-		  variation = ["reports higher profit margins","set to expand globally"].sample
-          random_partial_event = variation.to_s
-          eventname = "#{@stock.stockname} #{random_partial_event}"  
-	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
-		when 2    
-		  variation = ["releases new products for holiday season","set to invest on the latest tech"].sample
-		  random_partial_event = variation.to_s
-		  eventname = "#{@stock.stockname} #{random_partial_event}"  
-	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
-		else
-		  variation = ["plans to split stocks"].sample
-		  random_partial_event = variation.to_s
-		  eventname = "#{@stock.stockname} #{random_partial_event}"  
-	      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
-      end
-    end
-  end## end of event_selector
+  # def self.event_selector(event_type,event)
+  #   if event_type == 0 ##negative events
+  #     case event
+		# when 1    
+		#   variation = ["reports quaterly loss in revenue","faces lawsuit for illegal patent frauds"].sample
+		#   random_partial_event = variation.to_s
+		#   eventname = "#{@stock.stockname} #{random_partial_event}" 
+	 #      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
+		# when 2  
+		#   eventname = "CEO of #{@stock.stockname} sacked" 
+	 #      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
+		# else
+		#   @acquired = MarketEvent.acquire(@stock.id,event_type,event) 
+  #     end
+  #   else ## positive events
+  #     case event 
+		# when 1    
+		#   variation = ["reports higher profit margins","set to expand globally"].sample
+  #         random_partial_event = variation.to_s
+  #         eventname = "#{@stock.stockname} #{random_partial_event}"  
+	 #      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
+		# when 2    
+		#   variation = ["releases new products for holiday season","set to invest on the latest tech"].sample
+		#   random_partial_event = variation.to_s
+		#   eventname = "#{@stock.stockname} #{random_partial_event}"  
+	 #      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
+		# else
+		#   variation = ["plans to split stocks"].sample
+		#   random_partial_event = variation.to_s
+		#   eventname = "#{@stock.stockname} #{random_partial_event}"  
+	 #      @create_event = MarketEvent.new_event(@stock.id,eventname,@event_type,@event,0,0)
+  #     end
+  #   end
+  # end## end of event_selector
 
 end ## end of class def

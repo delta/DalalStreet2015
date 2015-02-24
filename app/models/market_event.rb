@@ -34,25 +34,25 @@ class MarketEvent < ActiveRecord::Base
     return @random_id 
   end
 
-  def self.acquire(id,event_type,event)
-    @stock = Stock.where("stocks.id" => id).first
-    @market_stock = MarketEvent.select("stock_id").where("event_done" => 1,"event_type" => 0).order("RANDOM()").first
+  # def self.acquire(id,event_type,event)
+  #   @stock = Stock.where("stocks.id" => id).first
+  #   @market_stock = MarketEvent.select("stock_id").where("event_done" => 1,"event_type" => 0).order("RANDOM()").first
     
-    loop do 
-     @market_stock = MarketEvent.select("stock_id").where("event_done" => 1,"event_type" => 0).order("RANDOM()").first
-    break if id != @market_stock.stock_id
-    end 
+  #   loop do
+  #    @market_stock = MarketEvent.select("stock_id").where("event_done" => 1,"event_type" => 0).order("RANDOM()").first
+  #   break if id != @market_stock.stock_id
+  #   end 
 
-    if !@market_stock.blank?
-	    @acquired_stock =  Stock.where(:id => @market_stock.stock_id).first
-	    eventname1 = "#{@stock.stockname} acquires #{@acquired_stock.stockname}"
-	    eventname2 = "#{@acquired_stock.stockname} acquired by #{@stock.stockname}"
-  		@create_event = MarketEvent.new_event(@stock.id,eventname1,0,event,0,0)
-	  	@create_event = MarketEvent.new_event(@acquired_stock.id,eventname2,1,event,0,0)   	
-    else
-        @log = Company.custom_logger("No acquire company found")
-    end
-  end ##acquire def end
+  #   if !@market_stock.blank?
+	 #    @acquired_stock =  Stock.where(:id => @market_stock.stock_id).first
+	 #    eventname1 = "#{@stock.stockname} acquires #{@acquired_stock.stockname}"
+	 #    eventname2 = "#{@acquired_stock.stockname} acquired by #{@stock.stockname}"
+  # 		@create_event = MarketEvent.new_event(@stock.id,eventname1,0,event,0,0)
+	 #  	@create_event = MarketEvent.new_event(@acquired_stock.id,eventname2,1,event,0,0)   	
+  #   else
+  #       @log = Company.custom_logger("No acquire company found")
+  #   end
+  # end ##acquire def end
 
   def self.event_runner
     @running_events = MarketEvent.where("event_done" => 0).all
@@ -83,9 +83,6 @@ class MarketEvent < ActiveRecord::Base
       @log = Company.custom_logger("No event companies found");
     end           
   end ##end event_runner
-
-
-
 
 
 end

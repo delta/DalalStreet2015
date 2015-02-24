@@ -73,8 +73,21 @@
 <% content_for :script do %>
  <script type="text/javascript">
 
-    $(function(){
-        var stock_channel = new WebsocketClass(dispatcher);
+
+    $(document).ready(function(){
+           var show_update_socket_unbind = show_update_socket.evt_unbinder("update_stock_user");
+           var buy_sell_socket_unbind = buy_sell_socket.evt_unbinder("update_stock_all"); 
+           var show_unbinder = show_channel.channel_unbinder("show_channel");
+           var buy_sell_unbinder = buy_sell_channel.channel_unbinder("buy_sell_channel");
+           var stock_table_socket_binder = stock_table_socket.evt_binder("stocktable_ajax_handler");
+
+             var get_table = function(data){
+               var data = {bool:true};
+               var stock_table_socket_trigger = stock_table_socket.evt_trigger("stocktable_ajax_handler",data);
+               // var stock_table_socket_unbind = stock_table_socket.evt_unbinder();
+             }; 
+
+        // var stock_channel = new WebsocketClass(dispatcher);
         var stock_subscribe = stock_channel.channel_subscribe("stock");
         var stock_binder = stock_channel.channel_binder("stock_channel",get_table);
     });
@@ -95,7 +108,6 @@
     
     var stock_socket = new WebsocketClass(dispatcher);
     var stock_socket_binder = stock_socket.evt_binder("stock_ajax_handler");
-    
     var getvalues = function(value){
         var valuenum = value.split('_')[1];
         var data = {identity: valuenum,value: document.getElementById(value).value};
@@ -105,13 +117,7 @@
         $("#news1,#news2").newsticker();
    };
 
-    var stock_table_socket = new WebsocketClass(dispatcher);
-    var stock_table_socket_binder = stock_table_socket.evt_binder("stocktable_ajax_handler");
-    var get_table = function(){
-        data = {bool:true};
-        var stock_table_socket_trigger = stock_table_socket.evt_trigger("stocktable_ajax_handler",data);
-        // var stock_table_socket_unbind = stock_table_socket.evt_unbinder();
-   };   
+    
 
 </script>
 

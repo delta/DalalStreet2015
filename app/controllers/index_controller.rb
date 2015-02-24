@@ -1,7 +1,9 @@
 class IndexController < Devise::SessionsController
 protect_from_forgery with: :null_session
-# before_filter :authenticate_user!
+
 include IndexHelper
+
+
   def index
     #CAUTIONNNNNNNN ::::   change to devise parameters later #####
     # Password fields present on an insecure (http://) page. This is a security risk that allows user login credentials to be stolen.[Learn More]
@@ -20,7 +22,9 @@ include IndexHelper
        @user = User.find(current_user)
        @username = @user.username
        # redirect_to :controller=>'dalal_dashboard', :action=>'show', :id => current_user.id
-  	end
-    	   
+  	end 
   end
+
+  
+
 end

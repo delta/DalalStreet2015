@@ -17,9 +17,13 @@ class CompanyEvent < ActiveRecord::Base
   def self.event_selector_all(stock)
 
     event_type = [0,1].sample
-    event =  [1,2,3].sample
+    event =  [1,2,3,4].sample
 
-    if event_type == 0 ##negative events
+    logger.info event_type
+    logger.info event
+    logger.info stock
+
+   if event_type == 0 ##negative events
       case event
     when 1    
        variation = ["reports quaterly loss in revenue","faces lawsuit for illegal patent frauds"].sample
@@ -27,30 +31,47 @@ class CompanyEvent < ActiveRecord::Base
        eventname = "#{stock.stockname} #{random_partial_event}" 
        @create_event = MarketEvent.new_event(stock.id,eventname,event_type,event,0,0)
     when 2  
-       eventname = "CEO of #{stock.stockname} sacked" 
+       variation = ["Analysts predict a dip in #{stock.stockname}'s share value","CEO of #{stock.stockname} sacked"].sample
+       eventname = variation.to_s
+       @create_event = MarketEvent.new_event(stock.id,eventname,event_type,event,0,0)
+    when 3
+       variation = ["network hacked and compromised","employees calls for a strike"].sample
+       random_partial_event = variation.to_s
+       eventname = "#{stock.stockname} #{random_partial_event}"
        @create_event = MarketEvent.new_event(stock.id,eventname,event_type,event,0,0)
     else
-       @acquired = MarketEvent.acquire(stock.id,event_type,event) 
-      end
-    else ## positive events
+       random_num = [10,12,25,17].sample
+       random_country = ["India","China","Brazil","USA","Canada"].sample
+       variation = ["reduces its global workforce by #{random_num}%","acquires assets in #{random_country}"].sample
+       random_partial_event = variation.to_s
+       eventname = "#{stock.stockname} #{random_partial_event}"
+       @create_event = MarketEvent.new_event(stock.id,eventname,event_type,event,0,0)
+    end
+   else ## positive events
       case event 
     when 1    
        variation = ["reports higher profit margins","set to expand globally"].sample
        random_partial_event = variation.to_s
        eventname = "#{stock.stockname} #{random_partial_event}"  
        @create_event = MarketEvent.new_event(stock.id,eventname,event_type,event,0,0)
-    when 2    
-       variation = ["releases new products for holiday season","set to invest on the latest tech"].sample
+    when 2 
+       random_num = [20,40,75,120].sample   
+       variation = ["releases new products for holiday season","set to invest #{random_num} million on latest tech"].sample
+       random_partial_event = variation.to_s
+       eventname = "#{stock.stockname} #{random_partial_event}"
+       @create_event = MarketEvent.new_event(stock.id,eventname,event_type,event,0,0)
+    when 3
+       variation = ["capital boosted by new foreign policies","plans to split stocks"].sample
        random_partial_event = variation.to_s
        eventname = "#{stock.stockname} #{random_partial_event}"  
        @create_event = MarketEvent.new_event(stock.id,eventname,event_type,event,0,0)
     else
-       variation = ["plans to split stocks"].sample
-       random_partial_event = variation.to_s
-       eventname = "#{stock.stockname} #{random_partial_event}"  
+       variation = ["New government policy helping #{stock.stockname}'s growth","#{stock.stockname} beats analysts prediction"].sample
+       eventname = variation.to_s
        @create_event = MarketEvent.new_event(stock.id,eventname,event_type,event,0,0)
-      end
     end
+
+   end
   end## end of event_selector
 
 #################################################### modified version ################################################################################

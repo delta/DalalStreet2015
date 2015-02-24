@@ -2,7 +2,7 @@ var WebsocketClass = function(socket_url){
 
     var establish_conn = false;
     var binder = false;
-    var evt = null;
+    // var evt = null;
     var channel_link = false;
     var dispatcher = null;
     var channel = null;
@@ -11,7 +11,7 @@ var WebsocketClass = function(socket_url){
          // dispatcher = new WebSocketRails($(socket_url).data('uri'), true);
          dispatcher = socket_url;
          establish_conn = true;
-	     console.log("Connection established : "+establish_conn);
+	     // console.log("Connection established : "+establish_conn);
 	};
 
 	this.__construct = function() {
@@ -29,7 +29,7 @@ var WebsocketClass = function(socket_url){
 
 	this.evt_binder = function(evt){
          binder = true;
-         evt = evt;
+         // evt = evt;
         if(binder)
           dispatcher.bind(evt,this.callback);
         else
@@ -65,7 +65,7 @@ var WebsocketClass = function(socket_url){
             this.bind_fail(evt);     
 	};
 
-	this.evt_unbinder = function(){    
+	this.evt_unbinder = function(evt){    
          if(binder)
             {dispatcher.unbind(evt);
              binder = false;
@@ -73,13 +73,13 @@ var WebsocketClass = function(socket_url){
             }
         else
            console.log("binder status : "+binder);
-
 	};
 
     this.channel_subscribe = function(channel_nm){
     	  if(establish_conn)
             { channel = dispatcher.subscribe(channel_nm);
               channel_link = true;
+              binder = true;
               console.log("Channel established :"+channel_link);
 	        }
 	      else
@@ -88,7 +88,10 @@ var WebsocketClass = function(socket_url){
 
 	this.channel_binder = function(evt,callback_fn){
 		if(channel_link)
-          channel.bind(evt, function(data){ callback_fn(data); console.log("data received :"+data); binder = true;});
+        { 
+          channel.bind(evt, function(data){ callback_fn(data); console.log("data received :"+data);});
+          // channel.unbind(evt);
+        }
         else
           	console.log("channel_link status:"+channel_link);
 	};
@@ -97,8 +100,10 @@ var WebsocketClass = function(socket_url){
         if(binder)
 	      {channel.unbind(evt);
 	       binder = false;
-	       console.log("Channel unbound : "+binder);
-	      }
+	       console.log("Channel bound : "+binder);}
+        else{
+           console.log("Channel bound : "+binder);
+         } 
     };
 
 };

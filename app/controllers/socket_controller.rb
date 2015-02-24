@@ -59,6 +59,7 @@ require "json"
                        @user_total_calculator = User.calculate_total(current_user.id)
                        @stockused = StockUsed.create(:user_id => current_user.id, :stock_id => @stockidbought,:numofstock => @numofstock)
                        flash[:notice] = "#{@numofstock} stocks of #{@stock_bought.stockname} traded successfully"
+                       flash[:error]=nil
                        @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
                        @success = 1
                     else
@@ -67,14 +68,17 @@ require "json"
                     end
                else
                   if @numofstock > 10
+                    flash[:notice]=nil
                     flash[:error] = "You cannot trade more than 10 stocks at a time.Trade failed."
                     @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
                   else
+                    flash[:notice]=nil
                     flash[:error] = "Invalid trade parameters.Please check and try again."
                     @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
                   end
                end      
             else
+               flash[:notice]=nil
                flash[:error] = "Did not receive request #{@numofstock} stocks of #{@stock_bought.stockname}.TRADE FAILED"
                @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3) 
             end ##main if block 1
@@ -118,6 +122,7 @@ require "json"
               data = load_data_with_partials(data)
               send_message :update_stock_user, data
         else
+           flash[:notice]=nil
            flash[:error] = "You have encountered an unexpected error.Please login and Try again."
            redirect_to :action => 'index'
         end  
@@ -234,6 +239,7 @@ require "json"
         send_message :bank_mortgage_partial_render, data
 
         else
+          flash[:notice]=nil
           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
           redirect_to :action => 'index'
         end
@@ -267,6 +273,7 @@ require "json"
        data = load_data_with_partials(data)
        send_message :update_modal_partials, data
       else
+       flash[:notice]=nil
        flash[:error] = "You have encountered an unexpected error.Please login and Try again."
        redirect_to :action => 'index'
       end
@@ -289,22 +296,26 @@ require "json"
                    if @user_cash_inhand.cash.to_f >= @numofstock_buy_for.to_f*@bid_price.to_f 
                       @buy_bid = Buy.create(:user_id=>current_user.id, :stock_id=>@stockid, :price=>@bid_price, :numofstock=>@numofstock_buy_for)
                       flash[:notice] = "Successful Bid."
+                      flash[:error] =nil
                       @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
                       @comparator = User.comparator("buy")
                       @user_total_calculator = User.calculate_total(current_user.id)
                       buy_sell_stock_socket_helper
                    else
+                      flash[:notice]=nil
                       flash[:error] = "Buy request failed.You only have $ #{@user_cash_inhand.cash}."
                       @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                       buy_sell_stock_socket_helper
                    end
                  else
+                  flash[:notice]=nil
                   @min_bid_price = (@stock.currentprice.to_f-0.1*@stock.currentprice.to_f).round(2)
                   flash[:error] = "You cannot bid for less than 10% of the current price the minimum buy price for #{@stock.stockname} is #{@min_bid_price}."
                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                   buy_sell_stock_socket_helper   
                  end  
               else
+                 flash[:notice]=nil
                  flash[:error] = "Buy request failed.There are only #{@stock.stocksinmarket} stocks in the market."
                  @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                  buy_sell_stock_socket_helper
@@ -320,21 +331,25 @@ require "json"
                 if @user_stock_inhand[0].totalstock.to_f >= @numofstock_sell_for.to_f
                   @sell_ask  = Sell.create(:user_id=>current_user.id, :stock_id=>@stockid, :priceexpected=>@ask_price, :numofstock=>@numofstock_sell_for)
                   flash[:notice] = "Sell request made."
+                  flash[:error]=nil
                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
                   @comparator = User.comparator("sell")
                   @user_total_calculator = User.calculate_total(current_user.id)
                   buy_sell_stock_socket_helper
                 else
+                  flash[:notice]=nil
                   flash[:error] = "Sell request failed.You only have #{@user_stock_inhand[0].totalstock} stocks of #{@user_stock_inhand[0].stockname}."
                   @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                   buy_sell_stock_socket_helper
                 end
          else
+            flash[:notice]=nil
             flash[:error] = "Invalid parameters.Please try again."
             @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
             buy_sell_stock_socket_helper
          end
         else
+          flash[:notice]=nil
           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
           redirect_to :action => 'index'
         end
@@ -358,11 +373,13 @@ require "json"
                    @extra_cash = 0.75*@numofstock_to_mortgage.to_f*@check_stock.currentprice.to_f
                    @extra_cash = @extra_cash.round(2)
                    flash[:notice] = "Mortgage Successful.$#{@extra_cash} added to your account"
+                   flash[:error]=nil
                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
                    @user_total_calculator = User.calculate_total(current_user.id)
                    bank_mortgage_socket_helper
                    # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
                 else
+                   flash[:notice]=nil
                    flash[:error] = "Invalid request.You only have #{@check_stock.totalstock} stocks of #{@check_stock.stockname}."
                    @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                    bank_mortgage_socket_helper
@@ -383,29 +400,34 @@ require "json"
                      @deducted = (@mortgage.numofstock.to_f*@stock.currentprice).round(2);
                      if @user.save
                         @mortgage.destroy
+                        flash[:error]=nil
                         flash[:notice] = "$#{@deducted} deducted from your account,stocks retrieved from bank."
                         @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:notice], :seen => 1, :notice_type => 1)
                         @user_total_calculator = User.calculate_total(current_user.id)
                         bank_mortgage_socket_helper
                         # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
                      else
+                        flash[:notice]=nil
                         flash[:error] = "Error processing request.Please try again."
                         @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
                         bank_mortgage_socket_helper
                         # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
                      end
                    else
+                     flash[:notice]=nil
                      flash[:error] = "You have only $#{@user.cash} in your account.You cannot retrieve your stocks."
                      @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 2)
                      bank_mortgage_socket_helper
                    end  
         else
+           flash[:notice]=nil
            flash[:error] = "Did not recieve request.Please try again."
            @notification = Notification.create(:user_id =>current_user.id, :notification => flash[:error], :seen => 1, :notice_type => 3)
            bank_mortgage_socket_helper
            # redirect_to :controller=>'dalal_dashboard', :id=>current_user.id, :action=>'bank_mortgage'
         end  
         else
+          flash[:notice]=nil
           flash[:error] = "You have encountered an unexpected error.Please login and Try again."
           redirect_to :action => 'index'
         end ##end of user_signed_in

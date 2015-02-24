@@ -74,6 +74,9 @@
                     <li>
                         <a href="#myModal" role="button" data-toggle="modal" data-target="#myModal">Login</a>
                     </li>
+                     <li>
+                        <a href="#register" role="button" data-toggle="modal" data-target="#register">Register</a>
+                    </li>
                     <%end%>
                 </ul>
             </div>
@@ -141,7 +144,7 @@
             <div class="row	 text-center">
                 <div class="col-lg-12">
                     <p>Copyright © Dalal Street 2015</p>
-                    <p>Pragan 2015</p>
+                    <p>Pragyan 2015</p>
                 </div>
             </div>
         </footer>
@@ -162,13 +165,35 @@
 					  <p><%= f.password_field :password , :placeholder => "password"%></p>
 					  <p><%= f.submit "Sign in", :class => "btn btn-primary" %></p>
 				<% end %>
-			          <span id="lock1" class="fa fa-lock medhidden redborder"></span>
 	            </div>
 
 	           </div>
 	      </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
+
+ <div class="modal" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content contcustom">
+      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <br>
+            <div class="modal-body">
+               <h2>Register</h2>
+            <div>
+            <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+              <p><%= f.text_field :email , :placeholder => "email" %></p>
+              <p><%= f.text_field :id , :placeholder => "Pragyan ID" %></p>
+              <p><%= f.text_field :username , :placeholder => "Name" %></p>
+              <p><%= f.password_field :password , :placeholder => "password"%></p>
+              <p><%= f.password_field :password_confirmation , :placeholder => "confirm password"%></p>
+              <p><%= f.submit "Register", :class => "btn btn-primary" %></p>
+            <% end %>
+            </div>
+            <p style="font-size:10px"><a href="http://www.pragyan.org/15/home/events/manigma/dalal_street/">Please register in pragyan website first.<a><p>
+             </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
     <div class="modal" id="contact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
     <div class="modal-dialog">
@@ -283,7 +308,7 @@
 
 <script type="text/javascript">
 
-    var dispatcher = new WebSocketRails($("#socket_link").data('uri'), true);
+var dispatcher = new WebSocketRails($("#socket_link").data('uri'), true);
 
  $(document).ready(function(){
 
