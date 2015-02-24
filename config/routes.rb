@@ -5,10 +5,9 @@ Rails.application.routes.draw do
 
 
 ######remove them later############################
-  get 'users/sign_up' => redirect('/404.html')
-  get 'users/sign_in' => redirect('/404.html')
-  get '/users' => redirect('/404.html')
-  devise_for :users
+  get 'users/sign_in' => redirect('/404.html')  
+  devise_for :users, :controllers => { registrations: 'registrations' }
+  
 
   get 'index/index'
 

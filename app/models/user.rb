@@ -4,6 +4,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  validates :id, :presence => true, :uniqueness => true
+  validates :username, :presence => true
+
+
 	has_many :stocks
 	has_many :buys
 	has_many :sells

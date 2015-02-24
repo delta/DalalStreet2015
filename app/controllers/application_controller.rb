@@ -8,27 +8,25 @@ class ApplicationController < ActionController::Base
 
   end
 
-   # def set_locale
-   #    I18n.locale = params[:locale]
-   #  end
-
-   #  def self.default_url_options(options={})
-   #    options.merge({ :locale => I18n.locale })
-   #  end
-   
   protected
-  def configure_devise_permitted_parameters
-    registration_params = [:id, :username, :email, :password, :password_confirmation]
+    def configure_devise_permitted_parameters
+      registration_params = [:id, :username, :email, :password, :password_confirmation]
 
-    if params[:action] == 'update'
-      devise_parameter_sanitizer.for(:account_update) { 
-        |u| u.permit(registration_params << :current_password)
-      }
-    elsif params[:action] == 'create'
-      devise_parameter_sanitizer.for(:sign_up) { 
-        |u| u.permit(registration_params) 
-      }
+      if params[:action] == 'update'
+        devise_parameter_sanitizer.for(:account_update) { 
+          |u| u.permit(registration_params << :current_password)
+        }
+      elsif params[:action] == 'create'
+        devise_parameter_sanitizer.for(:sign_up) { 
+          |u| u.permit(registration_params) 
+        }
+      end
     end
-  end
+
+  # private
+  #   def after_sign_in_path_for(resource)
+  #      "/about"
+  #   end
+ 
   
 end
