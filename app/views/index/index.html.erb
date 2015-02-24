@@ -335,12 +335,11 @@ var dispatcher = new WebSocketRails($("#socket_link").data('uri'), true);
 		clickEvent = false;
 	});
 
-        var index_channel = new WebsocketClass(dispatcher);
-        var index_subscribe = index_channel.channel_subscribe("index");
-        var index_binder = index_channel.channel_binder("index_channel",update_index_page);
+        // var index_channel = new WebsocketClass(dispatcher);
+        // var index_subscribe = index_channel.channel_subscribe("index");
+        // var index_binder = index_channel.channel_binder("index_channel",update_index_page);
 
 })
-
 
 $(window).load(function() {
     var boxheight = $('#myCarousel .carousel-inner').innerHeight();
@@ -349,14 +348,13 @@ $(window).load(function() {
 	$('#myCarousel .list-group-item').outerHeight(triggerheight);
 
 });
-
-   var index_update_socket = new WebsocketClass(dispatcher);
-   var index_update_socket_binder = index_update_socket.evt_binder("index_updater");
-   var update_index_page = function(data){
-        var data = {bool:true};
-        var index_update_socket_trigger = index_update_socket.evt_trigger("index_updater",data);
-        // var index_update_socket_unbind = index_update_socket.evt_unbinder();
-   };
+   // var index_update_socket = new WebsocketClass(dispatcher);
+   // var index_update_socket_binder = index_update_socket.evt_binder("index_updater");
+   // var update_index_page = function(data){
+   //      var data = {bool:true};
+   //      var index_update_socket_trigger = index_update_socket.evt_trigger("index_updater",data);
+   //      // var index_update_socket_unbind = index_update_socket.evt_unbinder();
+   // };
 
 </script>
 

@@ -58,12 +58,13 @@
                             <% end %>
                             </div>
 
-                            <div class="panel-body">
+                            <!-- <div class="panel-body">
                             <%= form_tag do %>
                              <%= label_tag(:update, "Click to update stocks:") %>
                              <%= text_field_tag(:update) %>
                              <%= submit_tag("update") %>
-                            <% end %>
+                            <% end %> -->
+
                             </div>
                         </div>
                     </div>
@@ -111,14 +112,5 @@
 <% end %>
 
 <% content_for :script do %>
-
-   <script type="text/javascript">
-
-    // window.onload = function(){
-            //     var ctx = document.getElementById("chart-area").getContext("2d");
-            //     window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
-            // };
-
-   </script>
  
 <% end %>    

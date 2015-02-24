@@ -9,13 +9,12 @@ class AdminController < ApplicationController
             WebsocketRails[:layout].trigger(:layout_channel, params[:q])
           end  
 
-          if params[:update]
-            WebsocketRails[:stock].trigger(:stock_channel, "true");
-          end
+          # if params[:update]
+          #   WebsocketRails[:stock].trigger(:stock_channel, "true");
+          # end
         
         end
     end
-
 
 	def user_details
         	if !user_signed_in?
@@ -73,7 +72,6 @@ class AdminController < ApplicationController
         if !user_signed_in?
             render :text => "<h2>User not authenticated.Please <a href='/index/index' >login</a></h2>"
         else
-
 
             @market_event=MarketEvent.new
             # for deleting market records
@@ -159,6 +157,7 @@ class AdminController < ApplicationController
 
                       if s.save
                          flash[:qS]="Stocks Updated"
+                         WebsocketRails[:stock].trigger(:stock_channel, "true");
                        else
                          flash[:Er]="Error occurred in updating Stocks."
                       end
@@ -172,8 +171,6 @@ class AdminController < ApplicationController
         end
 
       end
-
-
 
     def bank_rates
         if !user_signed_in?
@@ -198,11 +195,8 @@ class AdminController < ApplicationController
                 if params[:delete_id]
                     @deletestock=Bank.find(params[:delete_id]).delete
                 end
-
         end
-
-
-    end
+     end
 
 
 

@@ -47,7 +47,7 @@ require "json"
             if @stockidbought && @numofstock ##main if block 1 enters only if ajax variables are recieved
                @stock_bought = Stock.find(@stockidbought)
 
-               if @stock_bought.stocksinexchange > @numofstock and @numofstock > 0 and @numofstock <= 10
+               if @stock_bought.stocksinexchange >= @numofstock and @numofstock > 0 and @numofstock <= 10
                   @total_price_of_bought_stock = @numofstock*@stock_bought.currentprice
                   @user_cash_inhand = User.find(current_user.id)
                     if @user_cash_inhand.cash - @total_price_of_bought_stock > 0
@@ -161,7 +161,7 @@ require "json"
     def self.call_update_stock_user
        WebsocketRails[:show].trigger(:show_channel, "true")
        WebsocketRails[:buy_sell].trigger(:buy_sell_channel, "true")
-       WebsocketRails[:index].trigger(:index_channel, "true");
+       # WebsocketRails[:index].trigger(:index_channel, "true");
        WebsocketRails[:stock].trigger(:stock_channel, "true");
     end
 ##############################################################################################################################    
@@ -202,13 +202,13 @@ require "json"
          @no_stock_found = "You do not own Stocks belonging to this Company.To buy stocks send a bid request first."
        end   
       
-          @buy_history = Buy.where('buys.stock_id' => id).order("price DESC").limit(3)
-          @sell_history = Sell.where('sells.stock_id' => id).order("priceexpected ASC").limit(3)
+          # @buy_history = Buy.where('buys.stock_id' => id).order("price DESC").limit(3)
+          # @sell_history = Sell.where('sells.stock_id' => id).order("priceexpected ASC").limit(3)
 
           update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@stock, @stock)
           update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@no_stock_found , @no_stock_found)
-          update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@buy_history, @buy_history)
-          update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@sell_history, @sell_history)
+          # update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@buy_history, @buy_history)
+          # update_partial_input('dalal_dashboard/partials/buy_sell_partial_socket', :@sell_history, @sell_history)
       
       data = {}
       data = load_data_with_partials(data)
